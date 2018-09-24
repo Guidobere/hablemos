@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FireBaseChat</string>
+    <string name="sir_bot">Sir Bot</string>
+    <string name="don_bot">DON BOT</string>
+    <string name="hola_bienvenido">Hola bienvenido</string>
+    <string name="_00_00">00:00</string>
+</resources>
