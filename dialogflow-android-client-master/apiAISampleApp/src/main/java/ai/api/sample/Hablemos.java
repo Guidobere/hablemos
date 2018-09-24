@@ -22,9 +22,9 @@ import android.util.Log;
 
 import ai.api.util.BluetoothController;
 
-public class AIApplication extends Application {
+public class Hablemos extends Application {
 
-    private static final String TAG = AIApplication.class.getSimpleName();
+    private static final String TAG = Hablemos.class.getSimpleName();
 
     private int activitiesCount;
     private BluetoothControllerImpl bluetoothController;

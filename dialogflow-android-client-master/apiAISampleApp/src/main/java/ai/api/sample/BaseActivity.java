@@ -27,7 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private AIApplication app;
+    private Hablemos app;
 
     private static final long PAUSE_CALLBACK_DELAY = 500;
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
@@ -43,7 +43,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (AIApplication) getApplication();
+        app = (Hablemos) getApplication();
     }
 
     @Override

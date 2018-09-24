@@ -35,7 +35,7 @@ public class AISettingsActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        settingsManager = ((AIApplication) getApplication()).getSettingsManager();
+        settingsManager = ((Hablemos) getApplication()).getSettingsManager();
 
         ViewGroup bluetoothSection = (ViewGroup) findViewById(R.id.activity_settings_bluetooth_section);
         bluetoothSection.setOnClickListener(this);

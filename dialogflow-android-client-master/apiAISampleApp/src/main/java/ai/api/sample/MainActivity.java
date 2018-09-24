@@ -61,16 +61,12 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void serviceSampleClick(final View view) {
-        startActivity(AIServiceSampleActivity.class);
-    }
-
     public void buttonSampleClick(final View view) {
-        startActivity(AIButtonSampleActivity.class);
+        startActivity(RegistroActivity.class);
     }
 
     public void dialogSampleClick(final View view) {
-        startActivity(AIDialogSampleActivity.class);
+        startActivity(LoginActivity.class);
     }
 
     public void textSampleClick(final View view) {

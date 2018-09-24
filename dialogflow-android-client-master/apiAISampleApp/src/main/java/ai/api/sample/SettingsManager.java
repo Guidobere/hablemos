@@ -42,7 +42,7 @@ public class SettingsManager {
         this.useBluetooth = useBluetooth;
 
         prefs.edit().putBoolean(PREF_USE_BLUETOOTH, useBluetooth).commit();
-        final BluetoothController controller = ((AIApplication) context.getApplicationContext()).getBluetoothController();
+        final BluetoothController controller = ((Hablemos) context.getApplicationContext()).getBluetoothController();
         if (useBluetooth) {
             controller.start();
         } else {

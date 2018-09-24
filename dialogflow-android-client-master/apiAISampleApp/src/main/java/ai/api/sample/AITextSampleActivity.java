@@ -117,8 +117,8 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
     }
 
     /*
-    * AIRequest should have query OR event
-    */
+     * AIRequest should have query OR event
+     */
     private void sendRequest() {
 
         final String queryString = !eventSpinner.isEnabled() ? String.valueOf(queryEditText.getText()) : null;

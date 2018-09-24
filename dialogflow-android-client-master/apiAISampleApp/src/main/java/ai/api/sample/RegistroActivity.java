@@ -1,4 +1,4 @@
-package piazzoli.kevin.com.firebasechat.Activity;
+package ai.api.sample;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -17,7 +17,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+/*import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +30,7 @@ import com.kbeanie.multipicker.api.CameraImagePicker;
 import com.kbeanie.multipicker.api.ImagePicker;
 import com.kbeanie.multipicker.api.Picker;
 import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback;
-import com.kbeanie.multipicker.api.entity.ChosenImage;
+import com.kbeanie.multipicker.api.entity.ChosenImage;*/
 
 import java.io.File;
 import java.security.acl.Group;
@@ -40,11 +40,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+/*import de.hdodenhof.circleimageview.CircleImageView;
 import piazzoli.kevin.com.firebasechat.Entidades.Firebase.Usuario;
 import piazzoli.kevin.com.firebasechat.Persistencia.UsuarioDAO;
 import piazzoli.kevin.com.firebasechat.R;
-import piazzoli.kevin.com.firebasechat.Utilidades.Constantes;
+import piazzoli.kevin.com.firebasechat.Utilidades.Constantes;*/
 
 /**
  * Created by user on 19/02/2018. 19
@@ -52,7 +52,7 @@ import piazzoli.kevin.com.firebasechat.Utilidades.Constantes;
 
 public class RegistroActivity extends AppCompatActivity {
 
-    private CircleImageView fotoPerfil;
+   // private CircleImageView fotoPerfil;
     private EditText txtNombre;
     private EditText txtCorreo;
     private EditText txtContraseña;
@@ -61,30 +61,44 @@ public class RegistroActivity extends AppCompatActivity {
     private RadioButton rdHombre;
     private RadioButton rdMujer;
     private Button btnRegistrar;
-    private FirebaseAuth mAuth;
+
+    /*private FirebaseAuth mAuth;
     private FirebaseDatabase database;
 
     private ImagePicker imagePicker;
     private CameraImagePicker cameraPicker;
-
     private String pickerPath;
     private Uri fotoPerfilUri;
+
+ */
     private long fechaDeNacimiento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
-        fotoPerfil = findViewById(R.id.fotoPerfil);
-        txtNombre = findViewById(R.id.idRegistroNombre);
-        txtCorreo = findViewById(R.id.idRegistroCorreo);
-        txtContraseña = findViewById(R.id.idRegistroContraseña);
-        txtContraseñaRepetida = findViewById(R.id.idRegistroContraseñaRepetida);
-        txtFechaDeNacimiento = findViewById(R.id.txtFechaDeNacimiento);
-        rdHombre = findViewById(R.id.rdHombre);
-        rdMujer = findViewById(R.id.rdMujer);
-        btnRegistrar = findViewById(R.id.idRegistroRegistrar);
 
+        //  fotoPerfil = findViewById(R.id.fotoPerfil);
+
+        // LES FALTA CASTEO A ALGUNOS.
+        txtNombre = (EditText) findViewById(R.id.idRegistroNombre);
+        txtCorreo = (EditText) findViewById(R.id.idRegistroCorreo);
+        txtContraseña = (EditText) findViewById(R.id.idRegistroContraseña);
+        txtContraseñaRepetida = (EditText) findViewById(R.id.idRegistroContraseñaRepetida);
+        // txtFechaDeNacimiento = findViewById(R.id.txtFechaDeNacimiento);
+        //   rdHombre = findViewById(R.id.rdHombre);
+        // rdMujer = findViewById(R.id.rdMujer);
+        btnRegistrar = (Button) findViewById(R.id.idRegistroRegistrar);
+
+        btnRegistrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }});
+
+
+    }
+        /*
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         imagePicker = new ImagePicker(this);
@@ -172,6 +186,7 @@ public class RegistroActivity extends AppCompatActivity {
             }
         });
 
+
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -253,6 +268,7 @@ public class RegistroActivity extends AppCompatActivity {
         }
     }
 
+
     private boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
@@ -291,5 +307,6 @@ public class RegistroActivity extends AppCompatActivity {
         }
         super.onRestoreInstanceState(savedInstanceState);
     }
-
+   */
 }
+
