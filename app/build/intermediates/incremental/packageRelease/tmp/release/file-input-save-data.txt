@@ -1,7 +1,0 @@
-#Internal package file, do not edit.
-#Fri Sep 21 18:49:00 ART 2018
-0.baseType=DIRECTORY
-0.base=C\:\\Users\\User\\Desktop\\Proyecto\\Hablemos\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
-0.path=classes.dex
-0.set=DEX
-count=1
