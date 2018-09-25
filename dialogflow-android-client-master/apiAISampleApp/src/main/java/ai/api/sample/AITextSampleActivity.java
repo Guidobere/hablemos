@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import ai.api.AIListener;
 import ai.api.AIServiceException;
@@ -65,15 +66,11 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
     public static final String TAG = AITextSampleActivity.class.getName();
 
     private AIService aiService;
-
+    private String clientAccessToken = "3d0b0b12561c4040963f4e4f529527c7";
     private Gson gson = GsonFactory.getGson();
 
     private TextView resultTextView;
-    private EditText contextEditText;
     private EditText queryEditText;
-    private CheckBox eventCheckBox;
-
-    private Spinner eventSpinner;
 
     private AIDataService aiDataService;
 
@@ -84,41 +81,16 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         setContentView(R.layout.activity_aitext_sample);
 
         resultTextView = (TextView) findViewById(R.id.resultTextView);
-        contextEditText = (EditText) findViewById(R.id.contextEditText);
         queryEditText = (EditText) findViewById(R.id.textQuery);
+        queryEditText.setVisibility(View.VISIBLE);
 
         findViewById(R.id.buttonSend).setOnClickListener(this);
         findViewById(R.id.buttonClear).setOnClickListener(this);
-
-        eventSpinner = (Spinner) findViewById(R.id.selectEventSpinner);
-        final ArrayAdapter<String> eventAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Config.events);
-        eventSpinner.setAdapter(eventAdapter);
-
-        eventCheckBox = (CheckBox) findViewById(R.id.eventsCheckBox);
-        checkBoxClicked();
-        eventCheckBox.setOnClickListener(this);
-
-        Spinner spinner = (Spinner) findViewById(R.id.selectLanguageSpinner);
-        final ArrayAdapter<LanguageConfig> languagesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Config.languages);
-        spinner.setAdapter(languagesAdapter);
-        spinner.setOnItemSelectedListener(this);
-
-        final AIConfiguration config = new AIConfiguration("3d0b0b12561c4040963f4e4f529527c7",
-                AIConfiguration.SupportedLanguages.English,
+        final AIConfiguration config = new AIConfiguration(clientAccessToken, AIConfiguration.SupportedLanguages.Spanish,
                 AIConfiguration.RecognitionEngine.System);
 
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
-
-    }
-
-    private void initService(final LanguageConfig selectedLanguage) {
-        final AIConfiguration.SupportedLanguages lang = AIConfiguration.SupportedLanguages.fromLanguageTag(selectedLanguage.getLanguageCode());
-        final AIConfiguration config = new AIConfiguration(selectedLanguage.getAccessToken(),
-                lang,
-                AIConfiguration.RecognitionEngine.System);
-
-
         aiDataService = new AIDataService(this, config);
     }
 
@@ -155,11 +127,9 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
      */
     private void sendRequest() {
 
-        final String queryString = !eventSpinner.isEnabled() ? String.valueOf(queryEditText.getText()) : null;
-        final String eventString = eventSpinner.isEnabled() ? String.valueOf(String.valueOf(eventSpinner.getSelectedItem())) : null;
-        final String contextString = String.valueOf(contextEditText.getText());
+        final String queryString = String.valueOf(queryEditText.getText());
 
-        if (TextUtils.isEmpty(queryString) && TextUtils.isEmpty(eventString)) {
+        if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
             return;
         }
@@ -172,18 +142,10 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
             protected AIResponse doInBackground(final String... params) {
                 final AIRequest request = new AIRequest();
                 String query = params[0];
-                String event = params[1];
 
                 if (!TextUtils.isEmpty(query))
                     request.setQuery(query);
-                if (!TextUtils.isEmpty(event))
-                    request.setEvent(new AIEvent(event));
-                final String contextString = params[2];
                 RequestExtras requestExtras = null;
-                if (!TextUtils.isEmpty(contextString)) {
-                    final List<AIContext> contexts = Collections.singletonList(new AIContext(contextString));
-                    requestExtras = new RequestExtras(contexts, null);
-                }
 
                 try {
                     return aiDataService.request(request, requestExtras);
@@ -202,15 +164,8 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
                 }
             }
         };
-
-        task.execute(queryString, eventString, contextString);
+        task.execute(queryString);
     }
-
-    public void checkBoxClicked() {
-        eventSpinner.setEnabled(eventCheckBox.isChecked());
-        queryEditText.setVisibility(!eventCheckBox.isChecked() ? View.VISIBLE : View.GONE);
-    }
-
 
     public void onResult(final AIResponse response) {
         runOnUiThread(new Runnable() {
@@ -229,6 +184,7 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
 
                 final Result result = response.getResult();
                 Log.i(TAG, "Resolved query: " + result.getResolvedQuery());
+                queryEditText.setText(result.getResolvedQuery());
 
                 Log.i(TAG, "Action: " + result.getAction());
 
@@ -265,7 +221,6 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         });
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.menu_aibutton_sample, menu);
@@ -289,12 +244,8 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         startActivity(intent);
     }
 
-
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        final LanguageConfig selectedLanguage = (LanguageConfig) parent.getItemAtPosition(position);
-        initService(selectedLanguage);
     }
 
     @Override
@@ -309,9 +260,6 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
                 break;
             case R.id.buttonSend:
                 sendRequest();
-                break;
-            case R.id.eventsCheckBox:
-                checkBoxClicked();
                 break;
         }
     }
