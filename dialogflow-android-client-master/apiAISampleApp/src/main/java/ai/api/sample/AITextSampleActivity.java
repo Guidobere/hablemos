@@ -39,10 +39,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ai.api.AIListener;
 import ai.api.AIServiceException;
 import ai.api.RequestExtras;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIDataService;
+import ai.api.android.AIService;
 import ai.api.android.GsonFactory;
 import ai.api.model.AIContext;
 import ai.api.model.AIError;
@@ -56,11 +58,13 @@ import ai.api.model.Status;
 /**
  * Created by alexey on 07/12/16.
  */
-public class AITextSampleActivity extends BaseActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class AITextSampleActivity extends BaseActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, AIListener {
 
     //ESTO USAMOS!
 
     public static final String TAG = AITextSampleActivity.class.getName();
+
+    private AIService aiService;
 
     private Gson gson = GsonFactory.getGson();
 
@@ -99,6 +103,13 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         spinner.setAdapter(languagesAdapter);
         spinner.setOnItemSelectedListener(this);
 
+        final AIConfiguration config = new AIConfiguration("3d0b0b12561c4040963f4e4f529527c7",
+                AIConfiguration.SupportedLanguages.English,
+                AIConfiguration.RecognitionEngine.System);
+
+        aiService = AIService.getService(this, config);
+        aiService.setListener(this);
+
     }
 
     private void initService(final LanguageConfig selectedLanguage) {
@@ -111,6 +122,29 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         aiDataService = new AIDataService(this, config);
     }
 
+    public void micButtonOnClick(final View view) {
+        aiService.startListening();
+    }
+
+    @Override
+    public void onListeningStarted() {
+        // show recording indicator
+    }
+
+    @Override
+    public void onListeningCanceled() {
+
+    }
+
+    @Override
+    public void onListeningFinished() {
+        // hide recording indicator
+    }
+
+    @Override
+    public void onAudioLevel(final float level) {
+        // show sound level
+    }
 
     private void clearEditText() {
         queryEditText.setText("");
@@ -178,7 +212,7 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
     }
 
 
-    private void onResult(final AIResponse response) {
+    public void onResult(final AIResponse response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -222,7 +256,7 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         });
     }
 
-    private void onError(final AIError error) {
+    public void onError(final AIError error) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
