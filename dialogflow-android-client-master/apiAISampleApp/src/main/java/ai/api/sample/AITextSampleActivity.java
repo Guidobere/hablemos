@@ -201,7 +201,7 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
                 //ACA ES DONDE SE USA SPEECH PARA PEDIRLE QUE LO DIGA EN VOZ ALTA Y LO ESCRIBA
                 final String speech = result.getFulfillment().getSpeech();
                 Log.i(TAG, "Speech: " + speech);
-                resultTextView.setText(gson.toJson(speech));
+                resultTextView.setText(speech);
                 TTS.speak(speech);
 
                 final Metadata metadata = result.getMetadata();
