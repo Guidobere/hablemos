@@ -15,6 +15,7 @@
             android:id="@+id/textQuery"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:hint="Escribi aca"
             android:background="@android:color/white" />
 
         <RelativeLayout
@@ -26,7 +27,6 @@
                 android:id="@+id/buttonSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -48,11 +48,11 @@
                 android:layout_marginRight="7dp"
                 android:text="Hablar" />
 
+
             <Button
                 android:id="@+id/buttonClear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
@@ -60,7 +60,6 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
                 android:text="Limpiar" />
-
         </RelativeLayout>
 
         <LinearLayout
@@ -68,22 +67,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- ACA ESCRIBE EL MENSAJE ANTERIOR-->
+            <TextView
+                android:id="@+id/resultTextViewAnterior"
+                android:layout_width="match_parent"
+                android:hint="Mensaje Anterior"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
             <TextView
                 android:id="@+id/resultTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-
-            <!-- no se si lo usa pero hay que borrar de varios lados-->
-            <EditText
-                android:id="@+id/contextEditText"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/buttonClearHistorial"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="add Context here"
-                android:visibility="gone"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="66dp"
+                android:layout_marginStart="66dp"
+                android:text="Limpiar Historial" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

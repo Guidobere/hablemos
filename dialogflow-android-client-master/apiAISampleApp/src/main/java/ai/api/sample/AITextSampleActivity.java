@@ -25,20 +25,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import ai.api.AIListener;
 import ai.api.AIServiceException;
@@ -47,9 +44,7 @@ import ai.api.android.AIConfiguration;
 import ai.api.android.AIDataService;
 import ai.api.android.AIService;
 import ai.api.android.GsonFactory;
-import ai.api.model.AIContext;
 import ai.api.model.AIError;
-import ai.api.model.AIEvent;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Metadata;
@@ -67,10 +62,25 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
 
     private AIService aiService;
     private String clientAccessToken = "3d0b0b12561c4040963f4e4f529527c7";
+
     private Gson gson = GsonFactory.getGson();
 
     private TextView resultTextView;
     private EditText queryEditText;
+    private Button micButton;
+
+    //PARA EL MENSAJE ANTERIOR
+
+        //DONDE SE GUARDA EL MSJ ANTERIOR
+    private String dialogoAnterior="Mensaje anterior";
+       //Donde se muestra el msj anterior
+    private TextView resultTextViewAnterior;
+
+    //Lo que dice y muestra en la aplicacion
+    private String speech;
+
+    //nombre abuelo
+    private String nombreAbuelo="Carolina";
 
     private AIDataService aiDataService;
 
@@ -84,17 +94,24 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         queryEditText = (EditText) findViewById(R.id.textQuery);
         queryEditText.setVisibility(View.VISIBLE);
 
+        micButton = (Button) findViewById(R.id.micButton);
+
+        //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
+        resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
+
         findViewById(R.id.buttonSend).setOnClickListener(this);
         findViewById(R.id.buttonClear).setOnClickListener(this);
-        final AIConfiguration config = new AIConfiguration(clientAccessToken, AIConfiguration.SupportedLanguages.Spanish,
-                AIConfiguration.RecognitionEngine.System);
+        findViewById(R.id.buttonClearHistorial).setOnClickListener(this);
 
+        final AIConfiguration config = new AIConfiguration(clientAccessToken, AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
         aiDataService = new AIDataService(this, config);
     }
 
     public void micButtonOnClick(final View view) {
+        Toast.makeText(this, "Escuchando...", Toast.LENGTH_SHORT).show();
+        micButton.setText("Detener");
         aiService.startListening();
     }
 
@@ -110,7 +127,7 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
 
     @Override
     public void onListeningFinished() {
-        // hide recording indicator
+        micButton.setText("Hablar");
     }
 
     @Override
@@ -120,6 +137,15 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
 
     private void clearEditText() {
         queryEditText.setText("");
+    }
+
+    //Aca te borra el ultimo mensaje, su anterior y el texto.
+    private void clearEditTextHistorial() {
+        resultTextViewAnterior.setText("");
+        resultTextView.setText("");
+        queryEditText.setText("");
+        dialogoAnterior="";
+        speech="";
     }
 
     /*
@@ -142,10 +168,9 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
             protected AIResponse doInBackground(final String... params) {
                 final AIRequest request = new AIRequest();
                 String query = params[0];
-
+                RequestExtras requestExtras = null;
                 if (!TextUtils.isEmpty(query))
                     request.setQuery(query);
-                RequestExtras requestExtras = null;
 
                 try {
                     return aiDataService.request(request, requestExtras);
@@ -167,7 +192,51 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         task.execute(queryString);
     }
 
+    public void mostrarMensajeAnterior(){
+      dialogoAnterior=speech;
+      resultTextViewAnterior.setText(speech);
+    }
+
+    private String getSaludo() {
+        Calendar rightNow = Calendar.getInstance();
+        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
+        if (currentHourIn24Format < 13) {
+            return "Buenos días";
+        } else if (currentHourIn24Format > 12 && currentHourIn24Format < 19) {
+            return "Buenas tardes";
+        } else {
+            return "Buenas noches";
+        }
+    }
+
+    public void personalizarMensaje(){
+        switch (speech) {
+            case "Te puedo ofrecer hablar de: Pasteleria, Futbol y Salud":
+                speech = getSaludo() + " " + nombreAbuelo + "! " + speech;
+                resultTextView.setText(speech);
+                TTS.speak(speech);
+                break;
+            case "tarde":
+                resultTextView.setText("2 paracetamol");
+                TTS.speak("2 paracetamol");
+                break;
+            case "mañana":
+                resultTextView.setText("1 paracetamol");
+                TTS.speak("1 paracetamol");
+                break;
+            case "noche":
+                resultTextView.setText("3 paracetamol");
+                TTS.speak("3 paracetamol");
+                break;
+            default:
+                resultTextView.setText(speech);
+                TTS.speak(speech);
+                break;
+        }
+    }
+
     public void onResult(final AIResponse response) {
+        mostrarMensajeAnterior();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -189,10 +258,9 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
                 Log.i(TAG, "Action: " + result.getAction());
 
                 //ACA ES DONDE SE USA SPEECH PARA PEDIRLE QUE LO DIGA EN VOZ ALTA Y LO ESCRIBA
-                final String speech = result.getFulfillment().getSpeech();
+                speech = result.getFulfillment().getSpeech();
                 Log.i(TAG, "Speech: " + speech);
-                resultTextView.setText(speech);
-                TTS.speak(speech);
+                personalizarMensaje();
 
                 final Metadata metadata = result.getMetadata();
                 if (metadata != null) {
@@ -208,7 +276,6 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
                     }
                 }
             }
-
         });
     }
 
@@ -246,6 +313,7 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     @Override
@@ -257,6 +325,9 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
         switch (v.getId()) {
             case R.id.buttonClear:
                 clearEditText();
+                break;
+            case R.id.buttonClearHistorial:
+                clearEditTextHistorial();
                 break;
             case R.id.buttonSend:
                 sendRequest();
