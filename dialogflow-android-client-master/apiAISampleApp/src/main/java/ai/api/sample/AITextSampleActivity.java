@@ -69,6 +69,10 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
     private EditText queryEditText;
     private Button micButton;
 
+    private int HORARIO_MANANA = 6;
+    private int HORARIO_TARDE = 12;
+    private int HORARIO_NOCHE = 20;
+
     //PARA EL MENSAJE ANTERIOR
 
         //DONDE SE GUARDA EL MSJ ANTERIOR
@@ -200,9 +204,9 @@ public class AITextSampleActivity extends BaseActivity implements AdapterView.On
     private String getSaludo() {
         Calendar rightNow = Calendar.getInstance();
         int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
-        if (currentHourIn24Format < 13) {
+        if (currentHourIn24Format >= HORARIO_MANANA && currentHourIn24Format < HORARIO_TARDE) {
             return "Buenos días";
-        } else if (currentHourIn24Format > 12 && currentHourIn24Format < 19) {
+        } else if (currentHourIn24Format >= HORARIO_TARDE && currentHourIn24Format < HORARIO_NOCHE) {
             return "Buenas tardes";
         } else {
             return "Buenas noches";
