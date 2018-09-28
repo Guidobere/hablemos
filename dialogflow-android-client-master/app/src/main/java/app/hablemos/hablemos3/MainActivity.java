@@ -319,4 +319,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         final Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "¡Hasta la proxima!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
 }
