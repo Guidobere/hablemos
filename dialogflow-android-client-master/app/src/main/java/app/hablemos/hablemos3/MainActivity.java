@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -108,6 +110,27 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+
+        //TODO: Envio de email, hay que pasarlo a donde corresponda
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    GmailSender sender = new GmailSender("hablemosproyectofinal@gmail.com", "aprobamoscomosea");
+                    //TODO: poner el mail del tutor y el contenido del mail
+                    sender.sendMail("Reporte del " + getDate(), "Primer reporte", "Hablemos!", "mail tutor");
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
+                }
+            }
+        }).start();
+    }
+
+    private String getDate() {
+        Calendar rightNow = Calendar.getInstance();
+        int dia = rightNow.get(Calendar.DAY_OF_MONTH);
+        int mes = rightNow.get(Calendar.MONTH) + 1;
+        int anio = rightNow.get(Calendar.YEAR);
+        return "" + dia + "/" + mes + "/" + anio;
     }
 
     //act on result of TTS data check
