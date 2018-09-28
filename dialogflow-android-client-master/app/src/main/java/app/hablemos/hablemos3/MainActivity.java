@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private EditText queryEditText;
     private Button micButton;
 
+    private Button bRegistro;
+
     private int HORARIO_MANANA = 6;
     private int HORARIO_TARDE = 12;
     private int HORARIO_NOCHE = 20;
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         queryEditText.setVisibility(View.VISIBLE);
 
         micButton = (Button) findViewById(R.id.micButton);
+        bRegistro = (Button) findViewById(R.id.buttonRegistro);
 
         //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
         resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
@@ -307,4 +310,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     break;
             }
         }
+
+    public void abrirVentanaRegistro(final View view) {
+        startActivity(RegistroActivity.class);
+    }
+
+    private void startActivity(Class<?> cls) {
+        final Intent intent = new Intent(this, cls);
+        startActivity(intent);
+    }
 }

@@ -81,6 +81,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="66dp"
                 android:text="Limpiar Historial" />
+
+            <Button
+                android:id="@+id/buttonRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="66dp"
+                android:text="ir al registro"
+                android:onClick="abrirVentanaRegistro"
+                />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
