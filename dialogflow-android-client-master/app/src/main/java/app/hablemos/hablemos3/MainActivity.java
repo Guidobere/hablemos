@@ -5,15 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,13 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import ai.api.AIListener;
 import ai.api.AIServiceException;
@@ -40,11 +33,10 @@ import ai.api.android.GsonFactory;
 import ai.api.model.AIError;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
-import ai.api.model.Metadata;
 import ai.api.model.Result;
-import ai.api.model.Status;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
+    private static final String TAG = "MainActivity";
 
     //TTS object
     private TextToSpeech myTTS;
@@ -65,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private int HORARIO_MANANA = 6;
     private int HORARIO_TARDE = 12;
     private int HORARIO_NOCHE = 20;
+
+    //TODO Externalizar
+    private static final String msgErrorReconocimientoVoz =
+        "No se pudo reconocer la entrada de voz";
 
     //PARA EL MENSAJE ANTERIOR
 
@@ -171,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     public void onListeningCanceled() {
-
+        micButton.setEnabled(true);
     }
 
     @Override
@@ -305,7 +301,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                resultTextView.setText(error.toString());
+                //Se loguea el error.
+                Log.w(TAG, error.toString());
+
+                //Si error es del reconocimiento de voz se muestra un mensaje preestablecido.
+                if(error.toString().contains("Speech recognition engine error"))
+                    resultTextView.setText(msgErrorReconocimientoVoz);
+                else
+                    resultTextView.setText(error.toString());
+
+                //Cuando el error es "No speech input" se llama directamente al onError
+                //sin llamar a onListeningFinished. Por eso se habilita el micrófono acá.
+                micButton.setEnabled(true);
             }
         });
     }
