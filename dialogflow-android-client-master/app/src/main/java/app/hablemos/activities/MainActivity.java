@@ -1,8 +1,9 @@
-package app.hablemos.hablemos3;
+package app.hablemos.activities;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -19,8 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 
+import org.w3c.dom.Node;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 
 import ai.api.AIListener;
@@ -34,10 +43,14 @@ import ai.api.model.AIError;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
+import app.hablemos.R;
+import app.hablemos.mailsender.GeneradorTemplate;
+import app.hablemos.model.Interaccion;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private static final String TAG = "MainActivity";
 
+    private GeneradorTemplate generadorTemplate;
     //TTS object
     private TextToSpeech myTTS;
     //status check code
@@ -107,26 +120,54 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
 
-        //TODO: Envio de email, hay que pasarlo a donde corresponda
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    GmailSender sender = new GmailSender("hablemosproyectofinal@gmail.com", "aprobamoscomosea");
-                    //TODO: poner el mail del tutor y el contenido del mail
-                    sender.sendMail("Reporte del " + getDate(), "Primer reporte", "Hablemos!", "mail tutor");
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
-                }
+        generadorTemplate = new GeneradorTemplate();
+        AssetManager assetManager = getAssets();
+
+        try {
+            String[] files = assetManager.list("Files");
+            for(int i=0; i<files.length; i++){
+                System.out.println("file: "+i+"name: "+files[i]);
             }
-        }).start();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        //TODO: Envio de email, hay que pasarlo a donde corresponda
+        generadorTemplate.generarYEnviarMail(nombreAbuelo, obtenerInteracciones(), assetManager);
     }
 
-    private String getDate() {
-        Calendar rightNow = Calendar.getInstance();
-        int dia = rightNow.get(Calendar.DAY_OF_MONTH);
-        int mes = rightNow.get(Calendar.MONTH) + 1;
-        int anio = rightNow.get(Calendar.YEAR);
-        return "" + dia + "/" + mes + "/" + anio;
+    //TODO: obtener las interacciones desde firebase
+    private List<Interaccion> obtenerInteracciones() {
+        String json = "[\n" +
+                "      {\n" +
+                "        \"hora\": \"14:03\",\n" +
+                "        \"tipo\": \"caminar\",\n" +
+                "        \"respuesta\": \"si\",\n" +
+                "        \"observaciones\": \"Me parece bien\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"hora\": \"14:30\",\n" +
+                "        \"tipo\": \"tomar agua\",\n" +
+                "        \"respuesta\": \"si\",\n" +
+                "        \"observaciones\": \"gracias por recordarme, caminé una banda\"\n" +
+                "      }\n" +
+                "    ]";
+        List<LinkedTreeMap<String, String>> lista = gson.fromJson(json, List.class);
+        List<Interaccion> interacciones = convertirTreeMapEnInteraccion(lista);
+        return interacciones;
+    }
+
+    private List<Interaccion> convertirTreeMapEnInteraccion(List<LinkedTreeMap<String, String>> lista) {
+        List<Interaccion> interacciones = new ArrayList<Interaccion>();
+        for (int i=0; i<lista.size(); i++) {
+            Interaccion interaccion = new Interaccion();
+            interaccion.setHora(lista.get(i).get("hora"));
+            interaccion.setTipo(lista.get(i).get("tipo"));
+            interaccion.setRespuesta(lista.get(i).get("respuesta"));
+            interaccion.setObservaciones(lista.get(i).get("observaciones"));
+            interacciones.add(interaccion);
+        }
+        return interacciones;
     }
 
     //act on result of TTS data check

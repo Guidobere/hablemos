@@ -1,4 +1,4 @@
-package app.hablemos.hablemos3;
+package app.hablemos.mailsender;
 
 
 import java.io.ByteArrayInputStream;
@@ -56,13 +56,13 @@ public class GmailSender extends javax.mail.Authenticator {
     public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
         try {
             MimeMessage message = new MimeMessage(session);
-            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/html"));
             message.setSender(new InternetAddress(sender));
             message.setSubject(subject);
             message.setDataHandler(handler);
-            BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText(body);
-            _multipart.addBodyPart(messageBodyPart);
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            htmlPart.setContent(body, "text/html; charset=utf-8" );
+            _multipart.addBodyPart(htmlPart);
 
             // Put parts in message
             message.setContent(_multipart);

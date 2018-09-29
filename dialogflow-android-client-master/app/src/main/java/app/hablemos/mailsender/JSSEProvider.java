@@ -1,4 +1,4 @@
-package app.hablemos.hablemos3;
+package app.hablemos.mailsender;
 
 import java.security.AccessController;
 import java.security.Provider;
