@@ -69,6 +69,14 @@
         android:text="Medicamentos turno mañana" />
 
     <EditText
+        android:id="@+id/txtnoche"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+
+        android:hint="1 paracetamol, 2 actron" />
+
+    <EditText
         android:id="@+id/txtmañana"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
@@ -84,6 +92,15 @@
         android:layout_marginLeft="60dp"
         android:text="Medicamentos turno tarde" />
 
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Registrarme" />
+
     <EditText
         android:id="@+id/txttarde"
         android:layout_width="220dp"
@@ -97,25 +114,8 @@
         android:id="@+id/mNoche"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:layout_marginLeft="60dp"
-        android:text="Medicamentos turno noche" />
-
-    <EditText
-        android:id="@+id/txtnoche"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-
-        android:hint="1 paracetamol, 2 actron" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:text="Registrarme" />
+        android:text="Medicamentos turno noche"
+        android:textStyle="bold" />
 
 </LinearLayout>
