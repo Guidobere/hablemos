@@ -1,8 +1,10 @@
-package app.hablemos.hablemos3;
+package app.hablemos.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+
+import app.hablemos.R;
 
 
 public class RegistroActivity extends AppCompatActivity {

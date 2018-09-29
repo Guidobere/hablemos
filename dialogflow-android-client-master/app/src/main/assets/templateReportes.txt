@@ -1,0 +1,62 @@
+<html>
+    <head></head>
+    <body>
+        <h2>Reporte Diario de Actividades de @Abuelo@</h2>
+        <div class="container">
+            <div class="col-md-12 col-xs-12">
+                <h4>Caminata</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número Incitación</th>
+                            <th>Salió a Caminar?</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>@ListaCaminata@</tbody>
+                </table>
+            </div>
+            <div class="col-md-12 col-xs-12">
+                <h4>Agua</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número Incitación</th>
+                            <th>Tomó?</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>@ListaAgua@</tbody>
+                </table>
+            </div>
+            <div class="col-md-12 col-xs-12">
+                <h4>Medicamentos</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número Incitación</th>
+                            <th>Turno</th>
+                            <th>Tomó?</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>@ListaMedicamentos@</tbody>
+                </table>
+            </div>
+            <div class="col-md-12 col-xs-12">
+                <h4>Controles</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número Incitación</th>
+                            <th>Control</th>
+                            <th>Se controló?</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>@ListaControles@</tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
