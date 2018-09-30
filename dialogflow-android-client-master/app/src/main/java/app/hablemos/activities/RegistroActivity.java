@@ -1,4 +1,4 @@
-package app.hablemos.hablemos3;
+package app.hablemos.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import ai.api.android.AIDataService;
+
+import app.hablemos.R;
 
 
 public class RegistroActivity extends AppCompatActivity {
