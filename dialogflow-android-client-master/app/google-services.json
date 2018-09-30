@@ -8,6 +8,37 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:410536572841:android:e6e8b395700a07c9",
+        "android_client_info": {
+          "package_name": "app.hablemos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410536572841-ougujaetfkd2o529lalp071tfru3mo6u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUejSVUQUHMjAwlPd6LPRr8nZ-aJfcR8w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:410536572841:android:63a2039e87edbf18",
         "android_client_info": {
           "package_name": "app.hablemos.hablemos3"
