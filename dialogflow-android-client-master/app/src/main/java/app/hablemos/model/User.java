@@ -1,4 +1,4 @@
-package app.hablemos.hablemos3;
+package app.hablemos.model;
 
 public class User {
 
