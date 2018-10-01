@@ -119,15 +119,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         generadorTemplate = new GeneradorTemplate();
         AssetManager assetManager = getAssets();
 
-        try {
-            String[] files = assetManager.list("Files");
-            for(int i=0; i<files.length; i++){
-                System.out.println("file: "+i+"name: "+files[i]);
-            }
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
         //TODO: Envio de email, hay que pasarlo a donde corresponda
         generadorTemplate.generarYEnviarMail(nombreAbuelo, obtenerInteracciones(), assetManager);
     }
