@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <style>
+            #interacciones {
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            #interacciones td, #interacciones th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #interacciones tr:nth-child(even){
+                background-color: #ddd;
+            }
+
+            #interacciones th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: center;
+                background-color: lightblue;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Reporte Diario de Actividades de @Abuelo@</h1>
+        <div class="container">
+            <h2>Interacciones</h2>
+            <table id="interacciones">
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Tipo</th>
+                        <th>Respuesta</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>@ListaInteracciones@</tbody>
+            </table>
+        </div>
+    </body>
+</html>

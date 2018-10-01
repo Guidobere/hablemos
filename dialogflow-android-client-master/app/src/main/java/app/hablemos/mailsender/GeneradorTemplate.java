@@ -28,7 +28,7 @@ public class GeneradorTemplate {
     private String generarBodyHTML(String nombreAbuelo, List<Interaccion> interacciones, AssetManager assetManager) {
         String body = "";
         try {
-            InputStream is = assetManager.open("templateReportesTablaUnica.txt");
+            InputStream is = assetManager.open("reporteDiario.txt");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
