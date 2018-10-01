@@ -22,13 +22,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
-import org.w3c.dom.Node;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
