@@ -39,12 +39,11 @@
 
       </LinearLayout>
 
-
          <RelativeLayout
              android:id="@+id/relative1"
              android:layout_marginRight="30dp"
              android:layout_marginLeft="30dp"
-             android:layout_marginTop="50dp"
+             android:layout_marginTop="80dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layout_below="@+id/linearLayaut1">
@@ -141,7 +140,9 @@
              android:layout_centerHorizontal="true"
              android:textSize="12sp"
              android:layout_marginTop="10dp"
-             android:text="¿No tenes usuario? Registrate ahora"/>
+             android:text="¿No tenes usuario? Registrate ahora"
+             android:clickable="true"
+             android:focusable="true"/>
 
          <LinearLayout
              android:layout_width="wrap_content"
