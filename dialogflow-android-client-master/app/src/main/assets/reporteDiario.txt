@@ -1,6 +1,15 @@
 <html>
     <head>
         <style>
+            div.logo {
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                font-size: 30px;
+                text-align: center;
+                display: inline-block;
+                font-weight: bold;
+                margin-bottom: 25px;
+            }
+
             #interacciones {
                 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
                 border-collapse: collapse;
@@ -20,15 +29,19 @@
                 padding-top: 12px;
                 padding-bottom: 12px;
                 text-align: center;
-                background-color: lightblue;
+                background-color: #81D3CE;
                 color: white;
             }
         </style>
     </head>
     <body>
-        <h1>Reporte Diario de Actividades de @Abuelo@</h1>
+        <div class="logo">
+            <img src="@urlImagen@" alt="Hablemos!" width="200"/>
+            <br/>Hablemos!
+        </div>
+        <h2>Reporte Diario de @Abuelo@</h2>
         <div class="container">
-            <h2>Interacciones</h2>
+
             <table id="interacciones">
                 <thead>
                     <tr>

@@ -10,6 +10,12 @@ import app.hablemos.model.Interaccion;
 
 public class GeneradorTemplate {
 
+    //TODO levantar de properties o BD
+    private final String urlImagen = "https://i.postimg.cc/kgpdH5hh/hablemos_320x240.png";
+
+    //TODO levantar de BD (vendria por parámetro)
+    private final String emailsDestino = "mails destino";
+
     public void generarYEnviarMail(String nombreAbuelo, List<Interaccion> interacciones, AssetManager assetManager) {
         final String bodyFinal = generarBodyHTML(nombreAbuelo, interacciones, assetManager);
         new Thread(new Runnable() {
@@ -17,7 +23,7 @@ public class GeneradorTemplate {
                 try {
                     GmailSender sender = new GmailSender("hablemosproyectofinal@gmail.com", "aprobamoscomosea");
                     //TODO: poner el mail del tutor y el contenido del mail
-                    sender.sendMail("Reporte del " + getDate(), bodyFinal, "Hablemos!", "mail tutor");
+                    sender.sendMail("Reporte del " + getDate(), bodyFinal, "Hablemos!", emailsDestino);
                 } catch (Exception e) {
                     //TODO: logguear correspondientemente
                 }
@@ -41,6 +47,7 @@ public class GeneradorTemplate {
         //reemplazo nombre abuelo
         bodyFinal = bodyFinal.replace("@Abuelo@", nombreAbuelo);
         bodyFinal = bodyFinal.replace("@ListaInteracciones@", generarListaInteraccionesHTML(interacciones));
+        bodyFinal = bodyFinal.replace("@urlImagen@", urlImagen);
         return bodyFinal;
     }
 
@@ -64,4 +71,5 @@ public class GeneradorTemplate {
         int anio = rightNow.get(Calendar.YEAR);
         return "" + dia + "/" + mes + "/" + anio;
     }
+
 }
