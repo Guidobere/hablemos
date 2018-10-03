@@ -35,15 +35,14 @@
               android:layout_marginTop="10dp"
               android:layout_height="180dp"
               android:tint="@color/white"
-              />
-
+              android:contentDescription="@string/logo_login" />
 
       </LinearLayout>
 
          <RelativeLayout
              android:id="@+id/relative1"
-             android:layout_marginRight="30dp"
-             android:layout_marginLeft="30dp"
+             android:layout_marginEnd="30dp"
+             android:layout_marginStart="30dp"
              android:layout_marginTop="80dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
@@ -55,20 +54,23 @@
                  android:src="@drawable/sobre"
                  android:padding="3dp"
                  android:background="@color/colorPrimary"
-                 android:layout_height="40dp" />
+                 android:layout_height="40dp"
+                 android:contentDescription="@string/email_view" />
 
              <EditText
                  android:id="@+id/txtUser"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:padding="10dp"
-                 android:layout_toRightOf="@id/imageView_userIcon"
+                 android:layout_toEndOf="@id/imageView_userIcon"
                  android:background="@color/editTextColor"
                  android:layout_alignParentTop="true"
                  android:layout_alignBottom="@id/imageView_userIcon"
-                 android:hint="Coloca tu Email"
+                 android:hint="@string/coloca_tu_email"
                  android:textSize="15sp"
-                 android:paddingLeft="20dp"/>
+                 android:paddingStart="20dp"
+                 android:paddingEnd="20dp"
+                 android:inputType="textEmailAddress" />
 
          </RelativeLayout>
 
@@ -87,21 +89,23 @@
                  android:src="@drawable/candado"
                  android:padding="3dp"
                  android:background="@color/colorPrimary"
-                 android:layout_height="40dp" />
+                 android:layout_height="40dp"
+                 android:contentDescription="@string/contrasenia_view" />
 
              <EditText
                  android:id="@+id/txtPass"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:padding="10dp"
-                 android:layout_toRightOf="@+id/imageView_passIcon"
+                 android:layout_toEndOf="@+id/imageView_passIcon"
                  android:background="@color/editTextColor"
                  android:layout_alignParentTop="true"
                  android:layout_alignBottom="@+id/imageView_passIcon"
-                 android:hint="Coloca tu Contraseña"
+                 android:hint="@string/coloca_tu_contrasenia"
                  android:inputType="textPassword"
                  android:textSize="15sp"
-                 android:paddingLeft="20dp"/>
+                 android:paddingStart="20dp"
+                 android:paddingEnd="20dp" />
 
          </RelativeLayout>
 
@@ -112,18 +116,16 @@
              android:layout_marginRight="30dp"
              android:layout_below="@id/relative2"
              android:layout_marginLeft="30dp"
-             android:layout_marginTop="10dp"
-            >
+             android:layout_marginTop="10dp">
 
              <Button
                  android:id="@+id/Ingresar"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:text="Ingresar"
+                 android:text="@string/ingresar"
                  android:textSize="13sp"
                  android:fontFamily="sans-serif-condensed"
-                 android:background="@color/colorPrimary"
-                 />
+                 android:background="@color/colorPrimary" />
 
          </RelativeLayout>
 
@@ -133,8 +135,7 @@
          android:layout_marginRight="30dp"
          android:layout_below="@id/boton"
          android:layout_marginLeft="30dp"
-         android:layout_marginTop="10dp"
-         >
+         android:layout_marginTop="10dp">
 
          <TextView
              android:id="@+id/textRegistro"
@@ -144,16 +145,10 @@
              android:layout_centerHorizontal="true"
              android:textSize="12sp"
              android:layout_marginTop="10dp"
-             android:text="¿No tenes usuario? Registrate ahora"
+             android:text="@string/no_tenes_usuario_registrate_ahora"
              android:clickable="true"
              android:focusable="true"/>
 
-         <LinearLayout
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_below="@id/textRegistro">
-
-         </LinearLayout>
      </RelativeLayout>
 
      </RelativeLayout>

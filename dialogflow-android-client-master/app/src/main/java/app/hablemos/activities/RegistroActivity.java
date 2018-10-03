@@ -1,6 +1,7 @@
 package app.hablemos.activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -57,34 +58,40 @@ public class RegistroActivity extends AppCompatActivity {
                     u = user.getValue(User.class);
                     //Log.d("User:: ", u.username+ " " + u.email);
                 }
-                mailTutor.setText(u.email.toString());
-                nombreAbuelo.setText(u.username.toString());
-                equipoFavorito.setText(u.equipo.toString());
-                medicamentosM.setText(u.remediosManiana.toString());
-                medicamentosT.setText(u.remediosTarde.toString());
-                medicamentosN.setText(u.remediosNoche.toString());
-
+                mailTutor.setText(u.email);
+                nombreAbuelo.setText(u.username);
+                equipoFavorito.setText(u.equipo);
+                medicamentosM.setText(u.remediosManiana);
+                medicamentosT.setText(u.remediosTarde);
+                medicamentosN.setText(u.remediosNoche);
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
         //mailTutor.setText(usuario.email);
+
         //LOGICA PARA QUE AL HACER CLICK EN EL BOTON ENVIE LOS DATOS A LA FUNCION writeNewUser
         Button button = (Button) findViewById(R.id.btnLogin);
-        button.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(),medicamentosT.getText().toString(),medicamentosN.getText().toString());
+        button.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                writeNewUser(
+                        nombreAbuelo.getText().toString(),
+                        mailTutor.getText().toString(),
+                        equipoFavorito.getText().toString(),
+                        medicamentosM.getText().toString(),
+                        medicamentosT.getText().toString(),
+                        medicamentosN.getText().toString()
+                );
             }
         });
     }
+
     //FUNCION PARA CREAR USUARIO EN FIREBASE
     private void writeNewUser(String username, String email,String equipo,String remediosM,String remediosT,String remediosN) {
         User user = new User(username, email,equipo,remediosM,remediosT,remediosN);
         myUsersFb.push().setValue(new User(username,email,equipo,remediosM,remediosT,remediosN));//Inserto un nuevo valor con su respectivo ID y le Asigno el valor del nuevo
-
     }
 }

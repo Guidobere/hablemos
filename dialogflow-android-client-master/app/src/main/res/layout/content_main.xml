@@ -15,8 +15,9 @@
             android:id="@+id/textQuery"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Escribi aca"
-            android:background="@android:color/white" />
+            android:hint="@string/escribi_aca"
+            android:background="@android:color/white"
+            android:inputType="text" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -31,7 +32,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="128dp"
-                android:text="Enviar" />
+                android:text="@string/enviar_view" />
 
             <Button
                 android:id="@+id/micButton"
@@ -42,7 +43,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="7dp"
-                android:text="Hablar" />
+                android:text="@string/hablar_view" />
 
 
             <Button
@@ -53,7 +54,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="0dp"
-                android:text="Limpiar" />
+                android:text="@string/limpiar_view" />
         </RelativeLayout>
 
         <LinearLayout
@@ -65,7 +66,7 @@
             <TextView
                 android:id="@+id/resultTextViewAnterior"
                 android:layout_width="match_parent"
-                android:hint="Mensaje Anterior"
+                android:hint="@string/mensaje_anterior"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -80,14 +81,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="66dp"
-                android:text="Limpiar Historial" />
+                android:text="@string/limpiar_historial" />
 
             <Button
                 android:id="@+id/buttonRegistro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="66dp"
-                android:text="ir al registro"
+                android:text="@string/ir_al_registro"
                 android:onClick="abrirVentanaRegistro"
                 />
 
@@ -96,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="66dp"
-                android:text="ir al login"
+                android:text="@string/ir_al_login"
                 android:onClick="abrirVentanaLogin"
                 />
 

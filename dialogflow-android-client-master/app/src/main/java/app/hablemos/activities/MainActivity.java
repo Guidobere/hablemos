@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -45,48 +44,42 @@ import app.hablemos.mailsender.GeneradorTemplate;
 import app.hablemos.model.Interaccion;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
-    private static final String TAG = "MainActivity";
+    private String TAG = getString(R.string.tagMain);
 
-    private GeneradorTemplate generadorTemplate;
-    //TTS object
-    private TextToSpeech myTTS;
     //status check code
     private int MY_DATA_CHECK_CODE = 0;
-    private AIService aiService;
-    private String clientAccessToken = "3d0b0b12561c4040963f4e4f529527c7";
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
 
     private Gson gson = GsonFactory.getGson();
+    private GeneradorTemplate generadorTemplate;
+    //TTS object
+    private TextToSpeech myTTS;
 
     private TextView resultTextView;
     private EditText queryEditText;
     private Button micButton;
-
     private Button bRegistro;
     private Button bLogin;
 
-    private int HORARIO_MANANA = 6;
-    private int HORARIO_TARDE = 12;
-    private int HORARIO_NOCHE = 20;
-
-    //TODO Externalizar
-    private static final String msgErrorReconocimientoVoz =
-        "No se pudo reconocer la entrada de voz";
+    private int HORARIO_MANANA = Integer.getInteger(getString(R.string.horarioManiana));
+    private int HORARIO_TARDE = Integer.getInteger(getString(R.string.horarioTarde));
+    private int HORARIO_NOCHE = Integer.getInteger(getString(R.string.horarioNoche));
 
     //PARA EL MENSAJE ANTERIOR
+    //DONDE SE GUARDA EL MSJ ANTERIOR
+    private String dialogoAnterior = "";
 
-        //DONDE SE GUARDA EL MSJ ANTERIOR
-    private String dialogoAnterior="Mensaje anterior";
-       //Donde se muestra el msj anterior
+    //Donde se muestra el msj anterior
     private TextView resultTextViewAnterior;
 
     //Lo que dice y muestra en la aplicacion
     private String speech;
 
-    //nombre abuelo
-    private String nombreAbuelo="Carolina";
+    //TODO: obtener de firebase
+    private String nombreAbuelo = "Carolina";
 
     private AIDataService aiDataService;
+    private AIService aiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         micButton = (Button) findViewById(R.id.micButton);
         bRegistro = (Button) findViewById(R.id.buttonRegistro);
-        bLogin = (Button) findViewById(R.id.buttonRegistro);
+        bLogin = (Button) findViewById(R.id.buttonLogin);
 
         //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
         resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
@@ -109,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         findViewById(R.id.buttonClear).setOnClickListener(this);
         findViewById(R.id.buttonClearHistorial).setOnClickListener(this);
 
-        final AIConfiguration config = new AIConfiguration(clientAccessToken, AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
+        final AIConfiguration config = new AIConfiguration(getString(R.string.accessToken), AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
         aiDataService = new AIDataService(this, config);
@@ -119,11 +112,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
 
-        generadorTemplate = new GeneradorTemplate();
         AssetManager assetManager = getAssets();
+        generadorTemplate = new GeneradorTemplate(getBaseContext(), assetManager);
+
+        //TODO: levantar de firebase
+        String emailsDestino = "mails destino";
 
         //TODO: Envio de email, hay que pasarlo a donde corresponda
-        generadorTemplate.generarYEnviarMail(nombreAbuelo, obtenerInteracciones(), assetManager);
+        generadorTemplate.generarYEnviarMail(nombreAbuelo, emailsDestino, obtenerInteracciones());
     }
 
     //TODO: obtener las interacciones desde firebase
@@ -186,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void micButtonOnClick(final View view) {
-        Toast.makeText(this, "Escuchando...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
         micButton.setEnabled(false);
         aiService.startListening();
     }
@@ -277,11 +273,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         Calendar rightNow = Calendar.getInstance();
         int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
         if (currentHourIn24Format >= HORARIO_MANANA && currentHourIn24Format < HORARIO_TARDE) {
-            return "Buenos días";
+            return getString(R.string.saludoManiana);
         } else if (currentHourIn24Format >= HORARIO_TARDE && currentHourIn24Format < HORARIO_NOCHE) {
-            return "Buenas tardes";
+            return getString(R.string.saludoTarde);
         } else {
-            return "Buenas noches";
+            return getString(R.string.saludoNoche);
         }
     }
 
@@ -293,16 +289,19 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 myTTS.speak(speech,0,null, "saludo");
                 break;
             case "tarde":
+                //TODO: cambiar speech segun firebase
                 speech = "2 paracetamol";
                 resultTextView.setText(speech);
                 myTTS.speak(speech,0,null, "tarde");
                 break;
             case "mañana":
+                //TODO: cambiar speech segun firebase
                 speech = "1 paracetamol";
                 resultTextView.setText(speech);
                 myTTS.speak(speech,0,null, "maniana");
                 break;
             case "noche":
+                //TODO: cambiar speech segun firebase
                 speech = "3 paracetamol";
                 resultTextView.setText(speech);
                 myTTS.speak(speech,0,null, "noche");
@@ -337,8 +336,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 Log.w(TAG, error.toString());
 
                 //Si error es del reconocimiento de voz se muestra un mensaje preestablecido.
-                if(error.toString().contains("Speech recognition engine error"))
-                    resultTextView.setText(msgErrorReconocimientoVoz);
+                if(error.toString().contains(getString(R.string.errorSpeechRecog)))
+                    resultTextView.setText(getString(R.string.errorReconVoz));
                 else
                     resultTextView.setText(error.toString());
 
@@ -389,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(this, "¡Hasta la proxima!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.saludoFinal), Toast.LENGTH_SHORT).show();
         finish();
     }
 }
