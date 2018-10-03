@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private Button micButton;
 
     private Button bRegistro;
+    private Button bLogin;
 
     private int HORARIO_MANANA = 6;
     private int HORARIO_TARDE = 12;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         micButton = (Button) findViewById(R.id.micButton);
         bRegistro = (Button) findViewById(R.id.buttonRegistro);
+        bLogin = (Button) findViewById(R.id.buttonRegistro);
 
         //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
         resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
@@ -371,6 +373,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     public void abrirVentanaRegistro(final View view) {
         startActivity(RegistroActivity.class);
+    }
+
+    public void abrirVentanaLogin(final View view) {
+        startActivity(Login.class);
     }
 
     private void startActivity(Class<?> cls) {
