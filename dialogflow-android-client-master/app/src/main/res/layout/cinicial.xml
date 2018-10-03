@@ -41,7 +41,6 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:background="@color/colorPrimary"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -71,7 +70,7 @@
                 android:layout_height="40dp"
                 android:background="@color/colorPrimary"
                 android:padding="3dp"
-                android:src="@drawable/sobre" />
+                android:src="@drawable/nombreabuelo" />
 
             <EditText
                 android:layout_width="238dp"
@@ -100,7 +99,7 @@
                 <ImageView
                     android:id="@+id/imageView_passIcon"
                     android:layout_width="40dp"
-                    android:src="@drawable/candado"
+                    android:src="@drawable/sobre"
                     android:padding="3dp"
                     android:background="@color/colorPrimary"
                     android:layout_height="40dp" />
@@ -163,7 +162,7 @@
                 <ImageView
                     android:id="@+id/imageView_passIcon3"
                     android:layout_width="40dp"
-                    android:src="@drawable/candado"
+                    android:src="@drawable/futbol"
                     android:padding="3dp"
                     android:background="@color/colorPrimary"
                     android:layout_height="40dp" />
@@ -194,7 +193,7 @@
                 <ImageView
                     android:id="@+id/imageView_passIcon4"
                     android:layout_width="40dp"
-                    android:src="@drawable/candado"
+                    android:src="@drawable/medicamento"
                     android:padding="3dp"
                     android:background="@color/colorPrimary"
                     android:layout_height="40dp" />
@@ -225,7 +224,7 @@
                 <ImageView
                     android:id="@+id/imageView_passIcon5"
                     android:layout_width="40dp"
-                    android:src="@drawable/candado"
+                    android:src="@drawable/medicamento"
                     android:padding="3dp"
                     android:background="@color/colorPrimary"
                     android:layout_height="40dp" />
@@ -256,7 +255,7 @@
                 <ImageView
                     android:id="@+id/imageView_passIcon6"
                     android:layout_width="40dp"
-                    android:src="@drawable/candado"
+                    android:src="@drawable/medicamento"
                     android:padding="3dp"
                     android:background="@color/colorPrimary"
                     android:layout_height="40dp" />
