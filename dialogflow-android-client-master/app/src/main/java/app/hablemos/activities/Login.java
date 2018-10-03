@@ -1,20 +1,14 @@
 package app.hablemos.activities;
 
-import android.nfc.Tag;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
-
-import app.hablemos.R;
-
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import app.hablemos.R;
+
 
 public class Login extends AppCompatActivity {
 
@@ -30,13 +26,11 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    private String TAG = "Admin_Log";
+    private String TAG = getString(R.string.tagLogin);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-
 
         //LOGICA BOTON LOGIN
         Button button = findViewById(R.id.Ingresar);
@@ -48,7 +42,6 @@ public class Login extends AppCompatActivity {
                 //crearUsuario(user,pass);
             }
         });
-
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -74,9 +67,7 @@ public class Login extends AppCompatActivity {
                 crearUsuario();
             }
         });
-
     }
-
 
 /*    private void login(){
         EditText userTxtBox = (EditText) findViewById(R.id.txtUser);
@@ -107,7 +98,6 @@ public class Login extends AppCompatActivity {
                 });
     }*/
 
-
     //CREAR O LOGEAR USUARIO
     private void crearUsuario() {
         EditText userTxtBox = (EditText) findViewById(R.id.txtUser);
@@ -116,29 +106,26 @@ public class Login extends AppCompatActivity {
         final String email = userTxtBox.getText().toString();
         final String password = passTxtBox.getText().toString();
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(MainActivity.class);
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        startActivity(MainActivity.class);
+                        //updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        Toast.makeText(Login.this, getString(R.string.fallo_autenticacion),
+                                Toast.LENGTH_SHORT).show();
+                        //updateUI(null);
                     }
-                });
+                    // ...
+                }
+            });
     }
-
-
 
     private void startActivity(Class<?> cls) {
         final Intent intent = new Intent(this, cls);
@@ -147,41 +134,33 @@ public class Login extends AppCompatActivity {
 
     //Create a new createAccount method which takes in an email address and password, validates them and then creates a new user with the createUserWithEmailAndPassword method.
     private void singIn(){
-
         EditText userTxtBox = (EditText) findViewById(R.id.txtUser);
         EditText passTxtBox = (EditText) findViewById(R.id.txtPass);
-
         String email = userTxtBox.getText().toString();
         String password = passTxtBox.getText().toString();
 
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(MainActivity.class);
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        startActivity(MainActivity.class);
+                        //updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        Toast.makeText(Login.this, getString(R.string.fallo_autenticacion),
+                                Toast.LENGTH_SHORT).show();
+                        //updateUI(null);
                     }
-                });
-
+                    // ...
+                }
+            });
     }
 
-    //Create a new signIn method which takes in an email address and password, validates them, and then signs a user in with the
-
-
-    //When initializing your Activity, check to see if the user is currently signed in.
     @Override
     public void onStart() {
         super.onStart();

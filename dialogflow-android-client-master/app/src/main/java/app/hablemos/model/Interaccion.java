@@ -7,6 +7,17 @@ public class Interaccion {
     private String respuesta;
     private String observaciones;
 
+    public Interaccion() {
+
+    }
+
+    public Interaccion(String hora, String tipo, String respuesta, String observaciones) {
+        this.hora = hora;
+        this.tipo = tipo;
+        this.respuesta = respuesta;
+        this.observaciones = observaciones;
+    }
+
     public String getHora() {
         return hora;
     }
