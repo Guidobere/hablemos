@@ -44,21 +44,6 @@ public class RegistroActivity extends AppCompatActivity {
         medicamentosT = (EditText) findViewById(R.id.txttarde);
         medicamentosN = (EditText) findViewById(R.id.txtnoche);
 
-        //myRef.setValue("Prueba conf inicial!");
-        //User usuario = new User();
-        //usuario.email = myRefFb.child("users").child("email").toString();
- /*        myRefFb.child("email").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //ACA PONEMOS LOS DATOS QUE QUEREMOS QUE SE MUESTREN AL CAMBIAR EN FIREBASE
-                String email =  dataSnapshot.getValue().toString();
-                //resultTextView.setText(texto);
-                 mailTutor.setText(email);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-             }
-        });*/
         // Attach a listener to read the data at our posts reference
         myUsersFb.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
@@ -78,16 +63,7 @@ public class RegistroActivity extends AppCompatActivity {
                 medicamentosM.setText(u.remediosManiana.toString());
                 medicamentosT.setText(u.remediosTarde.toString());
                 medicamentosN.setText(u.remediosNoche.toString());
- /*                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                    Log.d("Log Usuario config: ", "onDataChange():" + dataSnapshot.toString());
-                     User user = dataSnapshot.getValue(User.class);
-                    users.put(dataSnapshot.getKey(),user);
-                     //String email=postSnapshot.getValue(User.class).email;
-                }
-                System.out.println(Arrays.asList(users));*/
-                //System.out.println(user);
-                //mailTutor.setText(user.);
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

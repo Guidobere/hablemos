@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -239,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
             private AIError aiError;
 
+                    @Nullable
                     @Override
                     protected AIResponse doInBackground(final String... params) {
                         final AIRequest request = new AIRequest();

@@ -57,6 +57,7 @@
                  android:layout_height="40dp" />
 
              <EditText
+                 android:id="@+id/txtUser"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:padding="10dp"
@@ -88,6 +89,7 @@
                  android:layout_height="40dp" />
 
              <EditText
+                 android:id="@+id/txtPass"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:padding="10dp"
@@ -113,6 +115,7 @@
             >
 
              <Button
+                 android:id="@+id/Ingresar"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:text="Ingresar"
