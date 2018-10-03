@@ -145,7 +145,6 @@ public class Login extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     //Create a new createAccount method which takes in an email address and password, validates them and then creates a new user with the createUserWithEmailAndPassword method.
     private void singIn(){
 

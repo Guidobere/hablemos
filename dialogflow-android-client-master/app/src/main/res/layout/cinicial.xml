@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars = "vertical"
+        android:scrollbarStyle="insideInset">
+
+        <RelativeLayout
+            android:id="@+id/relativep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="false"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp">
+
+
+             <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!-- AGREGAR ALGO PARA EL REGISTRO -->
+        <LinearLayout
+            android:id="@+id/linearLayaut1"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="180dp"
+                android:src="@drawable/logoapp"
+                android:layout_marginTop="10dp"
+                android:layout_height="180dp"
+                android:tint="@color/white"
+                />
+
+        </LinearLayout>
+
+            <RelativeLayout
+            android:id="@+id/relative1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativep"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="200dp"
+                tools:ignore="NotSibling">
+
+            <ImageView
+                android:id="@+id/imageView_userIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary"
+                android:padding="3dp"
+                android:src="@drawable/nombreabuelo" />
+
+            <EditText
+                android:layout_width="238dp"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@id/imageView_userIcon"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="0dp"
+                android:layout_toRightOf="@id/imageView_userIcon"
+                android:background="@color/editTextColor"
+                android:hint="Nombre Abuelo"
+                android:padding="10dp"
+                android:paddingLeft="20dp"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative2"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative1">
+
+                <ImageView
+                    android:id="@+id/imageView_passIcon"
+                    android:layout_width="40dp"
+                    android:src="@drawable/sobre"
+                    android:padding="3dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="40dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@+id/imageView_passIcon"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/imageView_passIcon"
+                    android:hint="Email del tutor"
+                    android:textSize="15sp"
+                    android:paddingLeft="20dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative3"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative2">
+
+                <ImageView
+                    android:id="@+id/imageView_passIcon2"
+                    android:layout_width="40dp"
+                    android:src="@drawable/candado"
+                    android:padding="3dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="40dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@+id/imageView_passIcon2"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/imageView_passIcon2"
+                    android:hint="Contraseña tutor"
+                    android:inputType="textPassword"
+                    android:textSize="15sp"
+                    android:paddingLeft="20dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative4"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative3">
+
+                <ImageView
+                    android:id="@+id/imageView_passIcon3"
+                    android:layout_width="40dp"
+                    android:src="@drawable/futbol"
+                    android:padding="3dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="40dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@+id/imageView_passIcon3"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/imageView_passIcon3"
+                    android:hint="Equipo futbol"
+                    android:textSize="15sp"
+                    android:paddingLeft="20dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative5"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative4">
+
+                <ImageView
+                    android:id="@+id/imageView_passIcon4"
+                    android:layout_width="40dp"
+                    android:src="@drawable/medicamento"
+                    android:padding="3dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="40dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@+id/imageView_passIcon4"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/imageView_passIcon4"
+                    android:hint="Medicamentos Turno Mañana"
+                    android:textSize="15sp"
+                    android:paddingLeft="20dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative6"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative5">
+
+                <ImageView
+                    android:id="@+id/imageView_passIcon5"
+                    android:layout_width="40dp"
+                    android:src="@drawable/medicamento"
+                    android:padding="3dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="40dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@+id/imageView_passIcon5"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/imageView_passIcon5"
+                    android:hint="Medicamentos Turno Tarde"
+                    android:textSize="15sp"
+                    android:paddingLeft="20dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative7"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative6">
+
+                <ImageView
+                    android:id="@+id/imageView_passIcon6"
+                    android:layout_width="40dp"
+                    android:src="@drawable/medicamento"
+                    android:padding="3dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="40dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@+id/imageView_passIcon6"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/imageView_passIcon6"
+                    android:hint="Medicamentos Turno Noche"
+                    android:textSize="15sp"
+                    android:paddingLeft="20dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/boton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_below="@id/relative7"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                >
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Registrar"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginBottom="10dp"
+                    />
+
+            </RelativeLayout>
+
+            </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
