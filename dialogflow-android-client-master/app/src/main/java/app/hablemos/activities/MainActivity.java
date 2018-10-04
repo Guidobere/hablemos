@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -41,6 +40,7 @@ import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
 import app.hablemos.mailsender.GeneradorTemplate;
+import app.hablemos.weather.WeatherService;
 import app.hablemos.model.Interaccion;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
@@ -121,6 +121,21 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         //TODO: Envio de email, hay que pasarlo a donde corresponda
         generadorTemplate.generarYEnviarMail(nombreAbuelo, obtenerInteracciones(), assetManager);
+
+        //TODO Ver donde poner esto y usarlo
+        try {
+            Boolean isHot = WeatherService.isItHotToday();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //TODO Ver donde poner esto y usarlo
+        try {
+            Boolean isSuitableForOutdoor = WeatherService.isSuitableForOutsideActivity();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     //TODO: obtener las interacciones desde firebase
