@@ -1,7 +1,6 @@
 package app.hablemos.weather;
 
-import android.content.Context;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -78,13 +77,24 @@ public class WeatherService {
         JSONObject weather = getWeather(getLat(), getLon());
 
         try {
-            Double temp = weather.getJSONObject("main").getDouble("temp");
+            JSONArray weatherArray = weather.getJSONArray("weather");
+            if (weatherArray!=null && weatherArray.length()>0) {
+                for (int i = 0; i < weatherArray.length(); i++) {
+                    JSONObject objects = weatherArray.getJSONObject(i);
+                    int id = objects.getInt("id");
+
+                    if (id < 800 || id >= 900) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
         } catch (JSONException e) {
             throw new Exception();
         }
-
-        //TODO add conditions based on temperature, humidity, etc
-        return true;
     }
 
 }
