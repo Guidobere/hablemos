@@ -1,89 +1,27 @@
 {
   "project_info": {
-    "project_number": "410536572841",
-    "firebase_url": "https://hablemos-b7bbe.firebaseio.com",
-    "project_id": "hablemos-b7bbe",
-    "storage_bucket": "hablemos-b7bbe.appspot.com"
+    "project_number": "509725217091",
+    "firebase_url": "https://hablemo10.firebaseio.com",
+    "project_id": "hablemo10",
+    "storage_bucket": "hablemo10.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:410536572841:android:e6e8b395700a07c9",
+        "mobilesdk_app_id": "1:509725217091:android:e6e8b395700a07c9",
         "android_client_info": {
           "package_name": "app.hablemos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "410536572841-ougujaetfkd2o529lalp071tfru3mo6u.apps.googleusercontent.com",
+          "client_id": "509725217091-7q9joo5h1e1vatsbr3jpcfjbe0m1hkuo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCUejSVUQUHMjAwlPd6LPRr8nZ-aJfcR8w"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:410536572841:android:63a2039e87edbf18",
-        "android_client_info": {
-          "package_name": "app.hablemos.hablemos3"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "410536572841-ougujaetfkd2o529lalp071tfru3mo6u.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCUejSVUQUHMjAwlPd6LPRr8nZ-aJfcR8w"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:410536572841:android:4a2f6e82a2990eb8",
-        "android_client_info": {
-          "package_name": "piazzoli.kevin.com.firebasechat"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "410536572841-ougujaetfkd2o529lalp071tfru3mo6u.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCUejSVUQUHMjAwlPd6LPRr8nZ-aJfcR8w"
+          "current_key": "AIzaSyDmKLgOel6i9UbWjNfyd3ycLOIXyiKDF-k"
         }
       ],
       "services": {

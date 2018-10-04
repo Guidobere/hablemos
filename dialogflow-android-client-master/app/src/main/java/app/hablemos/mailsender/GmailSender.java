@@ -74,14 +74,6 @@ public class GmailSender extends javax.mail.Authenticator {
         } catch (Exception e) {}
     }
 
-    public void addAttachment(String filename) throws Exception {
-        BodyPart messageBodyPart = new MimeBodyPart();
-        DataSource source = new FileDataSource(filename);
-        messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName("download image");
-        _multipart.addBodyPart(messageBodyPart);
-    }
-
     public class ByteArrayDataSource implements DataSource {
         private byte[] data;
         private String type;
@@ -90,11 +82,6 @@ public class GmailSender extends javax.mail.Authenticator {
             super();
             this.data = data;
             this.type = type;
-        }
-
-        public ByteArrayDataSource(byte[] data) {
-            super();
-            this.data = data;
         }
 
         public void setType(String type) {
@@ -108,7 +95,7 @@ public class GmailSender extends javax.mail.Authenticator {
                 return type;
         }
 
-        public InputStream getInputStream() throws IOException {
+        public InputStream getInputStream() {
             return new ByteArrayInputStream(data);
         }
 

@@ -1,96 +1,184 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+<?xml version="1.0" encoding="utf-8"?>
 
-    <LinearLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
-
-        <EditText
-            android:id="@+id/textQuery"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Escribi aca"
-            android:background="@android:color/white" />
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="false"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/buttonSend"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/linearLayaut1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="166dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/logoapp"
+                    android:tint="@color/white"
+                    android:contentDescription="@string/imagen_mensaje" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative1"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="128dp"
-                android:text="Enviar" />
+                android:layout_below="@+id/linearLayaut1">
 
-            <Button
-                android:id="@+id/micButton"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/imageView_userIcon"
+                    android:layout_width="40dp"
+                    android:src="@drawable/burbuja"
+                    android:padding="3dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/mensajeicono" />
+
+                <EditText
+                    android:id="@+id/textQuery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toEndOf="@id/imageView_userIcon"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@id/imageView_userIcon"
+                    android:hint="@string/escribi_algo_aca"
+                    android:textSize="15sp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:inputType="text" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative2"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="micButtonOnClick"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="7dp"
-                android:text="Hablar" />
+                android:layout_below="@+id/relative1">
 
+                <Button
+                    android:id="@+id/buttonSend"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="15dp"
+                    android:layout_toStartOf="@+id/micButton"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/enviar_view" />
 
-            <Button
-                android:id="@+id/buttonClear"
-                android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/micButton"
+                    android:layout_width="77dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/colorPrimary"
+                    android:onClick="micButtonOnClick"
+                    android:text="@string/hablar_view" />
+
+                <Button
+                    android:id="@+id/buttonClear"
+                    android:layout_width="76dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/limpiar_view" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/boton"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_below="@id/relative2"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/resultTextViewAnterior"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@color/editTextColor"
+                    android:hint="@string/mensaje_anterior"
+                    android:textSize="15sp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/boton2"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_below="@id/boton"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/resultTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:background="@color/editTextColor"
+                    android:layout_alignParentTop="true"
+                    android:hint="@string/mensaje_actual"
+                    android:textSize="15sp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative9"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="0dp"
-                android:text="Limpiar" />
+                android:layout_below="@+id/boton2">
+
+                <Button
+                    android:id="@+id/buttonClearHistorial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/limpiar_historial" />
+
+            </RelativeLayout>
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- ACA ESCRIBE EL MENSAJE ANTERIOR-->
-            <TextView
-                android:id="@+id/resultTextViewAnterior"
-                android:layout_width="match_parent"
-                android:hint="Mensaje Anterior"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/resultTextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <Button
-                android:id="@+id/buttonClearHistorial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="66dp"
-                android:text="Limpiar Historial" />
-
-            <Button
-                android:id="@+id/buttonRegistro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="66dp"
-                android:text="ir al registro"
-                android:onClick="abrirVentanaRegistro"
-                />
-
-        </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
