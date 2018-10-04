@@ -29,7 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -48,6 +47,7 @@ import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
 import app.hablemos.mailsender.GeneradorTemplate;
+import app.hablemos.weather.WeatherService;
 import app.hablemos.model.Interaccion;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
@@ -137,6 +137,20 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         //TODO: levantar de firebase
         String emailsDestino = "mail tutor";
+
+        //TODO Ver donde poner esto y usarlo
+        try {
+            Boolean isHot = WeatherService.isItHotToday();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //TODO Ver donde poner esto y usarlo
+        try {
+            Boolean isSuitableForOutdoor = WeatherService.isSuitableForOutsideActivity();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //TODO: Envio de email, hay que pasarlo a donde corresponda
         generadorTemplate.generarYEnviarMail(nombreAbuelo, emailsDestino, obtenerInteracciones());
