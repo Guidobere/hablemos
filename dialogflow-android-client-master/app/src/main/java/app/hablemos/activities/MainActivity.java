@@ -82,8 +82,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     //Lo que dice y muestra en la aplicacion
     private String speech;
 
-    //TODO: obtener de firebase
-    private String nombreAbuelo = "Carolina";
+    private String nombreAbuelo = "";
     
     private int a;
 
@@ -152,9 +151,17 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             e.printStackTrace();
         }
 
-        //TODO: Envio de email, hay que pasarlo a donde corresponda
-        generadorTemplate.generarYEnviarMail(nombreAbuelo, emailsDestino, obtenerInteracciones());
         pedirAlaBase("saludo");
+
+        //TODO: Envio de email, hay que pasarlo a donde corresponda
+        //TODO: cambiar el nombre hardcodeado por nombreAbuelo cuando se implemente en el lugar correspondiente, sino rompe porque esta vacio
+        generadorTemplate.generarYEnviarMail("Guido", emailsDestino, obtenerInteracciones());
+    }
+
+    private String parsearNombre(String nombre) {
+        String s1 = nombre.substring(0, 1).toUpperCase();
+        String nameCapitalized = s1 + nombre.substring(1).toLowerCase();
+        return nameCapitalized;
     }
 
     //TODO: obtener las interacciones desde firebase
@@ -318,11 +325,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     public void personalizarMensaje(){
         switch (speech) {
-            case "Te puedo ofrecer hablar de: Pasteleria, Futbol y Salud":
-                speech = getSaludo() + " " + nombreAbuelo + "! " + speech;
-                resultTextView.setText(speech);
-                myTTS.speak(speech,0,null, "saludo");
-                break;
             case "tarde":
                 pedirAlaBase("tarde");
                 break;
@@ -352,41 +354,40 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
        a = 0;
        myUsersFb2.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot users) {
 
-
-               Recordatorio u = new Recordatorio();
-                DataSnapshot users = dataSnapshot;
-
+                Recordatorio u;
                 Iterable<DataSnapshot> usersChildren = users.getChildren();
 
                 for (DataSnapshot user : usersChildren) {
-                   u = user.getValue(Recordatorio.class);
-                   String elturno=u.turno.toString();
-                   String losdias=u.dias.toString();
+                    u = user.getValue(Recordatorio.class);
+                    String elturno = "", losdias = "";
+                    if (u != null) {
+                        elturno = u.turno;
+                        losdias = u.dias;
+                    }
 
-                   if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
-                       a=1;
-                       speech="Hoy si";
-                       speech.contains("hola");
-                       resultTextView.setText(speech);
-                       myTTS.speak(speech,0,null, "glucosa-mañana");
-                   }
+                    if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
+                        a=1;
+                        speech="Hoy si";
+                        speech.contains("hola");
+                        resultTextView.setText(speech);
+                        myTTS.speak(speech,0,null, "glucosa-mañana");
+                    }
+                }
 
-               }
-
-               if(a==0){
-                   speech="Hoy no";
-                   resultTextView.setText(speech);
-                   myTTS.speak(speech,0,null, "glucosa-mañana");}
-
+                if(a == 0) {
+                    speech="Hoy no";
+                    resultTextView.setText(speech);
+                    myTTS.speak(speech,0,null, "glucosa-mañana");
+                }
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-
     }
 
     public void pedirAlaBase(final String turno){
@@ -401,29 +402,34 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     u = user.getValue(User.class);
                 }
 
-                switch (turno) {
-                    case "saludo":
-                        speech= "Hola! " + u.username;
-                        resultTextView.setText(speech);
-                        myTTS.speak(speech,0,null, "saludo");
-                        break;
-                    case "tarde":
-                        speech =u.remediosTarde;
-                        resultTextView.setText(speech);
-                        myTTS.speak(speech,0,null, "tarde");
-                        break;
-                    case "mañana":
-                        speech =u.remediosManiana;
-                        resultTextView.setText(speech);
-                        myTTS.speak(speech,0,null, "maniana");
-                        break;
-                    case "noche":
-                        speech =u.remediosTarde;
-                        resultTextView.setText(speech);
-                        myTTS.speak(speech,0,null, "noche");
-                        break;
-                    default:
-                        break;
+                if (u != null && u.username != null) {
+                    switch (turno) {
+                        case "saludo":
+                            nombreAbuelo = parsearNombre(u.username);
+                            speech = getSaludo() + ", " + nombreAbuelo + "! ";
+                            resultTextView.setText(speech);
+                            myTTS.speak(speech, 0, null, "saludo");
+                            break;
+                        case "tarde":
+                            speech = u.remediosTarde;
+                            resultTextView.setText(speech);
+                            myTTS.speak(speech, 0, null, "tarde");
+                            break;
+                        case "mañana":
+                            speech = u.remediosManiana;
+                            resultTextView.setText(speech);
+                            myTTS.speak(speech, 0, null, "maniana");
+                            break;
+                        case "noche":
+                            speech = u.remediosTarde;
+                            resultTextView.setText(speech);
+                            myTTS.speak(speech, 0, null, "noche");
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    System.out.println("Ocurrio un error al obtener el usuario");
                 }
             }
 
