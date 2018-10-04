@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -20,9 +21,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -42,9 +49,11 @@ import ai.api.model.Result;
 import app.hablemos.R;
 import app.hablemos.mailsender.GeneradorTemplate;
 import app.hablemos.model.Interaccion;
+import app.hablemos.model.Recordatorio;
+import app.hablemos.model.User;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
-    private String TAG = getString(R.string.tagMain);
+    private String TAG;
 
     //status check code
     private int MY_DATA_CHECK_CODE = 0;
@@ -58,12 +67,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private TextView resultTextView;
     private EditText queryEditText;
     private Button micButton;
-    private Button bRegistro;
-    private Button bLogin;
 
-    private int HORARIO_MANANA = Integer.getInteger(getString(R.string.horarioManiana));
-    private int HORARIO_TARDE = Integer.getInteger(getString(R.string.horarioTarde));
-    private int HORARIO_NOCHE = Integer.getInteger(getString(R.string.horarioNoche));
+    private int HORARIO_MANANA;
+    private int HORARIO_TARDE;
+    private int HORARIO_NOCHE;
 
     //PARA EL MENSAJE ANTERIOR
     //DONDE SE GUARDA EL MSJ ANTERIOR
@@ -77,9 +84,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     //TODO: obtener de firebase
     private String nombreAbuelo = "Carolina";
+    
+    private int a;
 
     private AIDataService aiDataService;
     private AIService aiService;
+    private String mailQueInicioSesion;
+
+    private String diaSemana="lunes";
+
+    //FIREBASE
+    DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
+    DatabaseReference myUsersFb2 = FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +103,17 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         setContentView(R.layout.content_main);
 
+        mailQueInicioSesion = getIntent().getExtras().getString("1");
+        TAG = getString(R.string.tagMain);
+        HORARIO_MANANA = Integer.parseInt(getString(R.string.horarioManiana));
+        HORARIO_TARDE = Integer.parseInt(getString(R.string.horarioTarde));
+        HORARIO_NOCHE = Integer.parseInt(getString(R.string.horarioNoche));
+
         resultTextView = (TextView) findViewById(R.id.resultTextView);
         queryEditText = (EditText) findViewById(R.id.textQuery);
         queryEditText.setVisibility(View.VISIBLE);
 
         micButton = (Button) findViewById(R.id.micButton);
-        bRegistro = (Button) findViewById(R.id.buttonRegistro);
-        bLogin = (Button) findViewById(R.id.buttonLogin);
 
         //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
         resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
@@ -116,10 +136,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         generadorTemplate = new GeneradorTemplate(getBaseContext(), assetManager);
 
         //TODO: levantar de firebase
-        String emailsDestino = "mails destino";
+        String emailsDestino = "mail tutor";
 
         //TODO: Envio de email, hay que pasarlo a donde corresponda
         generadorTemplate.generarYEnviarMail(nombreAbuelo, emailsDestino, obtenerInteracciones());
+        pedirAlaBase("saludo");
     }
 
     //TODO: obtener las interacciones desde firebase
@@ -289,28 +310,114 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 myTTS.speak(speech,0,null, "saludo");
                 break;
             case "tarde":
-                //TODO: cambiar speech segun firebase
-                speech = "2 paracetamol";
-                resultTextView.setText(speech);
-                myTTS.speak(speech,0,null, "tarde");
+                pedirAlaBase("tarde");
                 break;
             case "mañana":
-                //TODO: cambiar speech segun firebase
-                speech = "1 paracetamol";
-                resultTextView.setText(speech);
-                myTTS.speak(speech,0,null, "maniana");
+                pedirAlaBase("mañana");
                 break;
             case "noche":
-                //TODO: cambiar speech segun firebase
-                speech = "3 paracetamol";
-                resultTextView.setText(speech);
-                myTTS.speak(speech,0,null, "noche");
+                pedirAlaBase("noche");
+                break;
+            case "glucosa-mañana":
+                pedirAlaBase2("mañana");
+                break;
+            case "glucosa-noche":
+                pedirAlaBase2("noche");
+                break;
+            case "glucosa-tarde":
+                pedirAlaBase2("tarde");
                 break;
             default:
                 resultTextView.setText(speech);
                 myTTS.speak(speech,0,null, "default");
                 break;
         }
+    }
+
+   public void pedirAlaBase2(final String turnoGlucosa){
+       a = 0;
+       myUsersFb2.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+               Recordatorio u = new Recordatorio();
+                DataSnapshot users = dataSnapshot;
+
+                Iterable<DataSnapshot> usersChildren = users.getChildren();
+
+                for (DataSnapshot user : usersChildren) {
+                   u = user.getValue(Recordatorio.class);
+                   String elturno=u.turno.toString();
+                   String losdias=u.dias.toString();
+
+                   if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
+                       a=1;
+                       speech="Hoy si";
+                       speech.contains("hola");
+                       resultTextView.setText(speech);
+                       myTTS.speak(speech,0,null, "glucosa-mañana");
+                   }
+
+               }
+
+               if(a==0){
+                   speech="Hoy no";
+                   resultTextView.setText(speech);
+                   myTTS.speak(speech,0,null, "glucosa-mañana");}
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+    }
+
+    public void pedirAlaBase(final String turno){
+
+        myUsersFb.orderByChild("email").equalTo(mailQueInicioSesion).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot users) {
+
+                User u = new User();
+                Iterable<DataSnapshot> usersChildren = users.getChildren();
+                for (DataSnapshot user : usersChildren) {
+                    u = user.getValue(User.class);
+                }
+
+                switch (turno) {
+                    case "saludo":
+                        speech= "Hola! " + u.username;
+                        resultTextView.setText(speech);
+                        myTTS.speak(speech,0,null, "saludo");
+                        break;
+                    case "tarde":
+                        speech =u.remediosTarde;
+                        resultTextView.setText(speech);
+                        myTTS.speak(speech,0,null, "tarde");
+                        break;
+                    case "mañana":
+                        speech =u.remediosManiana;
+                        resultTextView.setText(speech);
+                        myTTS.speak(speech,0,null, "maniana");
+                        break;
+                    case "noche":
+                        speech =u.remediosTarde;
+                        resultTextView.setText(speech);
+                        myTTS.speak(speech,0,null, "noche");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     public void onResult(final AIResponse response) {
@@ -350,7 +457,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
     }
 
     @Override
@@ -358,26 +464,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.buttonClear:
-                    clearEditText();
-                    break;
-            case R.id.buttonClearHistorial:
-                clearEditTextHistorial();
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonClear:
+                clearEditText();
                 break;
-                case R.id.buttonSend:
-                    sendRequest();
-                    break;
-            }
+        case R.id.buttonClearHistorial:
+            clearEditTextHistorial();
+            break;
+            case R.id.buttonSend:
+                sendRequest();
+                break;
         }
-
-    public void abrirVentanaRegistro(final View view) {
-        startActivity(RegistroActivity.class);
-    }
-
-    public void abrirVentanaLogin(final View view) {
-        startActivity(Login.class);
     }
 
     private void startActivity(Class<?> cls) {
