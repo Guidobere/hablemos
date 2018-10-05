@@ -47,10 +47,10 @@ import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
 import app.hablemos.mailsender.GeneradorTemplate;
-import app.hablemos.weather.WeatherService;
 import app.hablemos.model.Interaccion;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
+import app.hablemos.weather.WeatherService;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private String TAG;
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private AIService aiService;
     private String mailQueInicioSesion;
 
-    private String diaSemana="lunes";
+    private String diaSemana;
 
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         mailQueInicioSesion = getIntent().getExtras().getString("1");
         TAG = getString(R.string.tagMain);
+
+        diaSemana = getDiaSemana(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+        
         HORARIO_MANANA = Integer.parseInt(getString(R.string.horarioManiana));
         HORARIO_TARDE = Integer.parseInt(getString(R.string.horarioTarde));
         HORARIO_NOCHE = Integer.parseInt(getString(R.string.horarioNoche));
@@ -131,12 +134,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
 
-        AssetManager assetManager = getAssets();
-        generadorTemplate = new GeneradorTemplate(getBaseContext(), assetManager);
-
-        //TODO: levantar de firebase
-        String emailsDestino = "mail tutor";
-
         //TODO Ver donde poner esto y usarlo
         try {
             Boolean isHot = WeatherService.isItHotToday();
@@ -153,9 +150,38 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         pedirAlaBase("saludo");
 
+        AssetManager assetManager = getAssets();
+        generadorTemplate = new GeneradorTemplate(getBaseContext(), assetManager);
         //TODO: Envio de email, hay que pasarlo a donde corresponda
-        //TODO: cambiar el nombre hardcodeado por nombreAbuelo cuando se implemente en el lugar correspondiente, sino rompe porque esta vacio
-        generadorTemplate.generarYEnviarMail("Guido", emailsDestino, obtenerInteracciones());
+        generadorTemplate.generarYEnviarMail(nombreAbuelo, mailQueInicioSesion, obtenerInteracciones());
+    }
+
+    private String getDiaSemana(int i) {
+        String dia = "";
+        switch (i) {
+            case 1:
+                dia = "Domingo";
+                break;
+            case 2:
+                dia = "Lunes";
+                break;
+            case 3:
+                dia = "Martes";
+                break;
+            case 4:
+                dia = "Miercoles";
+                break;
+            case 5:
+                dia = "Jueves";
+                break;
+            case 6:
+                dia = "Viernes";
+                break;
+            case 7:
+                dia = "Sabado";
+                break;
+        }
+        return dia;
     }
 
     private String parsearNombre(String nombre) {
@@ -391,7 +417,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void pedirAlaBase(final String turno){
-
         myUsersFb.orderByChild("email").equalTo(mailQueInicioSesion).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot users) {
