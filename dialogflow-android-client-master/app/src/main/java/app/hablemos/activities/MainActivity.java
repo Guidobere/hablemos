@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
     DatabaseReference myUsersFb2 = FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
+    DatabaseReference myUsersFb3 = FirebaseDatabase.getInstance().getReference().child("recordatoriosPresion");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,25 +161,25 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         String dia = "";
         switch (i) {
             case 1:
-                dia = "Domingo";
+                dia = "domingo";
                 break;
             case 2:
-                dia = "Lunes";
+                dia = "lunes";
                 break;
             case 3:
-                dia = "Martes";
+                dia = "martes";
                 break;
             case 4:
-                dia = "Miercoles";
+                dia = "miercoles";
                 break;
             case 5:
-                dia = "Jueves";
+                dia = "jueves";
                 break;
             case 6:
-                dia = "Viernes";
+                dia = "viernes";
                 break;
             case 7:
-                dia = "Sabado";
+                dia = "sabado";
                 break;
         }
         return dia;
@@ -361,22 +362,67 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 pedirAlaBase("noche");
                 break;
             case "glucosa-mañana":
-                pedirAlaBase2("mañana");
+                pedirAlaBaseSobreGlucosa("mañana");
                 break;
             case "glucosa-noche":
-                pedirAlaBase2("noche");
+                pedirAlaBaseSobreGlucosa("noche");
                 break;
             case "glucosa-tarde":
-                pedirAlaBase2("tarde");
+                pedirAlaBaseSobreGlucosa("tarde");
                 break;
-            default:
+            case "presión-mañana":
+                pedirAlaBaseSobrePresion("mañana");
+                break;
+            case "presión-noche":
+                pedirAlaBaseSobrePresion("noche");
+                break;
+            case "presión-tarde":
+                pedirAlaBaseSobrePresion("tarde");
+                break;
+            default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
                 resultTextView.setText(speech);
                 myTTS.speak(speech,0,null, "default");
                 break;
         }
     }
 
-   public void pedirAlaBase2(final String turnoGlucosa){
+    public void pedirAlaBaseSobrePresion(final String turnoPresion){
+        a = 0;
+        myUsersFb3.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot users) {
+
+                Recordatorio u;
+                Iterable<DataSnapshot> usersChildren = users.getChildren();
+
+                for (DataSnapshot user : usersChildren) {
+                    u = user.getValue(Recordatorio.class);
+                    String elturno = "", losdias = "";
+                    if (u != null) {
+                        elturno = u.turno;
+                        losdias = u.dias;
+                    }
+
+                    if(elturno.equalsIgnoreCase(turnoPresion) && losdias.contains(diaSemana)){
+                        a=1;
+                       // speech="Hoy si";
+                        loQueDiceYescribe("Hoy si");
+                    }
+                }
+
+                if(a == 0) {
+                    loQueDiceYescribe("Hoy no");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+   public void pedirAlaBaseSobreGlucosa(final String turnoGlucosa){
        a = 0;
        myUsersFb2.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
             @Override
@@ -395,17 +441,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
                         a=1;
-                        speech="Hoy si";
-                        speech.contains("hola");
-                        resultTextView.setText(speech);
-                        myTTS.speak(speech,0,null, "glucosa-mañana");
+                       loQueDiceYescribe("Hoy si");
                     }
                 }
 
                 if(a == 0) {
-                    speech="Hoy no";
-                    resultTextView.setText(speech);
-                    myTTS.speak(speech,0,null, "glucosa-mañana");
+                     loQueDiceYescribe("Hoy no");
                 }
             }
 
@@ -431,24 +472,16 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     switch (turno) {
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
-                            speech = getSaludo() + ", " + nombreAbuelo + "! ";
-                            resultTextView.setText(speech);
-                            myTTS.speak(speech, 0, null, "saludo");
+                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ");
                             break;
                         case "tarde":
-                            speech = u.remediosTarde;
-                            resultTextView.setText(speech);
-                            myTTS.speak(speech, 0, null, "tarde");
-                            break;
+                            loQueDiceYescribe(u.remediosTarde);
+                             break;
                         case "mañana":
-                            speech = u.remediosManiana;
-                            resultTextView.setText(speech);
-                            myTTS.speak(speech, 0, null, "maniana");
-                            break;
+                            loQueDiceYescribe(u.remediosManiana);
+                             break;
                         case "noche":
-                            speech = u.remediosTarde;
-                            resultTextView.setText(speech);
-                            myTTS.speak(speech, 0, null, "noche");
+                            loQueDiceYescribe(u.remediosTarde);
                             break;
                         default:
                             break;
@@ -533,5 +566,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         super.onStop();
         Toast.makeText(this, getString(R.string.saludoFinal), Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    public void loQueDiceYescribe(String unTexto){
+        speech=unTexto;
+        resultTextView.setText(speech);
+        myTTS.speak(speech,0,null, "default");
     }
 }
