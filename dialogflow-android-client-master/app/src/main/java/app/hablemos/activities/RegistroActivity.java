@@ -104,7 +104,7 @@ public class RegistroActivity extends AppCompatActivity {
 
                 //Aca lo mete a la database
                 writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(),medicamentosT.getText().toString(),medicamentosN.getText().toString());
-                finish();
+
             }
         });
     }
