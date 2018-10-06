@@ -561,16 +561,17 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         startActivity(intent);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(this, getString(R.string.saludoFinal), Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
     public void loQueDiceYescribe(String unTexto){
         speech=unTexto;
         resultTextView.setText(speech);
         myTTS.speak(speech,0,null, "default");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (true) {
+        } else {
+            super.onBackPressed();
+        }
     }
 }
