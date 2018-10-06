@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private TextView resultTextView;
     private EditText queryEditText;
     private Button micButton;
+    private Button send;
 
     private int HORARIO_MANANA;
     private int HORARIO_TARDE;
@@ -117,11 +119,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         queryEditText.setVisibility(View.VISIBLE);
 
         micButton = (Button) findViewById(R.id.micButton);
+        send = (Button) findViewById(R.id.buttonSend);
 
         //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
         resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
 
-        findViewById(R.id.buttonSend).setOnClickListener(this);
+      //  findViewById(R.id.buttonSend).setOnClickListener(this);
+        send.setOnClickListener(this);
         findViewById(R.id.buttonClear).setOnClickListener(this);
         findViewById(R.id.buttonClearHistorial).setOnClickListener(this);
 
@@ -295,6 +299,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         private void sendRequest()  {
 
             final String queryString = String.valueOf(queryEditText.getText());
+
+            send.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
         if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
