@@ -3,7 +3,6 @@ package app.hablemos.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -28,11 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import ai.api.AIListener;
@@ -47,8 +43,7 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
-import app.hablemos.mailsender.GeneradorTemplate;
-import app.hablemos.model.Interaccion;
+import app.hablemos.mailsender.InteractionsService;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
 import app.hablemos.weather.WeatherService;
@@ -61,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
 
     private Gson gson = GsonFactory.getGson();
-    private GeneradorTemplate generadorTemplate;
+
     //TTS object
     private TextToSpeech myTTS;
 
@@ -100,10 +95,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
     DatabaseReference myUsersFb2 = FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
     DatabaseReference myUsersFb3 = FirebaseDatabase.getInstance().getReference().child("recordatoriosPresion");
+    DatabaseReference fbRefInteracciones = FirebaseDatabase.getInstance().getReference().child("interacciones");
+
+    private InteractionsService interactionsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        interactionsService = new InteractionsService(getBaseContext(), getAssets(), fbRefInteracciones);
 
         setContentView(R.layout.content_main);
 
@@ -154,11 +153,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        AssetManager assetManager = getAssets();
-        generadorTemplate = new GeneradorTemplate(getBaseContext(), assetManager);
-        //TODO: Envio de email, hay que pasarlo a donde corresponda
-        generadorTemplate.generarYEnviarMail(nombreAbuelo, mailQueInicioSesion, obtenerInteracciones());
     }
 
     private String getDiaSemana(int i) {
@@ -193,40 +187,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         String s1 = nombre.substring(0, 1).toUpperCase();
         String nameCapitalized = s1 + nombre.substring(1).toLowerCase();
         return nameCapitalized;
-    }
-
-    //TODO: obtener las interacciones desde firebase
-    private List<Interaccion> obtenerInteracciones() {
-        String json = "[\n" +
-                "      {\n" +
-                "        \"hora\": \"14:03\",\n" +
-                "        \"tipo\": \"caminar\",\n" +
-                "        \"respuesta\": \"si\",\n" +
-                "        \"observaciones\": \"Me parece bien\"\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"hora\": \"14:30\",\n" +
-                "        \"tipo\": \"tomar agua\",\n" +
-                "        \"respuesta\": \"si\",\n" +
-                "        \"observaciones\": \"gracias por recordarme, caminé una banda\"\n" +
-                "      }\n" +
-                "    ]";
-        List<LinkedTreeMap<String, String>> lista = gson.fromJson(json, List.class);
-        List<Interaccion> interacciones = convertirTreeMapEnInteraccion(lista);
-        return interacciones;
-    }
-
-    private List<Interaccion> convertirTreeMapEnInteraccion(List<LinkedTreeMap<String, String>> lista) {
-        List<Interaccion> interacciones = new ArrayList<Interaccion>();
-        for (int i=0; i<lista.size(); i++) {
-            Interaccion interaccion = new Interaccion();
-            interaccion.setHora(lista.get(i).get("hora"));
-            interaccion.setTipo(lista.get(i).get("tipo"));
-            interaccion.setRespuesta(lista.get(i).get("respuesta"));
-            interaccion.setObservaciones(lista.get(i).get("observaciones"));
-            interacciones.add(interaccion);
-        }
-        return interacciones;
     }
 
     //act on result of TTS data check
@@ -483,6 +443,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
                             loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ");
+                            interactionsService.guardarInteraccion(
+                                mailQueInicioSesion, getString(R.string.interaccionAbrirApp), "-", "-");
+                            //TODO: Envio de email, hay que pasarlo a donde corresponda
+                            enviarReporte();
                             break;
                         case "tarde":
                             loQueDiceYescribe(u.remediosTarde);
@@ -588,4 +552,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             super.onBackPressed();
         }
     }
+
+        private void enviarReporte(){
+            interactionsService.enviarReporteInteracciones(nombreAbuelo, mailQueInicioSesion);
+        }
 }
