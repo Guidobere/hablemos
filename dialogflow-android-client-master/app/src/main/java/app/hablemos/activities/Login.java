@@ -181,14 +181,14 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(mAuthListener);
     }
-
+  
     @Override
     public void onResume() {
         super.onResume();
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(mAuthListener);
     }
-
+  
      @Override
     public void onPause() {
          super.onPause();
