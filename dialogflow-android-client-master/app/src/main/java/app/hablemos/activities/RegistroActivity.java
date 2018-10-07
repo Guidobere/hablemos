@@ -146,4 +146,12 @@ public class RegistroActivity extends AppCompatActivity {
         final Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (true) {
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

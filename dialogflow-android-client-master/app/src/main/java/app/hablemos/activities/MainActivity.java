@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     private String diaSemana;
 
+    boolean yaSaludo = false;
+
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
     DatabaseReference myUsersFb2 = FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
@@ -152,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        pedirAlaBase("saludo");
 
         AssetManager assetManager = getAssets();
         generadorTemplate = new GeneradorTemplate(getBaseContext(), assetManager);
@@ -251,6 +251,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public void onInit(int initStatus) {
         if (initStatus == TextToSpeech.SUCCESS) {
             myTTS.setLanguage(new Locale("es", "AR"));
+            if(!yaSaludo) {
+                pedirAlaBase("saludo");
+                yaSaludo = true;
+            }
         }
     }
 
@@ -568,9 +572,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void loQueDiceYescribe(String unTexto){
-        speech=unTexto;
-        resultTextView.setText(speech);
-        myTTS.speak(speech,0,null, "default");
+        try {
+            speech = unTexto;
+            resultTextView.setText(speech);
+            myTTS.speak(speech, 0, null, "default");
+        } catch (Exception e){
+            Log.e(this.getClass().getName(), "Error al emitir respuesta.", e);
+        }
     }
 
     @Override
