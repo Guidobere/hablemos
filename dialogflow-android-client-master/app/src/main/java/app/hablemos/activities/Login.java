@@ -24,7 +24,7 @@ import app.hablemos.R;
 public class Login extends AppCompatActivity {
 
     private TextView txtRegistrar;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     //private FirebaseAuth auth;
 
@@ -178,14 +178,22 @@ public class Login extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(mAuthListener);
     }
-
+  
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+  
      @Override
     public void onPause() {
          super.onPause();
          mAuth.removeAuthStateListener(mAuthListener);
-     }
+    }
 
     @Override
     public void onStop() {

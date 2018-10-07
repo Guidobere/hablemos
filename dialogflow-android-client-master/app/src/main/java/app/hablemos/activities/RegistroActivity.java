@@ -129,7 +129,7 @@ public class RegistroActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmailAndPassword:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(Login.class);
-                            //updateUI(user);
+                           // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmailAndPassword:failure", task.getException());
