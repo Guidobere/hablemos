@@ -181,18 +181,16 @@ public class Login extends AppCompatActivity {
         mAuth.addAuthStateListener(mAuthListener);
     }
 
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        finish();
-
-    }
+     @Override
+    public void onPause() {
+         super.onPause();
+         mAuth.removeAuthStateListener(mAuthListener);
+     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
+       if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
         finish();
