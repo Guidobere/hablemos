@@ -2,6 +2,7 @@ package app.hablemos.model;
 
 public class Interaccion {
 
+    private String emailDia;
     private String hora;
     private String tipo;
     private String respuesta;
@@ -11,7 +12,8 @@ public class Interaccion {
 
     }
 
-    public Interaccion(String hora, String tipo, String respuesta, String observaciones) {
+    public Interaccion(String emailDia, String hora, String tipo, String respuesta, String observaciones) {
+        this.emailDia = emailDia;
         this.hora = hora;
         this.tipo = tipo;
         this.respuesta = respuesta;
@@ -49,4 +51,8 @@ public class Interaccion {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+    public String getEmailDia() { return emailDia; }
+
+    public void setEmailDia(String emailDia) { this.emailDia = emailDia; }
 }

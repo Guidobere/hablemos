@@ -58,4 +58,7 @@
     <string name="imgturnomaniana">imgTurnoManiana</string>
     <string name="imgturnotarde">imgTurnoTarde</string>
     <string name="imgturnonoche">imgTurnoNoche</string>
+    <!-- Nombre interacciones -->
+    <string name="interaccionAbrirApp">Abrir Hablemos!</string>
+
 </resources>
