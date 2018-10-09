@@ -1,4 +1,4 @@
-package app.hablemos.weather;
+package app.hablemos.services;
 
 import org.json.JSONArray;
 import org.json.JSONException;

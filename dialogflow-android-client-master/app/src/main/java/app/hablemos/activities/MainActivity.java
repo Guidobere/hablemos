@@ -1,7 +1,12 @@
 package app.hablemos.activities;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,10 +48,11 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
-import app.hablemos.mailsender.InteractionsService;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
-import app.hablemos.weather.WeatherService;
+import app.hablemos.receivers.EmailReceiver;
+import app.hablemos.receivers.WeatherReceiver;
+import app.hablemos.services.InteractionsService;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private String TAG;
@@ -68,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private int HORARIO_MANANA;
     private int HORARIO_TARDE;
     private int HORARIO_NOCHE;
+
+    private int CANTIDAD_HORAS_CLIMA;
 
     //PARA EL MENSAJE ANTERIOR
     //DONDE SE GUARDA EL MSJ ANTERIOR
@@ -98,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     DatabaseReference fbRefInteracciones = FirebaseDatabase.getInstance().getReference().child("interacciones");
 
     private InteractionsService interactionsService;
+    private PendingIntent pendingEmailIntent;
+    private PendingIntent pendingWeatherIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         HORARIO_MANANA = Integer.parseInt(getString(R.string.horarioManiana));
         HORARIO_TARDE = Integer.parseInt(getString(R.string.horarioTarde));
         HORARIO_NOCHE = Integer.parseInt(getString(R.string.horarioNoche));
+
+        CANTIDAD_HORAS_CLIMA = Integer.parseInt(getString(R.string.horasClima));
 
         resultTextView = (TextView) findViewById(R.id.resultTextView);
         queryEditText = (EditText) findViewById(R.id.textQuery);
@@ -140,20 +152,26 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
 
-        //TODO Ver donde poner esto y usarlo
-        try {
-            Boolean isHot = WeatherService.isItHotToday();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //TODO Ver donde poner esto y usarlo
-        try {
-            Boolean isSuitableForOutdoor = WeatherService.isSuitableForOutsideActivity();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        registerReceiver(respuestasClimaReceiver, new IntentFilter("respuestasClima"));
+        setearCronClima();
     }
+
+    // Add this inside your class
+    BroadcastReceiver respuestasClimaReceiver =  new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String isHot = intent.getExtras().getString("isHot");
+            String isSuitableForOutdoor = intent.getExtras().getString("isSuitableForOutdoor");
+            if (Boolean.parseBoolean(isHot)) {
+                //TODO: mandar a tomar agua
+                System.out.println("isHot:" + isHot);
+            }
+            if (Boolean.parseBoolean(isSuitableForOutdoor)) {
+                //TODO: mandar pregunta para caminar
+                System.out.println("isSuitableForOutdoor: " + isSuitableForOutdoor);
+            }
+        }
+    };
 
     private String getDiaSemana(int i) {
         String dia = "";
@@ -445,8 +463,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ");
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionAbrirApp), "-", "-");
-                            //TODO: Envio de email, hay que pasarlo a donde corresponda
-                            enviarReporte();
+                            setearCronReporte();
                             break;
                         case "tarde":
                             loQueDiceYescribe(u.remediosTarde);
@@ -553,7 +570,39 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-        private void enviarReporte(){
-            interactionsService.enviarReporteInteracciones(nombreAbuelo, mailQueInicioSesion);
+    public void setearCronReporte(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent emailIntent = new Intent(this, EmailReceiver.class);
+        emailIntent.putExtra("nombreAbuelo", nombreAbuelo);
+        emailIntent.putExtra("mailQueInicioSesion", mailQueInicioSesion);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, emailIntent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 5);
+
+        // Clear previous everyday pending intent if exists.
+        if (null != pendingEmailIntent) {
+            alarmManager.cancel(pendingEmailIntent);
         }
+        pendingEmailIntent = pendingIntent;
+        /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
+    }
+
+    public void setearCronClima(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent weatherIntent = new Intent(this, WeatherReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, weatherIntent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, CANTIDAD_HORAS_CLIMA);
+
+        // Clear previous everyday pending intent if exists.
+        if (null != pendingWeatherIntent) {
+            alarmManager.cancel(pendingWeatherIntent);
+        }
+        pendingWeatherIntent = pendingIntent;
+        /* INTERVAL_HOUR: CADA HORA */
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HOUR * CANTIDAD_HORAS_CLIMA, pendingWeatherIntent);
+    }
 }
