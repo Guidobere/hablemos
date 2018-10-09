@@ -11,6 +11,7 @@
     <string name="horarioManiana">6</string>
     <string name="horarioTarde">12</string>
     <string name="horarioNoche">20</string>
+    <string name="horasClima">2</string>
     <string name="accessToken">3d0b0b12561c4040963f4e4f529527c7</string>
     <string name="errorReconVoz">No se pudo reconocer la entrada de voz</string>
     <string name="tagMain">MainActivity</string>
@@ -60,5 +61,4 @@
     <string name="imgturnonoche">imgTurnoNoche</string>
     <!-- Nombre interacciones -->
     <string name="interaccionAbrirApp">Abrir Hablemos!</string>
-
 </resources>

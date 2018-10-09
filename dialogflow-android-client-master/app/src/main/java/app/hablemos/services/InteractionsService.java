@@ -1,4 +1,4 @@
-package app.hablemos.mailsender;
+package app.hablemos.services;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import app.hablemos.R;
+import app.hablemos.mailsender.GmailSender;
 import app.hablemos.model.Interaccion;
 
 public class InteractionsService {
@@ -46,9 +47,7 @@ public class InteractionsService {
 
                     if (interacciones != null) {
                         Log.d(this.getClass().getName(), "Interacciones obtenidas" + interacciones.size());
-                        //TODO mail hardcodeado para probar reporte, eliminar esta línea y dejar la línea comentada de abajo
-                        generarYEnviarMail(nombreAbuelo, "andres.m.grillo@gmail.com", interacciones);
-                        //generarYEnviarMail(nombreAbuelo, mailQueInicioSesion, interacciones);
+                        generarYEnviarMail(nombreAbuelo, mailRegistro, interacciones);
                     } else {
                         Log.w(this.getClass().getName(), "Ocurrio un error al obtener las interacciones (resultado nulo).");
                     }
