@@ -100,9 +100,9 @@ public class RegistroActivity extends AppCompatActivity {
     DatabaseReference myUsersFb =FirebaseDatabase.getInstance().getReference().child("users");
     DatabaseReference myRecordatoriosGlucosaFb =FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
     DatabaseReference myRecordatoriosPresionFb =FirebaseDatabase.getInstance().getReference().child("recordatoriosPresion");
+
     //ESto es para la autenticacion
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    //  private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,10 +131,10 @@ public class RegistroActivity extends AppCompatActivity {
                 crearUsuario();
 
                 //Aca lo mete a la database
-                writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(),medicamentosT.getText().toString(),medicamentosN.getText().toString());
+                //writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(),medicamentosT.getText().toString(),medicamentosN.getText().toString());
                 CrearNuevoRecordatoriosGlucosa();
                 CrearNuevoRecordatoriosPresion();
-                //finish();
+
             }
         });
     }
@@ -275,7 +275,6 @@ public class RegistroActivity extends AppCompatActivity {
 
     }
 
-
     private void CrearNuevoRecordatoriosPresion() {
         Recordatorio recordatorio = new Recordatorio();
         String diasRecordatorioPresionMañana = RecordatoriosPresionMañana();
@@ -293,7 +292,6 @@ public class RegistroActivity extends AppCompatActivity {
 
 
     }
-
 
     private String RecordatoriosPresionMañana(){
 
@@ -420,6 +418,9 @@ public class RegistroActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             //  Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //Si no se repite o algo, lo guarda en la base
+                            writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(),medicamentosT.getText().toString(),medicamentosN.getText().toString());
                             startActivity(Login.class);
                            // updateUI(user);
                         } else {
