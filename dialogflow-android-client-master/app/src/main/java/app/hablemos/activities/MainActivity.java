@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     //status check code
     private int MY_DATA_CHECK_CODE = 0;
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
+    private static final int REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID = 133;
+    private boolean recordPermissionGranted = false;
 
     private Gson gson = GsonFactory.getGson();
 
@@ -211,7 +213,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSIONS_ID);
-        }
+        } else
+            recordPermissionGranted = true;
         if (requestCode == MY_DATA_CHECK_CODE) {
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 //the user has the necessary data - create the TTS
@@ -236,10 +239,52 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
+    /**
+     * Contiene la lógica del botón Hablar. Si ya dió permiso de grabación de audio anteriormente,
+     * puede hablar. Si no dió permiso se le solicita nuevamente. Luego en onRequestPermissionsResult
+     * se verifica la respuesta y se le permite hablar o no.
+     * @param view
+     */
     public void micButtonOnClick(final View view) {
+        //Se verifica primero con la variable local para mejor tiempo de respuesta del botón
+        if (recordPermissionGranted) {
+            escucharAbuelo();
+        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID);
+        } else {
+            //Esto es para cuando da falso porque se salió de la app y se volvió a entrar
+            recordPermissionGranted = true;
+        }
+    }
+
+    private void escucharAbuelo() {
         Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
         micButton.setEnabled(false);
         aiService.startListening();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_AUDIO_PERMISSIONS_ID : {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    recordPermissionGranted = true;
+                } else {
+                    Toast.makeText(this, getString(R.string.permisoGrabarDenegado), Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+            case REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID : {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    recordPermissionGranted = true;
+                    escucharAbuelo();
+                } else {
+                    Toast.makeText(this, getString(R.string.permisoGrabarDenegado), Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
     }
 
     @Override
