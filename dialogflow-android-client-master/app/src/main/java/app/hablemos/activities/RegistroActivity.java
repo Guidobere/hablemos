@@ -27,74 +27,16 @@ import app.hablemos.model.User;
 
 public class RegistroActivity extends AppCompatActivity {
 
-
     //DATOS PERSONALES
     private EditText nombreAbuelo;
     private EditText mailTutor;
     private EditText equipoFavorito;
-
     private EditText contra;
 
     //MEDICAMENTOS
     private EditText medicamentosM;
     private EditText medicamentosT;
     private EditText medicamentosN;
-
-    //GLUCOSA MAÑANA
-    private CheckBox chkbxGlucManianaLun;
-    private CheckBox chkbxGlucManianaMa;
-    private CheckBox chkbxGlucManianaMi;
-    private CheckBox chkbxGlucManianaJ;
-    private CheckBox chkbxGlucManianaV;
-    private CheckBox chkbxGlucManianaS;
-    private CheckBox chkbxGlucManianaD;
-
-    //GLUCOSA TARDE
-    private CheckBox chkbxGlucTardeLun;
-    private CheckBox chkbxGlucTardeMa;
-    private CheckBox chkbxGlucTardeMi;
-    private CheckBox chkbxGlucTardeJ;
-    private CheckBox chkbxGlucTardeV;
-    private CheckBox chkbxGlucTardeS;
-    private CheckBox chkbxGlucTardeD;
-
-    //GLUCOSA NOCHE
-    private CheckBox chkbxGlucNocheLun;
-    private CheckBox chkbxGlucNocheMa;
-    private CheckBox chkbxGlucNocheMi;
-    private CheckBox chkbxGlucNocheJ;
-    private CheckBox chkbxGlucNocheV;
-    private CheckBox chkbxGlucNocheS;
-    private CheckBox chkbxGlucNocheD;
-
-    //PRESION MAÑANA
-    private CheckBox chkbxPresionManianaL;
-    private CheckBox chkbxPresionManianaMa;
-    private CheckBox chkbxPresionManianaMi;
-    private CheckBox chkbxPresionManianaJ;
-    private CheckBox chkbxPresionManianaV;
-    private CheckBox chkbxPresionManianaS;
-    private CheckBox chkbxPresionManianaD;
-
-    //PRESION TARDE
-    private CheckBox chkbxPresionTardeL;
-    private CheckBox chkbxPresionTardeMa;
-    private CheckBox chkbxPresionTardeMi;
-    private CheckBox chkbxPresionTardeJ;
-    private CheckBox chkbxPresionTardeV;
-    private CheckBox chkbxPresionTardeS;
-    private CheckBox chkbxPresionTardeD;
-
-    //PRESION NOCHE
-    private CheckBox chkbxPresionNocheL;
-    private CheckBox chkbxPresionNocheMa;
-    private CheckBox chkbxPresionNocheMi;
-    private CheckBox chkbxPresionNocheJ;
-    private CheckBox chkbxPresionNocheV;
-    private CheckBox chkbxPresionNocheS;
-    private CheckBox chkbxPresionNocheD;
-
-    private Button botonRegistro;
 
     //private static HashMap<String, User> users = new HashMap<>();
     //ACCEDO A LOS USUARIOS DE FIREBASE y uso esta instancia como global
@@ -110,24 +52,20 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cinicial);
 
-        nombreAbuelo = (EditText) findViewById(R.id.txtAbuelo);
-        mailTutor = (EditText) findViewById(R.id.txtEmail);
-        equipoFavorito = (EditText) findViewById(R.id.txtEquipo);
-        contra = (EditText) findViewById(R.id.txtContra);
-        medicamentosM = (EditText) findViewById(R.id.txtmañana);
-        medicamentosT = (EditText) findViewById(R.id.txttarde);
-        medicamentosN = (EditText) findViewById(R.id.txtnoche);
-        botonRegistro = (Button) findViewById(R.id.btnRegister);
+        nombreAbuelo = findViewById(R.id.txtAbuelo);
+        mailTutor = findViewById(R.id.txtEmail);
+        equipoFavorito = findViewById(R.id.txtEquipo);
+        contra = findViewById(R.id.txtContra);
+        medicamentosM = findViewById(R.id.txtmañana);
+        medicamentosT = findViewById(R.id.txttarde);
+        medicamentosN = findViewById(R.id.txtnoche);
+        Button botonRegistro = findViewById(R.id.btnRegister);
 
         //LOGICA PARA QUE AL HACER CLICK EN EL BOTON ENVIE LOS DATOS A LA FUNCION writeNewUser
-
-        botonRegistro.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        botonRegistro.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
                 //Aca lo guarda para que lo podamos autenticar
                 crearUsuario();
-
             }
         });
     }
@@ -136,318 +74,171 @@ public class RegistroActivity extends AppCompatActivity {
     private void writeNewUser(String username, String email,String equipo,String remediosM,String remediosT,String remediosN) {
         //Inserto un nuevo valor con su respectivo ID y le Asigno el valor del nuevo
         myUsersFb.push().setValue(new User(username,email,equipo,remediosM,remediosT,remediosN));
-
     }
 
     private void CrearNuevoRecordatoriosGlucosa() {
-        Recordatorio recordatorio = new Recordatorio();
-
-        String diasRecordatorioGlucMañana = RecordatoriosGlucosaMañana();
+        String diasRecordatorioGlucManiana = RecordatoriosGlucosaManiana();
         String diasRecordatorioGlucTarde = RecordatoriosGlucosaTarde();
         String diasRecordatorioGlucNoche = RecordatoriosGlucosaNoche();
 
         String email = mailTutor.getText().toString();
-        if (diasRecordatorioGlucMañana != "" && diasRecordatorioGlucMañana != null)
-            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucMañana, "mañana"));
-        if (diasRecordatorioGlucTarde != "" && diasRecordatorioGlucMañana != null)
+        if (diasRecordatorioGlucManiana != null && !diasRecordatorioGlucManiana.equals(""))
+            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucManiana, "mañana"));
+        if (diasRecordatorioGlucTarde != null && !diasRecordatorioGlucTarde.equals(""))
             myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucTarde, "tarde"));
-        if (diasRecordatorioGlucNoche != "" && diasRecordatorioGlucMañana != null)
+        if (diasRecordatorioGlucNoche != null && !diasRecordatorioGlucNoche.equals(""))
             myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucNoche, "noche"));
-
-
     }
 
-    private String RecordatoriosGlucosaMañana(){
+    private String activoCheckbox(int checkBoxId, String diasRecordatorio, String dia) {
+        String agregado = "";
+        CheckBox checkBox = findViewById(checkBoxId);
+        if(checkBox.isChecked()) {
+            if (!diasRecordatorio.equals(""))
+                agregado += ",";
+            agregado += dia;
+        }
+        return agregado;
+    }
 
+    private String RecordatoriosGlucosaManiana(){
         String diasRecordatorioGlucManiana = "";
-
-        chkbxGlucManianaLun =  (CheckBox) findViewById(R.id.chBxGlucManianaL);
-        String diasRecordatorioGluc = "";
-        if(chkbxGlucManianaLun.isChecked())
-            diasRecordatorioGlucManiana += "lunes,";
-
-        chkbxGlucManianaMa =  (CheckBox) findViewById(R.id.chBxGlucManianaMa);
-        if(chkbxGlucManianaMa.isChecked())
-            diasRecordatorioGlucManiana += "martes,";
-
-        chkbxGlucManianaMi =  (CheckBox) findViewById(R.id.chBxGlucManianaMi);
-        if(chkbxGlucManianaMi.isChecked())
-            diasRecordatorioGlucManiana += "miercoles,";
-
-        chkbxGlucManianaJ =  (CheckBox) findViewById(R.id.chBxGlucManianaJ);
-        if(chkbxGlucManianaJ.isChecked())
-            diasRecordatorioGlucManiana += "jueves,";
-
-        chkbxGlucManianaV =  (CheckBox) findViewById(R.id.chBxGlucManianaV);
-        if(chkbxGlucManianaV.isChecked())
-            diasRecordatorioGlucManiana += "viernes,";
-
-        chkbxGlucManianaS =  (CheckBox) findViewById(R.id.chBxGlucManianaS);
-        if(chkbxGlucManianaS.isChecked())
-            diasRecordatorioGlucManiana += "sabado,";
-
-        chkbxGlucManianaD =  (CheckBox) findViewById(R.id.chBxGlucManianaD);
-        if(chkbxGlucManianaD.isChecked())
-            diasRecordatorioGlucManiana += "domingo";
-
+        diasRecordatorioGlucManiana += activoCheckbox(R.id.chBxGlucManianaL, diasRecordatorioGlucManiana, "lunes");
+        diasRecordatorioGlucManiana += activoCheckbox(R.id.chBxGlucManianaMa, diasRecordatorioGlucManiana, "martes");
+        diasRecordatorioGlucManiana += activoCheckbox(R.id.chBxGlucManianaMi, diasRecordatorioGlucManiana, "miercoles");
+        diasRecordatorioGlucManiana += activoCheckbox(R.id.chBxGlucManianaJ, diasRecordatorioGlucManiana, "jueves");
+        diasRecordatorioGlucManiana += activoCheckbox(R.id.chBxGlucManianaV, diasRecordatorioGlucManiana, "viernes");
+        diasRecordatorioGlucManiana += activoCheckbox(R.id.chBxGlucManianaS, diasRecordatorioGlucManiana, "sabado");
+        diasRecordatorioGlucManiana += activoCheckbox(R.id.chBxGlucManianaD, diasRecordatorioGlucManiana, "domingo");
         return diasRecordatorioGlucManiana;
-
     }
 
     private String RecordatoriosGlucosaTarde(){
-
         String diasRecordatorioGlucTarde = "";
-
-        chkbxGlucTardeLun =  (CheckBox) findViewById(R.id.chBxGlucTardeLu);
-        String diasRecordatorioGluc = "";
-        if(chkbxGlucTardeLun.isChecked())
-            diasRecordatorioGlucTarde += "lunes,";
-
-        chkbxGlucTardeMa =  (CheckBox) findViewById(R.id.chBxGlucTardeMa);
-        if(chkbxGlucTardeMa.isChecked())
-            diasRecordatorioGlucTarde += "martes,";
-
-        chkbxGlucTardeMi =  (CheckBox) findViewById(R.id.chBxGlucTardeMi);
-        if(chkbxGlucTardeMi.isChecked())
-            diasRecordatorioGlucTarde += "miercoles,";
-
-        chkbxGlucTardeJ =  (CheckBox) findViewById(R.id.chBxGlucTardeJ);
-        if(chkbxGlucTardeJ.isChecked())
-            diasRecordatorioGlucTarde += "jueves,";
-
-        chkbxGlucTardeV =  (CheckBox) findViewById(R.id.chBxGlucTardeV);
-        if(chkbxGlucTardeV.isChecked())
-            diasRecordatorioGlucTarde += "viernes,";
-
-        chkbxGlucTardeS =  (CheckBox) findViewById(R.id.chBxGlucTardeS);
-        if(chkbxGlucTardeS.isChecked())
-            diasRecordatorioGlucTarde += "sabado,";
-
-        chkbxGlucTardeD =  (CheckBox) findViewById(R.id.chBxGlucTardeD);
-        if(chkbxGlucTardeD.isChecked())
-            diasRecordatorioGlucTarde += "domingo";
-
+        diasRecordatorioGlucTarde += activoCheckbox(R.id.chBxGlucTardeLu, diasRecordatorioGlucTarde, "lunes");
+        diasRecordatorioGlucTarde += activoCheckbox(R.id.chBxGlucTardeMa, diasRecordatorioGlucTarde, "martes");
+        diasRecordatorioGlucTarde += activoCheckbox(R.id.chBxGlucTardeMi, diasRecordatorioGlucTarde, "miercoles");
+        diasRecordatorioGlucTarde += activoCheckbox(R.id.chBxGlucTardeJ, diasRecordatorioGlucTarde, "jueves");
+        diasRecordatorioGlucTarde += activoCheckbox(R.id.chBxGlucTardeV, diasRecordatorioGlucTarde, "viernes");
+        diasRecordatorioGlucTarde += activoCheckbox(R.id.chBxGlucTardeS, diasRecordatorioGlucTarde, "sabado");
+        diasRecordatorioGlucTarde += activoCheckbox(R.id.chBxGlucTardeD, diasRecordatorioGlucTarde, "domingo");
         return diasRecordatorioGlucTarde;
-
     }
 
     private String RecordatoriosGlucosaNoche(){
-
         String diasRecordatorioGlucNoche = "";
-
-        chkbxGlucNocheLun =  (CheckBox) findViewById(R.id.chBxGlucNocheLu);
-        String diasRecordatorioGluc = "";
-        if(chkbxGlucNocheLun.isChecked())
-            diasRecordatorioGlucNoche += "lunes,";
-
-        chkbxGlucNocheMa =  (CheckBox) findViewById(R.id.chBxGlucNocheMa);
-        if(chkbxGlucNocheMa.isChecked())
-            diasRecordatorioGlucNoche += "martes,";
-
-        chkbxGlucNocheMi =  (CheckBox) findViewById(R.id.chBxGlucNocheMi);
-        if(chkbxGlucNocheMi.isChecked())
-            diasRecordatorioGlucNoche += "miercoles,";
-
-        chkbxGlucNocheJ =  (CheckBox) findViewById(R.id.chBxGlucNocheJ);
-        if(chkbxGlucNocheJ.isChecked())
-            diasRecordatorioGlucNoche += "jueves,";
-
-        chkbxGlucNocheV =  (CheckBox) findViewById(R.id.chBxGlucNocheV);
-        if(chkbxGlucNocheV.isChecked())
-            diasRecordatorioGlucNoche += "viernes,";
-
-        chkbxGlucNocheS =  (CheckBox) findViewById(R.id.chBxGlucNocheS);
-        if(chkbxGlucNocheS.isChecked())
-            diasRecordatorioGlucNoche += "sabado,";
-
-        chkbxGlucNocheD =  (CheckBox) findViewById(R.id.chBxGlucNocheD);
-        if(chkbxGlucNocheD.isChecked())
-            diasRecordatorioGlucNoche += "domingo";
-
+        diasRecordatorioGlucNoche += activoCheckbox(R.id.chBxGlucNocheLu, diasRecordatorioGlucNoche, "lunes");
+        diasRecordatorioGlucNoche += activoCheckbox(R.id.chBxGlucNocheMa, diasRecordatorioGlucNoche, "martes");
+        diasRecordatorioGlucNoche += activoCheckbox(R.id.chBxGlucNocheMi, diasRecordatorioGlucNoche, "miercoles");
+        diasRecordatorioGlucNoche += activoCheckbox(R.id.chBxGlucNocheJ, diasRecordatorioGlucNoche, "jueves");
+        diasRecordatorioGlucNoche += activoCheckbox(R.id.chBxGlucNocheV, diasRecordatorioGlucNoche, "viernes");
+        diasRecordatorioGlucNoche += activoCheckbox(R.id.chBxGlucNocheS, diasRecordatorioGlucNoche, "sabado");
+        diasRecordatorioGlucNoche += activoCheckbox(R.id.chBxGlucNocheD, diasRecordatorioGlucNoche, "domingo");
         return diasRecordatorioGlucNoche;
-
     }
 
     private void CrearNuevoRecordatoriosPresion() {
-        Recordatorio recordatorio = new Recordatorio();
-        String diasRecordatorioPresionMañana = RecordatoriosPresionMañana();
+        String diasRecordatorioPresionManiana = RecordatoriosPresionManiana();
         String diasRecordatorioPresionTarde = RecordatoriosPresionTarde();
         String diasRecordatorioPresionNoche = RecordatoriosPresionNoche();
 
         String email = mailTutor.getText().toString();
-        if (diasRecordatorioPresionMañana != "" && diasRecordatorioPresionMañana != null)
-            myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionMañana, "mañana"));
-        if (diasRecordatorioPresionMañana != "" && diasRecordatorioPresionMañana != null)
+        if (diasRecordatorioPresionManiana != null && !diasRecordatorioPresionManiana.equals(""))
+            myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionManiana, "mañana"));
+        if (diasRecordatorioPresionTarde != null && !diasRecordatorioPresionTarde.equals(""))
             myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionTarde, "tarde"));
-        if (diasRecordatorioPresionMañana != "" && diasRecordatorioPresionMañana != null)
+        if (diasRecordatorioPresionNoche != null && !diasRecordatorioPresionNoche.equals(""))
             myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionNoche, "noche"));
-
-
-
     }
 
-    private String RecordatoriosPresionMañana(){
-
+    private String RecordatoriosPresionManiana(){
         String diasRecordatorioPresionManiana = "";
-
-        chkbxPresionManianaL =  (CheckBox) findViewById(R.id.chBxPresionManianaL);
-        String diasRecordatorioPresion = "";
-        if(chkbxPresionManianaL.isChecked())
-            diasRecordatorioPresionManiana += "lunes,";
-
-        chkbxPresionManianaMa =  (CheckBox) findViewById(R.id.chBxPresionManianaMa);
-        if(chkbxPresionManianaMa.isChecked())
-            diasRecordatorioPresionManiana += "martes,";
-
-        chkbxPresionManianaMi =  (CheckBox) findViewById(R.id.chBxPresionManianaMi);
-        if(chkbxPresionManianaMi.isChecked())
-            diasRecordatorioPresionManiana += "miercoles,";
-
-        chkbxPresionManianaJ =  (CheckBox) findViewById(R.id.chBxPresionManianaJ);
-        if(chkbxPresionManianaJ.isChecked())
-            diasRecordatorioPresionManiana += "jueves,";
-
-        chkbxPresionManianaV =  (CheckBox) findViewById(R.id.chBxPresionManianaV);
-        if(chkbxPresionManianaV.isChecked())
-            diasRecordatorioPresionManiana += "viernes,";
-
-        chkbxPresionManianaS =  (CheckBox) findViewById(R.id.chBxPresionManianaS);
-        if(chkbxPresionManianaS.isChecked())
-            diasRecordatorioPresionManiana += "sabado,";
-
-        chkbxPresionManianaD =  (CheckBox) findViewById(R.id.chBxPresionManianaD);
-        if(chkbxPresionManianaD.isChecked())
-            diasRecordatorioPresionManiana += "domingo";
-
+        diasRecordatorioPresionManiana += activoCheckbox(R.id.chBxPresionManianaL, diasRecordatorioPresionManiana, "lunes");
+        diasRecordatorioPresionManiana += activoCheckbox(R.id.chBxPresionManianaMa, diasRecordatorioPresionManiana, "martes");
+        diasRecordatorioPresionManiana += activoCheckbox(R.id.chBxPresionManianaMi, diasRecordatorioPresionManiana, "miercoles");
+        diasRecordatorioPresionManiana += activoCheckbox(R.id.chBxPresionManianaJ, diasRecordatorioPresionManiana, "jueves");
+        diasRecordatorioPresionManiana += activoCheckbox(R.id.chBxPresionManianaV, diasRecordatorioPresionManiana, "viernes");
+        diasRecordatorioPresionManiana += activoCheckbox(R.id.chBxPresionManianaS, diasRecordatorioPresionManiana, "sabado");
+        diasRecordatorioPresionManiana += activoCheckbox(R.id.chBxPresionManianaD, diasRecordatorioPresionManiana, "domingo");
         return diasRecordatorioPresionManiana;
-
     }
 
     private String RecordatoriosPresionTarde(){
-
         String diasRecordatorioPresionTarde = "";
-
-        chkbxPresionTardeL =  (CheckBox) findViewById(R.id.chBxPresionTardeLu);
-        String diasRecordatorioPresion = "";
-        if(chkbxPresionTardeL.isChecked())
-            diasRecordatorioPresionTarde += "lunes,";
-
-        chkbxPresionTardeMa =  (CheckBox) findViewById(R.id.chBxPresionTardeMa);
-        if(chkbxPresionTardeMa.isChecked())
-            diasRecordatorioPresionTarde += "martes,";
-
-        chkbxPresionTardeMi =  (CheckBox) findViewById(R.id.chBxPresionTardeMi);
-        if(chkbxPresionTardeMi.isChecked())
-            diasRecordatorioPresionTarde += "miercoles,";
-
-        chkbxPresionTardeJ =  (CheckBox) findViewById(R.id.chBxPresionTardeJ);
-        if(chkbxPresionTardeJ.isChecked())
-            diasRecordatorioPresionTarde += "jueves,";
-
-        chkbxPresionTardeV =  (CheckBox) findViewById(R.id.chBxPresionTardeV);
-        if(chkbxPresionTardeV.isChecked())
-            diasRecordatorioPresionTarde += "viernes,";
-
-        chkbxPresionTardeS =  (CheckBox) findViewById(R.id.chBxPresionTardeS);
-        if(chkbxPresionTardeS.isChecked())
-            diasRecordatorioPresionTarde += "sabado,";
-
-        chkbxPresionTardeD =  (CheckBox) findViewById(R.id.chBxPresionTardeD);
-        if(chkbxPresionTardeD.isChecked())
-            diasRecordatorioPresionTarde += "domingo";
-
+        diasRecordatorioPresionTarde += activoCheckbox(R.id.chBxPresionTardeLu, diasRecordatorioPresionTarde, "lunes");
+        diasRecordatorioPresionTarde += activoCheckbox(R.id.chBxPresionTardeMa, diasRecordatorioPresionTarde, "martes");
+        diasRecordatorioPresionTarde += activoCheckbox(R.id.chBxPresionTardeMi, diasRecordatorioPresionTarde, "miercoles");
+        diasRecordatorioPresionTarde += activoCheckbox(R.id.chBxPresionTardeJ, diasRecordatorioPresionTarde, "jueves");
+        diasRecordatorioPresionTarde += activoCheckbox(R.id.chBxPresionTardeV, diasRecordatorioPresionTarde, "viernes");
+        diasRecordatorioPresionTarde += activoCheckbox(R.id.chBxPresionTardeS, diasRecordatorioPresionTarde, "sabado");
+        diasRecordatorioPresionTarde += activoCheckbox(R.id.chBxPresionTardeD, diasRecordatorioPresionTarde, "domingo");
         return diasRecordatorioPresionTarde;
-
     }
 
     private String RecordatoriosPresionNoche(){
-
         String diasRecordatorioPresionNoche = "";
-
-        chkbxPresionNocheL =  (CheckBox) findViewById(R.id.chBxPresionNocheL);
-        String diasRecordatorioPresion = "";
-        if(chkbxPresionNocheL.isChecked())
-            diasRecordatorioPresionNoche += "lunes,";
-
-        chkbxPresionNocheMa =  (CheckBox) findViewById(R.id.chBxPresionNocheMa);
-        if(chkbxPresionNocheMa.isChecked())
-            diasRecordatorioPresionNoche += "martes,";
-
-        chkbxPresionNocheMi =  (CheckBox) findViewById(R.id.chBxPresionNocheMi);
-        if(chkbxPresionNocheMi.isChecked())
-            diasRecordatorioPresionNoche += "miercoles,";
-
-        chkbxPresionNocheJ =  (CheckBox) findViewById(R.id.chBxPresionNocheJ);
-        if(chkbxPresionNocheJ.isChecked())
-            diasRecordatorioPresionNoche += "jueves,";
-
-        chkbxPresionNocheV =  (CheckBox) findViewById(R.id.chBxPresionNocheV);
-        if(chkbxPresionNocheV.isChecked())
-            diasRecordatorioPresionNoche += "viernes,";
-
-        chkbxPresionNocheS =  (CheckBox) findViewById(R.id.chBxPresionNocheS);
-        if(chkbxPresionNocheS.isChecked())
-            diasRecordatorioPresionNoche += "sabado,";
-
-        chkbxPresionNocheD =  (CheckBox) findViewById(R.id.chBxPresionNocheD);
-        if(chkbxPresionNocheD.isChecked())
-            diasRecordatorioPresionNoche += "domingo";
-
+        diasRecordatorioPresionNoche += activoCheckbox(R.id.chBxPresionNocheL, diasRecordatorioPresionNoche, "lunes");
+        diasRecordatorioPresionNoche += activoCheckbox(R.id.chBxPresionNocheMa, diasRecordatorioPresionNoche, "martes");
+        diasRecordatorioPresionNoche += activoCheckbox(R.id.chBxPresionNocheMi, diasRecordatorioPresionNoche, "miercoles");
+        diasRecordatorioPresionNoche += activoCheckbox(R.id.chBxPresionNocheJ, diasRecordatorioPresionNoche, "jueves");
+        diasRecordatorioPresionNoche += activoCheckbox(R.id.chBxPresionNocheV, diasRecordatorioPresionNoche, "viernes");
+        diasRecordatorioPresionNoche += activoCheckbox(R.id.chBxPresionNocheS, diasRecordatorioPresionNoche, "sabado");
+        diasRecordatorioPresionNoche += activoCheckbox(R.id.chBxPresionNocheD, diasRecordatorioPresionNoche, "domingo");
         return diasRecordatorioPresionNoche;
-
     }
-
 
     private void crearUsuario() {
         String email = mailTutor.getText().toString();
         String password = contra.getText().toString();
 
         if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
-            Toast.makeText(getApplicationContext(), "falta llenar campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.nombreAbueloVacio), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(email) || !email.matches("[a-z0-9\\._]{1,30}@([a-z]{2,10}\\.[a-z]{2,10})[\\.[a-z]{2,10}]*"))  {
-            Toast.makeText(getApplicationContext(), "Email incorrecto", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.emailVacio), Toast.LENGTH_SHORT).show();
             return;
         }
 
-       if (TextUtils.isEmpty(password) || password.length() < 6 || !email.matches("[a-zA-Z0-9]{30}") ) {
-            Toast.makeText(getApplicationContext(), "Coloque contraseña", Toast.LENGTH_SHORT).show();
+        if (!email.matches(getString(R.string.regexEmail)))  {
+            Toast.makeText(getApplicationContext(), getString(R.string.emailMalFormado), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+       if (TextUtils.isEmpty(password)) {
+           Toast.makeText(getApplicationContext(), getString(R.string.contraseniaVacia), Toast.LENGTH_SHORT).show();
+           return;
+       }
+
+       if(!password.matches(getString(R.string.regexPassword))) {
+            Toast.makeText(getApplicationContext(), getString(R.string.contraseniaMalFormada), Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (TextUtils.isEmpty(equipoFavorito.getText().toString())) {
-            Toast.makeText(getApplicationContext(), "falta llenar campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.equipoVacio), Toast.LENGTH_SHORT).show();
             return;
         }
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = mAuth.getCurrentUser();
 
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            //Si no se repite o algo, lo guarda en la base
-                            writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString());
-
-                            CrearNuevoRecordatoriosGlucosa();
-                            CrearNuevoRecordatoriosPresion();
-
-                            startActivity(Login.class);
-
-                        } else {
-
-                            Toast.makeText(RegistroActivity.this, getString(R.string.fallo_autenticacion),
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                        // ...
+                        //Si no se repite o algo, lo guarda en la base
+                        writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString());
+                        CrearNuevoRecordatoriosGlucosa();
+                        CrearNuevoRecordatoriosPresion();
+                        startActivity(Login.class);
+                    } else {
+                        Toast.makeText(RegistroActivity.this, getString(R.string.fallo_autenticacion), Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            });
     }
 
     private void startActivity(Class<?> cls) {
