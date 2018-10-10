@@ -205,8 +205,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     private String parsearNombre(String nombre) {
         String s1 = nombre.substring(0, 1).toUpperCase();
-        String nameCapitalized = s1 + nombre.substring(1).toLowerCase();
-        return nameCapitalized;
+        return s1 + nombre.substring(1).toLowerCase();
     }
 
     //act on result of TTS data check
