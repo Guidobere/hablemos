@@ -125,9 +125,6 @@ public class RegistroActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
-                //Al usar autenticacion no hay que guardar aca la contraseña!
-                //Habria que poner alguna forma de manejar algo que ocurra malo!
-
                 //Aca lo guarda para que lo podamos autenticar
                 crearUsuario();
 
@@ -410,12 +407,12 @@ public class RegistroActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Coloque direccion de email", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email) || !email.matches("[a-z0-9\\._]{1,30}@([a-z]{2,10}\\.[a-z]{2,10})[\\.[a-z]{2,10}]*"))  {
+            Toast.makeText(getApplicationContext(), "Email incorrecto", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(password) || password.length() < 6) {
+       if (TextUtils.isEmpty(password) || password.length() < 6 || !email.matches("[a-zA-Z0-9]{30}") ) {
             Toast.makeText(getApplicationContext(), "Coloque contraseña", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -432,7 +429,6 @@ public class RegistroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             // Sign in success, update UI with the signed-in user's information
-                            //  Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             //Si no se repite o algo, lo guarda en la base
@@ -443,9 +439,7 @@ public class RegistroActivity extends AppCompatActivity {
 
                             startActivity(Login.class);
 
-                             // updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
 
                             Toast.makeText(RegistroActivity.this, getString(R.string.fallo_autenticacion),
                                     Toast.LENGTH_SHORT).show();
