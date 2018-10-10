@@ -295,7 +295,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="Glucosa" />
+                    android:text="Glucosa (No obligatorio)" />
 
             </LinearLayout>
 
@@ -526,7 +526,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="Presion" />
+                    android:text="Presion (No obligatorio)" />
 
             </LinearLayout>
 
