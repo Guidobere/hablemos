@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -100,9 +101,9 @@ public class RegistroActivity extends AppCompatActivity {
     DatabaseReference myUsersFb =FirebaseDatabase.getInstance().getReference().child("users");
     DatabaseReference myRecordatoriosGlucosaFb =FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
     DatabaseReference myRecordatoriosPresionFb =FirebaseDatabase.getInstance().getReference().child("recordatoriosPresion");
+
     //ESto es para la autenticacion
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    //  private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,11 +131,6 @@ public class RegistroActivity extends AppCompatActivity {
                 //Aca lo guarda para que lo podamos autenticar
                 crearUsuario();
 
-                //Aca lo mete a la database
-                writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(),medicamentosT.getText().toString(),medicamentosN.getText().toString());
-                CrearNuevoRecordatoriosGlucosa();
-                CrearNuevoRecordatoriosPresion();
-                //finish();
             }
         });
     }
@@ -275,7 +271,6 @@ public class RegistroActivity extends AppCompatActivity {
 
     }
 
-
     private void CrearNuevoRecordatoriosPresion() {
         Recordatorio recordatorio = new Recordatorio();
         String diasRecordatorioPresionMañana = RecordatoriosPresionMañana();
@@ -293,7 +288,6 @@ public class RegistroActivity extends AppCompatActivity {
 
 
     }
-
 
     private String RecordatoriosPresionMañana(){
 
@@ -407,27 +401,55 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
 
-
     private void crearUsuario() {
         String email = mailTutor.getText().toString();
         String password = contra.getText().toString();
+
+        if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
+            Toast.makeText(getApplicationContext(), "falta llenar campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), "Coloque direccion de email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password) || password.length() < 6) {
+            Toast.makeText(getApplicationContext(), "Coloque contraseña", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(equipoFavorito.getText().toString())) {
+            Toast.makeText(getApplicationContext(), "falta llenar campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             // Sign in success, update UI with the signed-in user's information
                             //  Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //Si no se repite o algo, lo guarda en la base
+                            writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString());
+
+                            CrearNuevoRecordatoriosGlucosa();
+                            CrearNuevoRecordatoriosPresion();
+
                             startActivity(Login.class);
-                           // updateUI(user);
+
+                             // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            //    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+
                             Toast.makeText(RegistroActivity.this, getString(R.string.fallo_autenticacion),
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+
                         }
                         // ...
                     }

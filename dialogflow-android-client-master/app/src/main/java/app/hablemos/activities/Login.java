@@ -155,21 +155,18 @@ public class Login extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
+
                     Log.d(TAG, "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
                     startActivity(MainActivity.class);
-                    //updateUI(user);
+
                 } else {
                     if (password.length() < 6) {
                         passTxtBox.setError(getString(R.string.minimum_password));
                     } else {
                         Toast.makeText(Login.this, getString(R.string.fallo_autenticacion), Toast.LENGTH_LONG).show();
                     }
-                    // If sign in fails, display a message to the user.
-                    //Log.w(TAG, "signInWithEmail:failure", task.getException());
-                    //Toast.makeText(Login.this, getString(R.string.fallo_autenticacion), Toast.LENGTH_SHORT).show();
-                    //updateUI(null);
+
                 }
             }
         });
