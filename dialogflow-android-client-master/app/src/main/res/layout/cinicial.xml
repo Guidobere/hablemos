@@ -1,775 +1,721 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fillViewport="true"
-        android:scrollbars = "vertical"
-        android:scrollbarStyle="insideInset">
-
-        <RelativeLayout
-            android:id="@+id/relativep"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-    <android.support.v7.widget.CardView
+    <RelativeLayout
+        android:id="@+id/relativep"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:cardPreventCornerOverlap="false"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp">
 
-
-        <RelativeLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!-- AGREGAR ALGO PARA EL REGISTRO -->
-            <LinearLayout
-                android:id="@+id/linearLayaut1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/registro"
-                    android:tint="@color/white" />
-
-            </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="false"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp">
 
             <RelativeLayout
-                android:id="@+id/relative1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relativep"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="200dp"
-                tools:ignore="NotSibling">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/imageView_userIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="3dp"
-                    android:src="@drawable/nombreabuelo" />
-
-                <EditText
-                    android:id="@+id/txtAbuelo"
-                    android:layout_width="238dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@id/imageView_userIcon"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="0dp"
-                    android:layout_toRightOf="@id/imageView_userIcon"
-                    android:background="@color/editTextColor"
-                    android:hint="Nombre Abuelo"
-                    android:padding="10dp"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relative1"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView_passIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="3dp"
-                    android:src="@drawable/sobre" />
-
-                <EditText
-                    android:id="@+id/txtEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageView_passIcon"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/imageView_passIcon"
-                    android:background="@color/editTextColor"
-                    android:hint="Email del tutor"
-                    android:padding="10dp"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relative2"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView_passIcon2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="3dp"
-                    android:src="@drawable/candado" />
-
-                <EditText
-                    android:id="@+id/txtContra"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageView_passIcon2"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/imageView_passIcon2"
-                    android:background="@color/editTextColor"
-                    android:hint="Contraseña tutor"
-                    android:inputType="textPassword"
-                    android:padding="10dp"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relative3"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView_passIcon3"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="3dp"
-                    android:src="@drawable/futbol" />
-
-                <EditText
-                    android:id="@+id/txtEquipo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageView_passIcon3"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/imageView_passIcon3"
-                    android:background="@color/editTextColor"
-                    android:hint="Equipo futbol"
-                    android:padding="10dp"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relative4"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView_passIcon4"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="3dp"
-                    android:src="@drawable/medicamento" />
-
-                <EditText
-                    android:id="@+id/txtmañana"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageView_passIcon4"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/imageView_passIcon4"
-                    android:background="@color/editTextColor"
-                    android:hint="Medicamentos Turno Mañana"
-                    android:padding="10dp"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relative5"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView_passIcon5"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="3dp"
-                    android:src="@drawable/medicamento" />
-
-                <EditText
-                    android:id="@+id/txttarde"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageView_passIcon5"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/imageView_passIcon5"
-                    android:background="@color/editTextColor"
-                    android:hint="Medicamentos Turno Tarde"
-                    android:padding="10dp"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relative6"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView_passIcon6"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="3dp"
-                    android:src="@drawable/medicamento" />
-
-                <EditText
-                    android:id="@+id/txtnoche"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageView_passIcon6"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/imageView_passIcon6"
-                    android:background="@color/editTextColor"
-                    android:hint="Medicamentos Turno Noche"
-                    android:padding="10dp"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-            //GLUCOSA
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_below="@+id/relative7"
-                android:id="@+id/lblGlucosa"
-                >
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:text="Glucosa (No obligatorio)" />
-
-            </LinearLayout>
-
-                //MAÑANA
-                <TextView
-                    android:id="@+id/lblGlucosaMañana"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Mañana"
-                    android:layout_marginLeft="10dp"
-                    android:layout_below="@+id/lblGlucosa"
-                    />
-
+                <!-- AGREGAR ALGO PARA EL REGISTRO -->
                 <LinearLayout
-                    android:id="@+id/checkboxGlucosaDias"
+                    android:id="@+id/linearLayaut1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/registro"
+                        android:tint="@color/white"
+                        android:contentDescription="@string/imagenregistro" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relativep"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="200dp"
+                    tools:ignore="NotSibling">
+
+                    <ImageView
+                        android:id="@+id/imageView_userIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/nombreabuelo"
+                        android:contentDescription="@string/imgusericon" />
+
+                    <EditText
+                        android:id="@+id/txtAbuelo"
+                        android:layout_width="238dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@id/imageView_userIcon"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="0dp"
+                        android:layout_toEndOf="@id/imageView_userIcon"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/nombre_abuelo"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp"
+                        android:inputType="text" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relative1"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView_passIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/sobre"
+                        android:contentDescription="@string/imgpassicon" />
+
+                    <EditText
+                        android:id="@+id/txtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_passIcon"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/email_del_tutor"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp"
+                        android:inputType="textEmailAddress" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relative2"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView_passIcon2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/candado"
+                        android:contentDescription="@string/imgpassicon2"/>
+
+                    <EditText
+                        android:id="@+id/txtContra"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_passIcon2"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon2"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/contrase_a_tutor"
+                        android:inputType="textPassword"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relative3"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView_passIcon3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/futbol"
+                        android:contentDescription="@string/imgpassicon3" />
+
+                    <EditText
+                        android:id="@+id/txtEquipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_passIcon3"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon3"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/equipo_futbol"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp"
+                        android:inputType="text" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relative4"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView_passIcon4"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/medicamento"
+                        android:contentDescription="@string/imgturnomaniana" />
+
+                    <EditText
+                        android:id="@+id/txtmañana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_passIcon4"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon4"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/medicamentos_turno_ma_ana"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp"
+                        android:inputType="text" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relative5"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView_passIcon5"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/medicamento"
+                        android:contentDescription="@string/imgturnotarde"/>
+
+                    <EditText
+                        android:id="@+id/txttarde"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_passIcon5"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon5"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/medicamentos_turno_tarde"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp"
+                        android:inputType="text"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relative6"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView_passIcon6"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/medicamento"
+                        android:contentDescription="@string/imgturnonoche"/>
+
+                    <EditText
+                        android:id="@+id/txtnoche"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_passIcon6"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon6"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/medicamentos_turno_noche"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp"
+                        android:inputType="text" />
+                </RelativeLayout>
+
+                <!-- GLUCOSA -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/lblGlucosaMañana"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/relative7"
+                    android:id="@+id/lblGlucosa">
 
-                    <TableRow
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="none"
+                        android:selectAllOnFocus="false"
+                        android:text="@string/glucosa"
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+                    <!-- MAÑANA -->
+                    <TextView
+                        android:id="@+id/lblGlucosaMañana"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ma_ana"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/lblGlucosa"/>
+
+                    <LinearLayout
+                        android:id="@+id/checkboxGlucosaDias"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/lblGlucosaMañana"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/chBxGlucManianaL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L" />
+                            android:text="@string/lunes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucManianaMa"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ma" />
+                            android:text="@string/martes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucManianaMi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mi" />
+                            android:text="@string/miercoles_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucManianaJ"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="J" />
+                            android:text="@string/jueves_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucManianaV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="V" />
+                            android:text="@string/viernes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucManianaS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S" />
+                            android:text="@string/sabado_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucManianaD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="D" />
+                            android:text="@string/domingo_vista" />
+                    </LinearLayout>
 
+                    <!-- TARDE -->
+                    <TextView
+                        android:id="@+id/lblGlucosaTarde"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tarde"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/checkboxGlucosaDias"/>
 
-                    </TableRow>
-                </LinearLayout>
-
-                //TARDE
-                <TextView
-                    android:id="@+id/lblGlucosaTarde"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tarde"
-                    android:layout_marginLeft="10dp"
-                    android:layout_below="@+id/checkboxGlucosaDias"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/checkboxGlucosaTarde"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/lblGlucosaTarde"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TableRow
+                    <LinearLayout
+                        android:id="@+id/checkboxGlucosaTarde"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/lblGlucosaTarde"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/chBxGlucTardeLu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L" />
+                            android:text="@string/lunes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucTardeMa"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ma" />
+                            android:text="@string/martes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucTardeMi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mi" />
+                            android:text="@string/miercoles_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucTardeJ"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="J" />
+                            android:text="@string/jueves_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucTardeV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="V" />
+                            android:text="@string/viernes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucTardeS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S" />
+                            android:text="@string/sabado_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucTardeD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="D" />
+                            android:text="@string/domingo_vista" />
+                    </LinearLayout>
 
+                    <!-- NOCHE -->
+                    <TextView
+                        android:id="@+id/lblGlucosaNoche"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/noche"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/checkboxGlucosaTarde"
+                        />
 
-                    </TableRow>
-                </LinearLayout>
-
-                //NOCHE
-                <TextView
-                    android:id="@+id/lblGlucosaNoche"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Noche"
-                    android:layout_marginLeft="10dp"
-                    android:layout_below="@+id/checkboxGlucosaTarde"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/checkboxGlucosaNoche"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/lblGlucosaNoche"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TableRow
+                    <LinearLayout
+                        android:id="@+id/checkboxGlucosaNoche"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/lblGlucosaNoche"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/chBxGlucNocheLu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L" />
+                            android:text="@string/lunes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucNocheMa"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ma" />
+                            android:text="@string/martes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucNocheMi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mi" />
+                            android:text="@string/miercoles_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucNocheJ"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="J" />
+                            android:text="@string/jueves_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucNocheV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="V" />
+                            android:text="@string/viernes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucNocheS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S" />
+                            android:text="@string/sabado_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxGlucNocheD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="D" />
+                            android:text="@string/domingo_vista" />
+                    </LinearLayout>
 
-
-                    </TableRow>
-                </LinearLayout>
-
-
-            //PRESION
-            <LinearLayout
-                android:id="@+id/lblPresion"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_below="@+id/checkboxGlucosaNoche"
-
-                >
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:text="Presion (No obligatorio)" />
-
-            </LinearLayout>
-
-                //MAÑANA
-                <TextView
-                    android:id="@+id/lblPresionMañana"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Mañana"
-                    android:layout_marginLeft="10dp"
-                    android:layout_below="@+id/lblPresion"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/checkboxPresionMañana"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/lblPresionMañana"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TableRow
+                    <!-- PRESION -->
+                    <LinearLayout
+                        android:id="@+id/lblPresion"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_below="@+id/checkboxGlucosaNoche">
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="none"
+                            android:selectAllOnFocus="false"
+                            android:text="@string/presion_vista"
+                            tools:ignore="LabelFor" />
+                    </LinearLayout>
+
+                    <!-- MAÑANA -->
+                    <TextView
+                        android:id="@+id/lblPresionMañana"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ma_ana"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/lblPresion" />
+
+                    <LinearLayout
+                        android:id="@+id/checkboxPresionMañana"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/lblPresionMañana"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/chBxPresionManianaL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L" />
+                            android:text="@string/lunes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionManianaMa"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ma" />
+                            android:text="@string/martes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionManianaMi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mi" />
+                            android:text="@string/miercoles_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionManianaJ"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="J" />
+                            android:text="@string/jueves_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionManianaV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="V" />
+                            android:text="@string/viernes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionManianaS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S" />
+                            android:text="@string/sabado_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionManianaD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="D" />
+                            android:text="@string/domingo_vista" />
+                    </LinearLayout>
 
+                    <!-- TARDE -->
+                    <TextView
+                        android:id="@+id/lblPresionTarde"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tarde"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/checkboxPresionMañana" />
 
-                    </TableRow>
-                </LinearLayout>
-
-                //TARDE
-                <TextView
-                    android:id="@+id/lblPresionTarde"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tarde"
-                    android:layout_marginLeft="10dp"
-                    android:layout_below="@+id/checkboxPresionMañana"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/checkboxPresionTarde"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/lblPresionTarde"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TableRow
+                    <LinearLayout
+                        android:id="@+id/checkboxPresionTarde"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/lblPresionTarde"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/chBxPresionTardeLu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L" />
+                            android:text="@string/lunes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionTardeMa"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ma" />
+                            android:text="@string/martes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionTardeMi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mi" />
+                            android:text="@string/miercoles_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionTardeJ"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="J" />
+                            android:text="@string/jueves_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionTardeV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="V" />
+                            android:text="@string/viernes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionTardeS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S" />
+                            android:text="@string/sabado_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionTardeD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="D" />
+                            android:text="@string/domingo_vista" />
+                    </LinearLayout>
 
+                    <!-- NOCHE -->
+                    <TextView
+                        android:id="@+id/lblPresionNoche"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/noche"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/checkboxPresionTarde" />
 
-                    </TableRow>
-                </LinearLayout>
-
-                //NOCHE
-                <TextView
-                    android:id="@+id/lblPresionNoche"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Noche"
-                    android:layout_marginLeft="10dp"
-                    android:layout_below="@+id/checkboxPresionTarde"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/checkboxPresionNoche"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/lblPresionNoche"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TableRow
+                    <LinearLayout
+                        android:id="@+id/checkboxPresionNoche"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/lblPresionNoche"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/chBxPresionNocheL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L" />
+                            android:text="@string/lunes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionNocheMa"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ma" />
+                            android:text="@string/martes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionNocheMi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mi" />
+                            android:text="@string/miercoles_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionNocheJ"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="J" />
+                            android:text="@string/jueves_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionNocheV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="V" />
+                            android:text="@string/viernes_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionNocheS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S" />
+                            android:text="@string/sabado_vista" />
 
                         <CheckBox
                             android:id="@+id/chBxPresionNocheD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="D" />
+                            android:text="@string/domingo_vista" />
+                    </LinearLayout>
 
-
-                    </TableRow>
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/boton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/checkboxPresionNoche"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginTop="10dp">
-
-                    <Button
-                        android:id="@+id/btnRegister"
+                    <RelativeLayout
+                        android:id="@+id/boton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:background="@color/colorPrimary"
-                        android:fontFamily="sans-serif-condensed"
-                        android:text="Registrar"
-                        android:textSize="13sp" />
+                        android:layout_below="@id/checkboxPresionNoche"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp">
 
-                </RelativeLayout>
+                        <Button
+                            android:id="@+id/btnRegister"
+                            android:layout_width="125dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:background="@color/colorPrimary"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="@string/registrar"
+                            android:textSize="13sp" />
 
-
-
-        </RelativeLayout>
-
-
-    </android.support.v7.widget.CardView>
-
-</RelativeLayout>
-
-    </ScrollView>
-
-</RelativeLayout>
+                        <Button
+                            android:id="@+id/btnCancel"
+                            android:layout_width="125dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:background="@color/colorPrimary"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="@string/cancelar"
+                            android:textSize="13sp" />
+                    </RelativeLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+</ScrollView>

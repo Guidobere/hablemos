@@ -49,10 +49,10 @@
     <string name="nombre_abuelo">Nombre Abuelo</string>
     <string name="email_del_tutor">Email del tutor</string>
     <string name="contrase_a_tutor">Contraseña tutor</string>
-    <string name="equipo_futbol">Equipo futbol</string>
-    <string name="medicamentos_turno_ma_ana">Medicamentos Turno Mañana</string>
-    <string name="medicamentos_turno_tarde">Medicamentos Turno Tarde</string>
-    <string name="medicamentos_turno_noche">Medicamentos Turno Noche</string>
+    <string name="equipo_futbol">Equipo fútbol</string>
+    <string name="medicamentos_turno_ma_ana">Medicamentos Mañana</string>
+    <string name="medicamentos_turno_tarde">Medicamentos Tarde</string>
+    <string name="medicamentos_turno_noche">Medicamentos Noche</string>
     <string name="imgusericon">imgUserIcon</string>
     <string name="imgpassicon">imgPassIcon</string>
     <string name="imgpassicon2">imgPassIcon2</string>
@@ -60,8 +60,20 @@
     <string name="imgturnomaniana">imgTurnoManiana</string>
     <string name="imgturnotarde">imgTurnoTarde</string>
     <string name="imgturnonoche">imgTurnoNoche</string>
+    <string name="glucosa">Glucosa (No obligatorio)</string>
+    <string name="ma_ana">Mañana</string>
+    <string name="lunes_vista">L</string>
+    <string name="martes_vista">Ma</string>
+    <string name="miercoles_vista">Mi</string>
+    <string name="jueves_vista">J</string>
+    <string name="viernes_vista">V</string>
+    <string name="sabado_vista">S</string>
+    <string name="domingo_vista">D</string>
+    <string name="tarde">Tarde</string>
+    <string name="noche">Noche</string>
+    <string name="presion_vista">Presion (No obligatorio)</string>
     <!-- Validaciones registro -->
-    <string name="regexEmail">[a–zA–Z0–9\\._]{1,30}@[a-zA-Z]+(\\.[a-zA-Z]+)+</string>
+    <string name="regexEmail">[a–zA–Z0–9\._]{3,30}@([a–zA–Z]{3,10}\.[a–zA–Z]{2,10})[\.[a–zA–Z]{2,10}]*</string>
     <string name="regexPassword">[a–zA–Z0–9]{6,30}</string>
     <string name="nombreAbueloVacio">El nombre no puede estar vacío</string>
     <string name="emailVacio">El email no puede estar vacío</string>
@@ -71,4 +83,5 @@
     <string name="equipoVacio">El equipo de fútbol no puede estar vacío</string>
     <!-- Nombre interacciones -->
     <string name="interaccionAbrirApp">Abrir Hablemos!</string>
+    <string name="cancelar">Cancelar</string>
 </resources>
