@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/relativep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
  <android.support.v7.widget.CardView
      android:layout_width="match_parent"
@@ -18,94 +25,94 @@
 
      <RelativeLayout
          android:layout_width="match_parent"
-         android:layout_height="match_parent">
+         android:layout_height="513dp">
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:orientation="vertical"
-          android:id="@+id/linearLayaut1"
-          android:gravity="center_horizontal"
-          android:background="@color/colorPrimary"
-          android:layout_height="wrap_content">
+         <LinearLayout
+             android:id="@+id/linearLayaut1"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/colorPrimary"
+             android:gravity="center_horizontal"
+             android:orientation="vertical">
 
-          <ImageView
-              android:id="@+id/imageView5"
-              android:layout_width="180dp"
-              android:src="@drawable/logoapp"
-              android:layout_marginTop="10dp"
-              android:layout_height="180dp"
-              android:tint="@color/white"
-              android:contentDescription="@string/logo_login" />
+             <ImageView
+                 android:id="@+id/imageView5"
+                 android:layout_width="180dp"
+                 android:layout_height="180dp"
+                 android:layout_marginTop="10dp"
+                 android:contentDescription="@string/logo_login"
+                 android:src="@drawable/logoapp"
+                 android:tint="@color/white" />
 
-      </LinearLayout>
+         </LinearLayout>
 
          <RelativeLayout
              android:id="@+id/relative1"
-             android:layout_marginEnd="30dp"
-             android:layout_marginStart="30dp"
-             android:layout_marginTop="80dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_below="@+id/linearLayaut1">
+             android:layout_below="@+id/linearLayaut1"
+             android:layout_marginEnd="30dp"
+             android:layout_marginStart="30dp"
+             android:layout_marginTop="80dp">
 
              <ImageView
                  android:id="@+id/imageView_userIcon"
                  android:layout_width="40dp"
-                 android:src="@drawable/sobre"
-                 android:padding="3dp"
-                 android:background="@color/colorPrimary"
                  android:layout_height="40dp"
-                 android:contentDescription="@string/email_view" />
+                 android:background="@color/colorPrimary"
+                 android:contentDescription="@string/email_view"
+                 android:padding="3dp"
+                 android:src="@drawable/sobre" />
 
              <EditText
                  android:id="@+id/txtUser"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:padding="10dp"
+                 android:layout_alignBottom="@id/imageView_userIcon"
+                 android:layout_alignParentTop="true"
                  android:layout_toEndOf="@id/imageView_userIcon"
                  android:background="@color/editTextColor"
-                 android:layout_alignParentTop="true"
-                 android:layout_alignBottom="@id/imageView_userIcon"
                  android:hint="@string/coloca_tu_email"
-                 android:textSize="15sp"
-                 android:paddingStart="20dp"
+                 android:inputType="textEmailAddress"
+                 android:padding="10dp"
                  android:paddingEnd="20dp"
-                 android:inputType="textEmailAddress" />
+                 android:paddingStart="20dp"
+                 android:textSize="15sp" />
 
          </RelativeLayout>
 
          <RelativeLayout
              android:id="@+id/relative2"
-             android:layout_marginRight="30dp"
-             android:layout_marginLeft="30dp"
-             android:layout_marginTop="10dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_below="@+id/relative1">
+             android:layout_below="@+id/relative1"
+             android:layout_marginLeft="30dp"
+             android:layout_marginRight="30dp"
+             android:layout_marginTop="10dp">
 
              <ImageView
                  android:id="@+id/imageView_passIcon"
                  android:layout_width="40dp"
-                 android:src="@drawable/candado"
-                 android:padding="3dp"
-                 android:background="@color/colorPrimary"
                  android:layout_height="40dp"
-                 android:contentDescription="@string/contrasenia_view" />
+                 android:background="@color/colorPrimary"
+                 android:contentDescription="@string/contrasenia_view"
+                 android:padding="3dp"
+                 android:src="@drawable/candado" />
 
              <EditText
                  android:id="@+id/txtPass"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:padding="10dp"
+                 android:layout_alignBottom="@+id/imageView_passIcon"
+                 android:layout_alignParentTop="true"
                  android:layout_toEndOf="@+id/imageView_passIcon"
                  android:background="@color/editTextColor"
-                 android:layout_alignParentTop="true"
-                 android:layout_alignBottom="@+id/imageView_passIcon"
                  android:hint="@string/coloca_tu_contrasenia"
                  android:inputType="textPassword"
-                 android:textSize="15sp"
+                 android:padding="10dp"
+                 android:paddingEnd="20dp"
                  android:paddingStart="20dp"
-                 android:paddingEnd="20dp" />
+                 android:textSize="15sp" />
 
          </RelativeLayout>
 
@@ -113,46 +120,48 @@
              android:id="@+id/boton"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_marginRight="30dp"
              android:layout_below="@id/relative2"
              android:layout_marginLeft="30dp"
+             android:layout_marginRight="30dp"
              android:layout_marginTop="10dp">
 
              <Button
                  android:id="@+id/Ingresar"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:text="@string/ingresar"
-                 android:textSize="13sp"
+                 android:background="@color/colorPrimary"
                  android:fontFamily="sans-serif-condensed"
-                 android:background="@color/colorPrimary" />
+                 android:text="@string/ingresar"
+                 android:textSize="13sp" />
 
          </RelativeLayout>
 
-     <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_marginRight="30dp"
-         android:layout_below="@id/boton"
-         android:layout_marginLeft="30dp"
-         android:layout_marginTop="10dp">
-
-         <TextView
-             android:id="@+id/textRegistro"
-             android:layout_width="wrap_content"
+         <RelativeLayout
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:textColor="@color/colorPrimary"
-             android:layout_centerHorizontal="true"
-             android:textSize="12sp"
-             android:layout_marginTop="10dp"
-             android:text="@string/no_tenes_usuario_registrate_ahora"
-             android:clickable="true"
-             android:focusable="true"/>
+             android:layout_below="@id/boton"
+             android:layout_marginLeft="30dp"
+             android:layout_marginRight="30dp"
+             android:layout_marginTop="10dp">
 
-     </RelativeLayout>
+             <TextView
+                 android:id="@+id/textRegistro"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerHorizontal="true"
+                 android:layout_marginTop="10dp"
+                 android:clickable="true"
+                 android:focusable="true"
+                 android:text="@string/no_tenes_usuario_registrate_ahora"
+                 android:textColor="@color/colorPrimary"
+                 android:textSize="12dp" />
+
+         </RelativeLayout>
 
      </RelativeLayout>
 
  </android.support.v7.widget.CardView>
 
 </RelativeLayout>
+
+</ScrollView>
