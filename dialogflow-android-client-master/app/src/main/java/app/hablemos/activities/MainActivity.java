@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         super.onCreate(savedInstanceState);
         interactionsService = new InteractionsService(getBaseContext(), getAssets(), fbRefInteracciones);
 
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.nuevomain);
 
         mailQueInicioSesion = getIntent().getExtras().getString("1");
         vieneDeNotificacion = getIntent().getExtras().getBoolean("vieneDeNotificacion");
@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         send = (Button) findViewById(R.id.buttonSend);
 
         //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
-        resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
+        //resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
 
       //  findViewById(R.id.buttonSend).setOnClickListener(this);
         send.setOnClickListener(this);
-        findViewById(R.id.buttonClear).setOnClickListener(this);
-        findViewById(R.id.buttonClearHistorial).setOnClickListener(this);
+        //findViewById(R.id.buttonClear).setOnClickListener(this);
+        //findViewById(R.id.buttonClearHistorial).setOnClickListener(this);
 
         final AIConfiguration config = new AIConfiguration(getString(R.string.accessToken), AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         // show sound level
     }
 
-    private void clearEditText() {
+  /*  private void clearEditText() {
         queryEditText.setText("");
     }
 
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         queryEditText.setText("");
         dialogoAnterior="";
         speech="";
-    }
+    }*/
 
     /*
      * AIRequest should have query OR event
@@ -363,11 +363,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 };
                 task.execute(queryString);
             }
-
+/*
     public void mostrarMensajeAnterior(){
       dialogoAnterior=speech;
       resultTextViewAnterior.setText(speech);
-    }
+    }*/
 
     private String getSaludo() {
         Calendar rightNow = Calendar.getInstance();
@@ -546,7 +546,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void onResult(final AIResponse response) {
-        mostrarMensajeAnterior();
+        //mostrarMensajeAnterior();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -592,10 +592,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonClear:
-                clearEditText();
+             //   clearEditText();
                 break;
         case R.id.buttonClearHistorial:
-            clearEditTextHistorial();
+           // clearEditTextHistorial();
             break;
             case R.id.buttonSend:
                 sendRequest();

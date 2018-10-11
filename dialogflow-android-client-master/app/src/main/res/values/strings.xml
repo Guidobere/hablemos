@@ -28,9 +28,9 @@
     <string name="contrasenia_view">Contraseña</string>
     <string name="email_view">Email</string>
     <string name="logo_login">Login</string>
-    <string name="escribi_aca">Escribi aca</string>
-    <string name="enviar_view">Enviar</string>
-    <string name="hablar_view">Hablar</string>
+    <string name="escribi_aca">ESCRIBIR ACA</string>
+    <string name="enviar_view">ENVIAR</string>
+    <string name="hablar_view">HABLAR</string>
     <string name="limpiar_view">Limpiar</string>
     <string name="mensaje_anterior">Mensaje Anterior</string>
     <string name="limpiar_historial">Borrar Historial</string>
@@ -43,7 +43,7 @@
     <string name="imagen_mensaje">imagenMensaje</string>
     <string name="mensajeicono">mensajeIcono</string>
     <string name="escribi_algo_aca">Escribi algo aca</string>
-    <string name="mensaje_actual">Mensaje actual</string>
+    <string name="mensaje_actual">LOS MENSAJES VAN ACA</string>
     <string name="imagenregistro">imagenRegistro</string>
     <string name="registrar">Registrar</string>
     <string name="nombre_abuelo">Nombre Abuelo</string>
@@ -88,4 +88,5 @@
 
     <string name="cancelar">Cancelar</string>
     <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>
+    <string name="el_mensaje_va_aca">EL MENSAJE VA ACA</string>
 </resources>
