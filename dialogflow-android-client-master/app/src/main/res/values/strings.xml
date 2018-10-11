@@ -73,8 +73,8 @@
     <string name="noche">Noche</string>
     <string name="presion_vista">Presion (No obligatorio)</string>
     <!-- Validaciones registro -->
-    <string name="regexEmail">[a–zA–Z0–9\._]{3,30}@([a–zA–Z]{3,10}\.[a–zA–Z]{2,10})[\.[a–zA–Z]{2,10}]*</string>
-    <string name="regexPassword">[a–zA–Z0–9]{6,30}</string>
+    <string name="regexEmail">[a\u002DzA\u002DZ0\u002D9\._]{3,30}@([a\u002DzA\u002DZ]{3,10}\.[a\u002DzA\u002DZ]{2,10})[\.[a\u002DzA\u002DZ]{2,10}]*</string>
+    <string name="regexPassword">[a\u002DzA\u002DZ0\u002D9]{6,30}</string>
     <string name="nombreAbueloVacio">El nombre no puede estar vacío</string>
     <string name="emailVacio">El email no puede estar vacío</string>
     <string name="emailMalFormado">El email ingresado no es correcto</string>
