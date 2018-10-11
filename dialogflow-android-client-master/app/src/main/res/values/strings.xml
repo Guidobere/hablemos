@@ -72,6 +72,7 @@
     <string name="tarde">Tarde</string>
     <string name="noche">Noche</string>
     <string name="presion_vista">Presion (No obligatorio)</string>
+
     <!-- Validaciones registro -->
     <string name="regexEmail">[a\u002DzA\u002DZ0\u002D9\._]{3,30}@([a\u002DzA\u002DZ]{3,10}\.[a\u002DzA\u002DZ]{2,10})[\.[a\u002DzA\u002DZ]{2,10}]*</string>
     <string name="regexPassword">[a\u002DzA\u002DZ0\u002D9]{6,30}</string>
@@ -81,7 +82,10 @@
     <string name="contraseniaVacia">La contraseña no puede estar vacía</string>
     <string name="contraseniaMalFormada">La contraseña ingresada no esta correctamente formada</string>
     <string name="equipoVacio">El equipo de fútbol no puede estar vacío</string>
+
     <!-- Nombre interacciones -->
     <string name="interaccionAbrirApp">Abrir Hablemos!</string>
+
     <string name="cancelar">Cancelar</string>
+    <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>
 </resources>
