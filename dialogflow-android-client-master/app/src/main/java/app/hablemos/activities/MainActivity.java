@@ -510,13 +510,25 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                                 setearCronReporte();
                             break;
                         case "tarde":
-                            loQueDiceYescribe(u.remediosTarde);
+                            if(TextUtils.isEmpty(u.remediosTarde)){
+                                loQueDiceYescribe("Nada que tomar");
+                            }
+                            else{
+                                loQueDiceYescribe(u.remediosTarde);}
                              break;
                         case "mañana":
-                            loQueDiceYescribe(u.remediosManiana);
-                             break;
+                           if(TextUtils.isEmpty(u.remediosManiana)){
+                                loQueDiceYescribe("Nada que tomar");
+                            }
+                            else{
+                                loQueDiceYescribe(u.remediosManiana);}
+                          break;
                         case "noche":
-                            loQueDiceYescribe(u.remediosTarde);
+                            if(TextUtils.isEmpty(u.remediosTarde)){
+                                loQueDiceYescribe("Nada que tomar");
+                            }
+                            else{
+                            loQueDiceYescribe(u.remediosTarde);}
                             break;
                         default:
                             break;
