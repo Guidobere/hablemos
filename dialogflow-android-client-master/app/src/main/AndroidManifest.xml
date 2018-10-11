@@ -29,7 +29,8 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop">
         </activity>
 
         <receiver android:name=".receivers.EmailReceiver"></receiver>

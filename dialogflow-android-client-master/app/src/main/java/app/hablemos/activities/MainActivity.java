@@ -31,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -42,7 +41,6 @@ import ai.api.RequestExtras;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIDataService;
 import ai.api.android.AIService;
-import ai.api.android.GsonFactory;
 import ai.api.model.AIError;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
@@ -62,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
     private static final int REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID = 133;
     private boolean recordPermissionGranted = false;
-
-    private Gson gson = GsonFactory.getGson();
 
     //TTS object
     private TextToSpeech myTTS;
@@ -100,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private String diaSemana;
 
     boolean yaSaludo = false;
+    boolean vieneDeNotificacion;
 
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
@@ -119,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         setContentView(R.layout.content_main);
 
         mailQueInicioSesion = getIntent().getExtras().getString("1");
+        vieneDeNotificacion = getIntent().getExtras().getBoolean("vieneDeNotificacion");
+
         TAG = getString(R.string.tagMain);
 
         diaSemana = getDiaSemana(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
@@ -507,7 +506,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ");
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionAbrirApp), "-", "-");
-                            setearCronReporte();
+                            if(!vieneDeNotificacion)
+                                setearCronReporte();
                             break;
                         case "tarde":
                             loQueDiceYescribe(u.remediosTarde);
