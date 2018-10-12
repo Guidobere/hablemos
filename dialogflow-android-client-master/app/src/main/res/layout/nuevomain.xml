@@ -24,9 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:hint="@string/escribi_aca"
+            android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:textSize="52sp"
             android:singleLine="true"
+            android:imeOptions="actionSend"
                        />
     </LinearLayout>
 
@@ -39,7 +41,7 @@
             android:id="@+id/buttonSend"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-
+            android:textColorHint="@color/black"
             android:hint="@string/enviar_view"
             android:textSize="50sp"
             android:background="@color/nuevo"
@@ -51,7 +53,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp">
+        android:layout_marginTop="200dp"
+        >
     <Button
         android:id="@+id/micButton"
         android:layout_width="match_parent"
@@ -60,8 +63,8 @@
         android:textSize="50sp"
         android:background="@color/nuevo"
         android:textStyle="bold"
-        android:textColorHighlight="@color/colorPrimary"
-        />
+        android:textColorHint="@color/black"
+         />
 </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/el_mensaje_va_aca"
+            android:textStyle="bold"
             android:textSize="30sp"/>
 
     </LinearLayout>

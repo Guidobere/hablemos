@@ -42,7 +42,7 @@
                  android:layout_marginTop="10dp"
                  android:contentDescription="@string/logo_login"
                  android:src="@drawable/logoapp"
-                 android:tint="@color/white" />
+                 android:tint="@color/black" />
 
          </LinearLayout>
 
@@ -132,7 +132,8 @@
                  android:background="@color/colorPrimary"
                  android:fontFamily="sans-serif-condensed"
                  android:text="@string/ingresar"
-                 android:textSize="13sp" />
+                 android:textSize="13sp"
+                 />
 
          </RelativeLayout>
 
