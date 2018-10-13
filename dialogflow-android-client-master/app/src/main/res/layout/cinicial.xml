@@ -698,18 +698,30 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                                          >
-                        <Button
-                            android:id="@+id/btnRegister"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
 
-                            android:background="@color/colorPrimary"
-                            android:fontFamily="sans-serif-condensed"
-                            android:text="@string/registrar"
-                            android:textSize="13sp" />
+                            <Button
+                                android:id="@+id/btnRegister"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
 
-                        <Button
+                                android:background="@color/colorPrimary"
+                                android:fontFamily="sans-serif-condensed"
+                                android:text="@string/registrar"
+                                android:textSize="13sp" />
+
+                            <Button
+                                android:id="@+id/btnGuardar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/colorPrimary"
+                                android:fontFamily="sans-serif-condensed"
+                                android:text="Guardar"
+                                android:textSize="13sp"
+                                android:visibility="gone"/>
+
+                            <Button
                             android:id="@+id/btnCancel"
                             android:layout_width="wrap_content"
                             android:layout_weight="1"
