@@ -63,6 +63,7 @@
         android:textSize="50sp"
         android:background="@color/nuevo"
         android:textStyle="bold"
+        android:onClick="micButtonOnClick"
         android:textColorHint="@color/black"
          />
 </LinearLayout>
