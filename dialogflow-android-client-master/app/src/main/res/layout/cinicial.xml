@@ -303,400 +303,401 @@
                         tools:ignore="LabelFor" />
                 </LinearLayout>
 
-                    <!-- MAÑANA -->
-                    <TextView
-                        android:id="@+id/lblGlucosaMañana"
+                <!-- MAÑANA -->
+                <TextView
+                    android:id="@+id/lblGlucosaMañana"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ma_ana"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/lblGlucosa"/>
+
+                <LinearLayout
+                    android:id="@+id/checkboxGlucosaDias"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/lblGlucosaMañana"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucManianaL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/ma_ana"
-                        android:layout_marginStart="10dp"
-                        android:layout_below="@+id/lblGlucosa"/>
+                        android:text="@string/lunes_vista" />
 
-                    <LinearLayout
-                        android:id="@+id/checkboxGlucosaDias"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/lblGlucosaMañana"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucManianaL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lunes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucManianaMa"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/martes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucManianaMi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/miercoles_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucManianaJ"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/jueves_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucManianaV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/viernes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucManianaS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sabado_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucManianaD"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/domingo_vista" />
-                    </LinearLayout>
-
-                    <!-- TARDE -->
-                    <TextView
-                        android:id="@+id/lblGlucosaTarde"
+                    <CheckBox
+                        android:id="@+id/chBxGlucManianaMa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tarde"
-                        android:layout_marginStart="10dp"
-                        android:layout_below="@+id/checkboxGlucosaDias"/>
+                        android:text="@string/martes_vista" />
 
-                    <LinearLayout
-                        android:id="@+id/checkboxGlucosaTarde"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/lblGlucosaTarde"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucTardeLu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lunes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucTardeMa"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/martes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucTardeMi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/miercoles_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucTardeJ"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/jueves_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucTardeV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/viernes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucTardeS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sabado_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucTardeD"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/domingo_vista" />
-                    </LinearLayout>
-
-                    <!-- NOCHE -->
-                    <TextView
-                        android:id="@+id/lblGlucosaNoche"
+                    <CheckBox
+                        android:id="@+id/chBxGlucManianaMi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/noche"
-                        android:layout_marginStart="10dp"
-                        android:layout_below="@+id/checkboxGlucosaTarde"
-                        />
+                        android:text="@string/miercoles_vista" />
 
-                    <LinearLayout
-                        android:id="@+id/checkboxGlucosaNoche"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/lblGlucosaNoche"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucNocheLu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lunes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucNocheMa"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/martes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucNocheMi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/miercoles_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucNocheJ"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/jueves_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucNocheV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/viernes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucNocheS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sabado_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxGlucNocheD"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/domingo_vista" />
-                    </LinearLayout>
-
-                    <!-- PRESION -->
-                    <LinearLayout
-                        android:id="@+id/lblPresion"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_below="@+id/checkboxGlucosaNoche">
-
-                        <EditText
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:inputType="none"
-                            android:selectAllOnFocus="false"
-                            android:text="@string/presion_vista"
-                            tools:ignore="LabelFor" />
-                    </LinearLayout>
-
-                    <!-- MAÑANA -->
-                    <TextView
-                        android:id="@+id/lblPresionMañana"
+                    <CheckBox
+                        android:id="@+id/chBxGlucManianaJ"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/ma_ana"
-                        android:layout_marginStart="10dp"
-                        android:layout_below="@+id/lblPresion" />
+                        android:text="@string/jueves_vista" />
 
-                    <LinearLayout
-                        android:id="@+id/checkboxPresionMañana"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/lblPresionMañana"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionManianaL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lunes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionManianaMa"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/martes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionManianaMi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/miercoles_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionManianaJ"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/jueves_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionManianaV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/viernes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionManianaS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sabado_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionManianaD"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/domingo_vista" />
-                    </LinearLayout>
-
-                    <!-- TARDE -->
-                    <TextView
-                        android:id="@+id/lblPresionTarde"
+                    <CheckBox
+                        android:id="@+id/chBxGlucManianaV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tarde"
-                        android:layout_marginStart="10dp"
-                        android:layout_below="@+id/checkboxPresionMañana" />
+                        android:text="@string/viernes_vista" />
 
-                    <LinearLayout
-                        android:id="@+id/checkboxPresionTarde"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/lblPresionTarde"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionTardeLu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lunes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionTardeMa"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/martes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionTardeMi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/miercoles_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionTardeJ"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/jueves_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionTardeV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/viernes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionTardeS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sabado_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionTardeD"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/domingo_vista" />
-                    </LinearLayout>
-
-                    <!-- NOCHE -->
-                    <TextView
-                        android:id="@+id/lblPresionNoche"
+                    <CheckBox
+                        android:id="@+id/chBxGlucManianaS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/noche"
-                        android:layout_marginStart="10dp"
-                        android:layout_below="@+id/checkboxPresionTarde" />
+                        android:text="@string/sabado_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucManianaD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/domingo_vista" />
+                </LinearLayout>
+
+                <!-- TARDE -->
+                <TextView
+                    android:id="@+id/lblGlucosaTarde"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tarde"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/checkboxGlucosaDias"/>
+
+                <LinearLayout
+                    android:id="@+id/checkboxGlucosaTarde"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/lblGlucosaTarde"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucTardeLu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucTardeMa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/martes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucTardeMi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/miercoles_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucTardeJ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/jueves_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucTardeV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/viernes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucTardeS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sabado_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucTardeD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/domingo_vista" />
+                </LinearLayout>
+
+                <!-- NOCHE -->
+                <TextView
+                    android:id="@+id/lblGlucosaNoche"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/noche"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/checkboxGlucosaTarde"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/checkboxGlucosaNoche"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/lblGlucosaNoche"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucNocheLu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucNocheMa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/martes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucNocheMi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/miercoles_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucNocheJ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/jueves_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucNocheV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/viernes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucNocheS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sabado_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxGlucNocheD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/domingo_vista" />
+                </LinearLayout>
+
+                <!-- PRESION -->
+                <LinearLayout
+                    android:id="@+id/lblPresion"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/checkboxGlucosaNoche">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="none"
+                        android:selectAllOnFocus="false"
+                        android:text="@string/presion_vista"
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+                <!-- MAÑANA -->
+                <TextView
+                    android:id="@+id/lblPresionMañana"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ma_ana"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/lblPresion" />
+
+                <LinearLayout
+                    android:id="@+id/checkboxPresionMañana"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/lblPresionMañana"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionManianaL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionManianaMa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/martes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionManianaMi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/miercoles_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionManianaJ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/jueves_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionManianaV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/viernes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionManianaS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sabado_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionManianaD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/domingo_vista" />
+                </LinearLayout>
+
+                <!-- TARDE -->
+                <TextView
+                    android:id="@+id/lblPresionTarde"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tarde"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/checkboxPresionMañana" />
+
+                <LinearLayout
+                    android:id="@+id/checkboxPresionTarde"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/lblPresionTarde"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionTardeLu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionTardeMa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/martes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionTardeMi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/miercoles_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionTardeJ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/jueves_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionTardeV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/viernes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionTardeS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sabado_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionTardeD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/domingo_vista" />
+                </LinearLayout>
+
+                <!-- NOCHE -->
+                <TextView
+                    android:id="@+id/lblPresionNoche"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/noche"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/checkboxPresionTarde" />
+
+                <LinearLayout
+                    android:id="@+id/checkboxPresionNoche"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/lblPresionNoche"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionNocheL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionNocheMa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/martes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionNocheMi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/miercoles_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionNocheJ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/jueves_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionNocheV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/viernes_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionNocheS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sabado_vista" />
+
+                    <CheckBox
+                        android:id="@+id/chBxPresionNocheD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/domingo_vista" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/boton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/checkboxPresionNoche"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <LinearLayout
-                        android:id="@+id/checkboxPresionNoche"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/lblPresionNoche"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionNocheL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lunes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionNocheMa"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/martes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionNocheMi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/miercoles_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionNocheJ"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/jueves_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionNocheV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/viernes_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionNocheS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sabado_vista" />
-
-                        <CheckBox
-                            android:id="@+id/chBxPresionNocheD"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/domingo_vista" />
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/boton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/checkboxPresionNoche"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_marginTop="10dp"
-                        android:paddingBottom="10dp">
+                        >
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                                         >
                         <Button
                             android:id="@+id/btnRegister"
                             android:layout_width="wrap_content"
@@ -708,6 +709,17 @@
                             android:textSize="13sp" />
 
                         <Button
+                            android:id="@+id/btnGuardar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="Guardar"
+                            android:textSize="13sp"
+                            android:visibility="gone"/>
+
+                        <Button
                             android:id="@+id/btnCancel"
                             android:layout_width="wrap_content"
                             android:layout_weight="1"
@@ -716,9 +728,9 @@
                             android:fontFamily="sans-serif-condensed"
                             android:text="@string/cancelar"
                             android:textSize="13sp" />
-                        </LinearLayout>
+                    </LinearLayout>
 
-                    </RelativeLayout>
+                </RelativeLayout>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>

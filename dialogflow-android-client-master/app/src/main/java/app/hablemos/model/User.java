@@ -14,7 +14,8 @@ public class User {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public User(String username, String email, String equipo, String remediosManiana, String remediosTarde, String remediosNoche) {
+    public User(String userID,String username, String email, String equipo, String remediosManiana, String remediosTarde, String remediosNoche) {
+        this.userID = userID;
         this.username = username;
         this.email = email;
         this.equipo = equipo;
@@ -23,7 +24,8 @@ public class User {
         this.remediosNoche = remediosNoche;
     }
 
-    public User(String username, String email) {
+    public User(String userID,String username, String email) {
+        this.userID = userID;
         this.username = username;
         this.email = email;
         this.equipo = "";
