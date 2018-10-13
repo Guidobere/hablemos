@@ -88,8 +88,7 @@ public class RegistroActivity extends AppCompatActivity {
 
         botonCancel.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                //startActivity(MainActivity.class);
-                finish();
+                startActivity(Login.class);
             }
         });
 
@@ -99,8 +98,8 @@ public class RegistroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Aca actualiza al usuario existente
                 guardarUsuario();
-                //startActivity(MainActivity.class);
-                finish();
+                startActivity(Login.class);
+
             }
         });
 
@@ -137,7 +136,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioGlucTarde = RecordatoriosGlucosaTarde();
         String diasRecordatorioGlucNoche = RecordatoriosGlucosaNoche();
 
-        String email = mailTutor.getText().toString().toLowerCase();
+        String email = mailTutor.getText().toString();
         if (diasRecordatorioGlucManiana != null && !diasRecordatorioGlucManiana.equals(""))
             myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucManiana, "mañana"));
         if (diasRecordatorioGlucTarde != null && !diasRecordatorioGlucTarde.equals(""))
@@ -198,7 +197,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioPresionTarde = RecordatoriosPresionTarde();
         String diasRecordatorioPresionNoche = RecordatoriosPresionNoche();
 
-        String email = mailTutor.getText().toString().toLowerCase();
+        String email = mailTutor.getText().toString();
         if (diasRecordatorioPresionManiana != null && !diasRecordatorioPresionManiana.equals(""))
             myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionManiana, "mañana"));
         if (diasRecordatorioPresionTarde != null && !diasRecordatorioPresionTarde.equals(""))
@@ -244,7 +243,7 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void crearUsuario() {
-        String email = mailTutor.getText().toString().toLowerCase();
+        String email = mailTutor.getText().toString();
         String password = contra.getText().toString();
 
         if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
