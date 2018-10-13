@@ -99,6 +99,7 @@ public class RegistroActivity extends AppCompatActivity {
                 //Aca actualiza al usuario existente
                 guardarUsuario();
                 startActivity(Login.class);
+
             }
         });
 
