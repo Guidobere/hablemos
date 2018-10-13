@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -135,13 +136,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         micButton = (Button) findViewById(R.id.micButton);
         send = (Button) findViewById(R.id.buttonSend);
 
-        //PARA EL MENSAJE ANTERIOR - PARA MOSTRARLO
-        //resultTextViewAnterior = (TextView) findViewById(R.id.resultTextViewAnterior);
-
       //  findViewById(R.id.buttonSend).setOnClickListener(this);
         send.setOnClickListener(this);
-        //findViewById(R.id.buttonClear).setOnClickListener(this);
-        //findViewById(R.id.buttonClearHistorial).setOnClickListener(this);
 
         final AIConfiguration config = new AIConfiguration(getString(R.string.accessToken), AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
@@ -155,6 +151,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         registerReceiver(respuestasClimaReceiver, new IntentFilter("respuestasClima"));
         setearCronClima();
+
+        queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    sendRequest();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
     }
 
     // Add this inside your class
@@ -305,19 +313,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         // show sound level
     }
 
-  /*  private void clearEditText() {
-        queryEditText.setText("");
-    }
-
-    //Aca te borra el ultimo mensaje, su anterior y el texto.
-    private void clearEditTextHistorial() {
-        resultTextViewAnterior.setText("");
-        resultTextView.setText("");
-        queryEditText.setText("");
-        dialogoAnterior="";
-        speech="";
-    }*/
-
     /*
      * AIRequest should have query OR event
      */
@@ -325,9 +320,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
             final String queryString = String.valueOf(queryEditText.getText());
 
+            queryEditText.setText("");
+
             send.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
-        if (TextUtils.isEmpty(queryString)) {
+            if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
             return;
         }
@@ -551,7 +548,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             @Override
             public void run() {
                 final Result result = response.getResult();
-                queryEditText.setText(result.getResolvedQuery());
+              //  queryEditText.setText(result.getResolvedQuery());
 
                 //ACA ES DONDE SE USA SPEECH PARA PEDIRLE QUE LO DIGA EN VOZ ALTA Y LO ESCRIBA
                 speech = result.getFulfillment().getSpeech();
