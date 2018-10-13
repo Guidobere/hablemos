@@ -107,7 +107,7 @@ public class Login extends AppCompatActivity {
 
     //CREAR O LOGEAR USUARIO
     private void crearUsuario() {
-        email = mailTxtBox.getText().toString();
+        email = mailTxtBox.getText().toString().toLowerCase();
         password = passTxtBox.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -138,7 +138,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void singIn(){
-        email = mailTxtBox.getText().toString();
+        email = mailTxtBox.getText().toString().toLowerCase();
         password = passTxtBox.getText().toString();
 
         if (TextUtils.isEmpty(email)) {

@@ -137,7 +137,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioGlucTarde = RecordatoriosGlucosaTarde();
         String diasRecordatorioGlucNoche = RecordatoriosGlucosaNoche();
 
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         if (diasRecordatorioGlucManiana != null && !diasRecordatorioGlucManiana.equals(""))
             myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucManiana, "mañana"));
         if (diasRecordatorioGlucTarde != null && !diasRecordatorioGlucTarde.equals(""))
@@ -198,7 +198,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioPresionTarde = RecordatoriosPresionTarde();
         String diasRecordatorioPresionNoche = RecordatoriosPresionNoche();
 
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         if (diasRecordatorioPresionManiana != null && !diasRecordatorioPresionManiana.equals(""))
             myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionManiana, "mañana"));
         if (diasRecordatorioPresionTarde != null && !diasRecordatorioPresionTarde.equals(""))
@@ -244,7 +244,7 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void crearUsuario() {
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         String password = contra.getText().toString();
 
         if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
