@@ -81,7 +81,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioGlucTarde = RecordatoriosGlucosaTarde();
         String diasRecordatorioGlucNoche = RecordatoriosGlucosaNoche();
 
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         if (diasRecordatorioGlucManiana != null && !diasRecordatorioGlucManiana.equals(""))
             myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucManiana, "mañana"));
         if (diasRecordatorioGlucTarde != null && !diasRecordatorioGlucTarde.equals(""))
@@ -142,7 +142,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioPresionTarde = RecordatoriosPresionTarde();
         String diasRecordatorioPresionNoche = RecordatoriosPresionNoche();
 
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         if (diasRecordatorioPresionManiana != null && !diasRecordatorioPresionManiana.equals(""))
             myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionManiana, "mañana"));
         if (diasRecordatorioPresionTarde != null && !diasRecordatorioPresionTarde.equals(""))
@@ -188,7 +188,7 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void crearUsuario() {
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         String password = contra.getText().toString();
 
         if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
@@ -230,7 +230,7 @@ public class RegistroActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
 
                         //Si no se repite o algo, lo guarda en la base
-                        writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString());
+                        writeNewUser( nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),equipoFavorito.getText().toString().toLowerCase(),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase());
                         CrearNuevoRecordatoriosGlucosa();
                         CrearNuevoRecordatoriosPresion();
                         startActivity(Login.class);
