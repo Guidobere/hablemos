@@ -1,5 +1,6 @@
 package app.hablemos.services;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
@@ -91,10 +92,15 @@ public class InteractionsService {
         }
         String bodyFinal = body;
 
-        //reemplazo nombre abuelo, interacciones y el logo
+        //reemplazo nombre abuelo, interacciones, logo y color
         bodyFinal = bodyFinal.replace("@Abuelo@", nombreAbuelo);
         bodyFinal = bodyFinal.replace("@ListaInteracciones@", generarListaInteraccionesHTML(interacciones));
-        bodyFinal = bodyFinal.replace("@urlImagen@", getContext().getString(R.string.urlImagen));
+        bodyFinal = bodyFinal.replace("@urlImagen@", getContext().getString(R.string.urlImagenReporte));
+        @SuppressLint("ResourceType")
+        String color = getContext().getString(R.color.colorPrimary);
+        if(color.length()==9) color = color.replace("#ff", "#");
+        bodyFinal = bodyFinal.replace("@color_primera_fila@", color);
+
         return bodyFinal;
     }
 
