@@ -8,7 +8,8 @@ public class Recordatorio {
 
     public Recordatorio(){}
 
-    public Recordatorio(String email,String  dias,String turno){
+    public Recordatorio(String recordatorioID,String email,String  dias,String turno){
+        this.recordatorioID = recordatorioID;
         this.email=email;
         this.dias=dias;
         this.turno=turno;
