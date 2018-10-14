@@ -42,6 +42,8 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText medicamentosT;
     private EditText medicamentosN;
 
+
+    private String mailQueInicioSesion;
     private int a=0;
 
     //private static HashMap<String, User> users = new HashMap<>();
@@ -121,6 +123,8 @@ public class RegistroActivity extends AppCompatActivity {
                     // User is signed in
                     String email = user.getEmail().toString();
                     pedirAlaBaseUsuarioByEmail(email);
+                    pedirAlaBaseSobrePresion(email);
+                    pedirAlaBaseSobreGlucosa(email);
 
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + email);
 
@@ -133,11 +137,16 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     //FUNCION PARA CREAR USUARIO EN FIREBASE
-    private void writeNewUser(String username, String email,String equipo,String remediosM,String remediosT,String remediosN) {
+     private String writeNewUser(String username, String email,String equipo,String remediosM,String remediosT,String remediosN) {
         //Obtengo el ID del usuario que se me va a guardar en la BD
         String userID=myUsersFb.push().getKey();
         //Guardo la informacion en el usuario.child(ID) al respectivo usuario.
-        myUsersFb.child(userID).setValue(new User(userID,username,email,equipo,remediosM,remediosT,remediosN));
+        if(userID != null && userID != "")
+            myUsersFb.child(userID).setValue(new User(userID,username,email,equipo,remediosM,remediosT,remediosN));
+        else {
+            Toast.makeText(RegistroActivity.this, "fallo al crear al usuario", Toast.LENGTH_SHORT).show();
+        }
+        return userID;
     }
 
     private void CrearNuevoRecordatoriosGlucosa() {
@@ -146,12 +155,18 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioGlucNoche = RecordatoriosGlucosaNoche();
 
         String email = mailTutor.getText().toString();
-        if (diasRecordatorioGlucManiana != null && !diasRecordatorioGlucManiana.equals(""))
-            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucManiana, "mañana"));
-        if (diasRecordatorioGlucTarde != null && !diasRecordatorioGlucTarde.equals(""))
-            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucTarde, "tarde"));
-        if (diasRecordatorioGlucNoche != null && !diasRecordatorioGlucNoche.equals(""))
-            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(email, diasRecordatorioGlucNoche, "noche"));
+        if (diasRecordatorioGlucManiana != null && !diasRecordatorioGlucManiana.equals("")) {
+            String recordatorioID = myRecordatoriosGlucosaFb.push().getKey();
+            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioGlucManiana, "mañana"));
+        }
+        if (diasRecordatorioGlucTarde != null && !diasRecordatorioGlucTarde.equals("")) {
+            String recordatorioID = myRecordatoriosGlucosaFb.push().getKey();
+            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioGlucTarde, "tarde"));
+        }
+        if (diasRecordatorioGlucNoche != null && !diasRecordatorioGlucNoche.equals("")){
+            String recordatorioID = myRecordatoriosGlucosaFb.push().getKey();
+            myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioGlucNoche, "noche"));
+            }
     }
 
     private String activoCheckbox(int checkBoxId, String diasRecordatorio, String dia) {
@@ -207,12 +222,18 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioPresionNoche = RecordatoriosPresionNoche();
 
         String email = mailTutor.getText().toString();
-        if (diasRecordatorioPresionManiana != null && !diasRecordatorioPresionManiana.equals(""))
-            myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionManiana, "mañana"));
-        if (diasRecordatorioPresionTarde != null && !diasRecordatorioPresionTarde.equals(""))
-            myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionTarde, "tarde"));
-        if (diasRecordatorioPresionNoche != null && !diasRecordatorioPresionNoche.equals(""))
-            myRecordatoriosPresionFb.push().setValue(new Recordatorio(email, diasRecordatorioPresionNoche, "noche"));
+        if (diasRecordatorioPresionManiana != null && !diasRecordatorioPresionManiana.equals("")) {
+            String recordatorioID = myRecordatoriosPresionFb.push().getKey();
+            myRecordatoriosPresionFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioPresionManiana, "mañana"));
+        }
+        if (diasRecordatorioPresionTarde != null && !diasRecordatorioPresionTarde.equals("")) {
+            String recordatorioID = myRecordatoriosPresionFb.push().getKey();
+            myRecordatoriosPresionFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioPresionTarde, "tarde"));
+        }
+        if (diasRecordatorioPresionNoche != null && !diasRecordatorioPresionNoche.equals("")) {
+            String recordatorioID = myRecordatoriosPresionFb.push().getKey();
+            myRecordatoriosPresionFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioPresionNoche, "noche"));
+        }
     }
 
     private String RecordatoriosPresionManiana(){
@@ -292,9 +313,11 @@ public class RegistroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //Si no se repite o algo, lo guarda en la base
-                            writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString());
-                            CrearNuevoRecordatoriosGlucosa();
-                            CrearNuevoRecordatoriosPresion();
+                            String userID=writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString());
+                            if(userID != "" && userID != null) {
+                                CrearNuevoRecordatoriosGlucosa();
+                                CrearNuevoRecordatoriosPresion();
+                            }
                             startActivity(Login.class);
                         } else {
                             Toast.makeText(RegistroActivity.this, getString(R.string.fallo_autenticacion), Toast.LENGTH_SHORT).show();
@@ -381,7 +404,7 @@ public class RegistroActivity extends AppCompatActivity {
                     u = user.getValue(User.class);
                 }
 
-                if (u != null && u.username != null) {
+                if (u != null && u.userID != null) {
 
                     //LLENAR CAMPOS
                     UserID=u.userID;
@@ -397,6 +420,9 @@ public class RegistroActivity extends AppCompatActivity {
                     medicamentosM.setText(u.remediosManiana);
                     medicamentosT.setText(u.remediosTarde);
                     medicamentosN.setText(u.remediosNoche);
+
+                    CrearNuevoRecordatoriosGlucosa();
+                    CrearNuevoRecordatoriosPresion();
 
                 } else {
                     System.out.println("Ocurrio un error al obtener el usuario");
@@ -414,11 +440,128 @@ public class RegistroActivity extends AppCompatActivity {
     private void UpdateUsuer() {
         //Inserto un nuevo valor con su respectivo ID y le Asigno el valor del nuevo
         String userID=UserID !=null? UserID : "" ;
-/*        if(mAuth.getCurrentUser() == null)
-            userID=myUsersFb.push().getKey();*/
-        myUsersFb.child(userID).setValue(new User(userID,nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString()
+        if(userID!= "")
+            myUsersFb.child(userID).setValue(new User(userID,nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString()
         ));
     }
 
+
+    public void pedirAlaBaseSobrePresion(final String email){
+
+        myRecordatoriosPresionFb.orderByChild("email").equalTo(email).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot users) {
+
+                Recordatorio r;
+                Iterable<DataSnapshot> usersChildren = users.getChildren();
+
+                for (DataSnapshot recordatorio : usersChildren) {
+                    r = recordatorio.getValue(Recordatorio.class);
+                    String elturno = "", losdias = "";
+                    if (r != null) {
+                        elturno = r.turno.toLowerCase();
+                        losdias = r.dias.toLowerCase();
+
+                            if(elturno == "mañana"){
+                                checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxPresionManianaL);
+                                checkAndSetCheckBoxById(losdias,"martes",R.id.chBxPresionManianaMa);
+                                checkAndSetCheckBoxById(losdias,"miercoles",R.id.chBxPresionManianaMi);
+                                checkAndSetCheckBoxById(losdias,"jueves",R.id.chBxPresionManianaJ);
+                                checkAndSetCheckBoxById(losdias,"viernes",R.id.chBxPresionManianaV);
+                                checkAndSetCheckBoxById(losdias,"sabado",R.id.chBxPresionManianaS);
+                                checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxPresionManianaD);
+                            }
+                            else if (elturno.toLowerCase() == "tarde"){
+                                checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxPresionTardeLu);
+                                checkAndSetCheckBoxById(losdias,"martes",R.id.chBxPresionTardeMa);
+                                checkAndSetCheckBoxById(losdias,"miercoles",R.id.chBxPresionTardeMi);
+                                checkAndSetCheckBoxById(losdias,"jueves",R.id.chBxPresionTardeJ);
+                                checkAndSetCheckBoxById(losdias,"viernes",R.id.chBxPresionTardeV);
+                                checkAndSetCheckBoxById(losdias,"sabado",R.id.chBxPresionTardeS);
+                                checkAndSetCheckBoxById(losdias,"domingo",R.id.chBxPresionTardeD);
+
+
+                            } else if (elturno == "noche"){
+                                checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxPresionNocheL);
+                                checkAndSetCheckBoxById(losdias,"martes",R.id.chBxPresionNocheMa);
+                                checkAndSetCheckBoxById(losdias,"miercoles",R.id.chBxPresionNocheMi);
+                                checkAndSetCheckBoxById(losdias,"jueves",R.id.chBxPresionNocheJ);
+                                checkAndSetCheckBoxById(losdias,"viernes",R.id.chBxPresionNocheV);
+                                checkAndSetCheckBoxById(losdias,"sabado",R.id.chBxPresionNocheS);
+                                checkAndSetCheckBoxById(losdias,"domingo",R.id.chBxPresionNocheD);
+                            }
+
+                        }
+                    }
+                }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    public void pedirAlaBaseSobreGlucosa(final String email){
+
+        myRecordatoriosPresionFb.orderByChild("email").equalTo(email).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot users) {
+
+                Recordatorio r;
+                Iterable<DataSnapshot> usersChildren = users.getChildren();
+
+                for (DataSnapshot recordatorio : usersChildren) {
+                    r = recordatorio.getValue(Recordatorio.class);
+                    String elturno = "", losdias = "";
+                    if (r != null) {
+                        elturno = r.turno.toLowerCase();
+                        losdias = r.dias.toLowerCase();
+
+                        if(elturno == "mañana"){
+                            checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxGlucManianaL);
+                            checkAndSetCheckBoxById(losdias,"martes",R.id.chBxGlucManianaMa);
+                            checkAndSetCheckBoxById(losdias,"miercoles",R.id.chBxGlucManianaMi);
+                            checkAndSetCheckBoxById(losdias,"jueves",R.id.chBxGlucManianaJ);
+                            checkAndSetCheckBoxById(losdias,"viernes",R.id.chBxGlucManianaV);
+                            checkAndSetCheckBoxById(losdias,"sabado",R.id.chBxGlucManianaS);
+                            checkAndSetCheckBoxById(losdias,"domingo",R.id.chBxGlucManianaD);
+                        }
+                        else if (elturno.toLowerCase() == "tarde"){
+                            checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxGlucTardeLu);
+                            checkAndSetCheckBoxById(losdias,"martes",R.id.chBxGlucTardeMa);
+                            checkAndSetCheckBoxById(losdias,"miercoles",R.id.chBxGlucTardeMi);
+                            checkAndSetCheckBoxById(losdias,"jueves",R.id.chBxGlucTardeJ);
+                            checkAndSetCheckBoxById(losdias,"viernes",R.id.chBxGlucTardeV);
+                            checkAndSetCheckBoxById(losdias,"sabado",R.id.chBxGlucTardeS);
+                            checkAndSetCheckBoxById(losdias,"domingo",R.id.chBxGlucTardeD);
+
+
+                        } else if (elturno == "noche"){
+                            checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxGlucNocheLu);
+                            checkAndSetCheckBoxById(losdias,"martes",R.id.chBxGlucNocheMa);
+                            checkAndSetCheckBoxById(losdias,"miercoles",R.id.chBxGlucNocheMi);
+                            checkAndSetCheckBoxById(losdias,"jueves",R.id.chBxGlucNocheJ);
+                            checkAndSetCheckBoxById(losdias,"viernes",R.id.chBxGlucNocheV);
+                            checkAndSetCheckBoxById(losdias,"sabado",R.id.chBxGlucNocheS);
+                            checkAndSetCheckBoxById(losdias,"domingo",R.id.chBxGlucNocheD);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    private void checkAndSetCheckBoxById(String listaDias,String dia,int checkBoxById) {
+        if(listaDias.contains(dia)) {
+            CheckBox checkBox = findViewById(checkBoxById);
+            checkBox.setChecked(true);
+        }
+    }
 
 }
