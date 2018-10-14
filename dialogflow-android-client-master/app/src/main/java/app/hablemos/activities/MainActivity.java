@@ -19,7 +19,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         HORARIO_TARDE = Integer.parseInt(getString(R.string.horarioTarde));
         HORARIO_NOCHE = Integer.parseInt(getString(R.string.horarioNoche));
 
-        CANTIDAD_HORAS_CLIMA = Integer.parseInt(getString(R.string.horasClima));
+         CANTIDAD_HORAS_CLIMA = Integer.parseInt(getString(R.string.horasClima));
 
         resultTextView = (TextView) findViewById(R.id.resultTextView);
         queryEditText = (EditText) findViewById(R.id.textQuery);
@@ -164,6 +167,27 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         });
 
     }
+
+
+    //mostrar menu de opciones
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menuacciones, menu);
+        return true;
+         }
+
+    //que accione los botones de ahi
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.configurar) {
+            startActivity(RegistroActivity.class);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     // Add this inside your class
     BroadcastReceiver respuestasClimaReceiver =  new BroadcastReceiver() {

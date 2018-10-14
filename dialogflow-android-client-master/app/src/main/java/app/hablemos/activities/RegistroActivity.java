@@ -42,6 +42,8 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText medicamentosT;
     private EditText medicamentosN;
 
+    private int a=0;
+
     //private static HashMap<String, User> users = new HashMap<>();
     //ACCEDO A LOS USUARIOS DE FIREBASE y uso esta instancia como global
     private String TAG = "RegistroLog";
@@ -72,10 +74,12 @@ public class RegistroActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser() != null) {
             botonRegistro.setVisibility(View.GONE);
             botonGuardar.setVisibility(View.VISIBLE);
+            a=1;
         }
         else{
             botonRegistro.setVisibility(View.VISIBLE);
             botonGuardar.setVisibility(View.GONE);
+            a=0;
         }
 
         //LOGICA PARA QUE AL HACER CLICK EN EL BOTON ENVIE LOS DATOS A LA FUNCION writeNewUser
@@ -88,7 +92,7 @@ public class RegistroActivity extends AppCompatActivity {
 
         botonCancel.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                startActivity(Login.class);
+                finish();
             }
         });
 
@@ -98,7 +102,12 @@ public class RegistroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Aca actualiza al usuario existente
                 guardarUsuario();
-                startActivity(Login.class);
+                if(a==1) {
+                    finish();
+                }else {
+                    startActivity(Login.class);
+                }
+
 
             }
         });

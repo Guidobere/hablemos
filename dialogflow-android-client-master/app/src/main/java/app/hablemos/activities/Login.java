@@ -198,7 +198,7 @@ public class Login extends AppCompatActivity {
        if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-        finish();
+
     }
 
 }
