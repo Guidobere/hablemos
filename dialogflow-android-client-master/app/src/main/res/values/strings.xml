@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">Hablemos</string>
+
+    <!-- Parámetros -->
+    <string name="accessToken">3d0b0b12561c4040963f4e4f529527c7</string>
+    <string name="horarioManiana">6</string>
+    <string name="horarioTarde">12</string>
+    <string name="horarioNoche">20</string>
+    <string name="horasClima">2</string>
+    <string name="mail">hablemosproyectofinal@gmail.com</string>
+    <string name="pass">aprobamoscomosea</string>
+    <string name="urlImagenReporte">https://i.postimg.cc/MpTs8h49/hablemos-320x240-fenix.png</string>
+
     <string name="action_settings">Settings</string>
     <string name="non_empty_query">No se ha ingresado un texto</string>
     <string name="escuchando">Escuchando…</string>
@@ -9,16 +20,10 @@
     <string name="saludoNoche">Buenas noches</string>
     <string name="errorSpeechRecog">Speech recognition engine error</string>
     <string name="saludoFinal">¡Hasta la proxima!</string>
-    <string name="horarioManiana">6</string>
-    <string name="horarioTarde">12</string>
-    <string name="horarioNoche">20</string>
-    <string name="horasClima">2</string>
-    <string name="accessToken">3d0b0b12561c4040963f4e4f529527c7</string>
+
+
     <string name="errorReconVoz">No se pudo reconocer la entrada de voz</string>
     <string name="tagMain">MainActivity</string>
-    <string name="mail">hablemosproyectofinal@gmail.com</string>
-    <string name="pass">aprobamoscomosea</string>
-    <string name="urlImagen">https://i.postimg.cc/kgpdH5hh/hablemos_320x240.png</string>
     <string name="nombreReporte">reporteDiario.txt</string>
     <string name="remitente">Hablemos!</string>
     <string name="coloca_tu_email">Coloca tu Email</string>

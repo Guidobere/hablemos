@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.res.ResourcesCompat;
 
 import app.hablemos.R;
 import app.hablemos.activities.MainActivity;
@@ -56,11 +57,14 @@ public class NotificationService {
         PendingIntent pendingIntent = PendingIntent.getActivity(
             context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //Color de logo y título
+        int color = ResourcesCompat.getColor(context.getResources(), R.color.colorPrimary, null);
+
         //Notificación
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CANAL_NOTIFICACION)
             .setSmallIcon(smallIcon)
             .setLargeIcon(largeIcon)
-            .setColor(Color.argb(255, 107, 162, 249))
+            .setColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)))
             .setContentTitle(notificationTitle)
             .setContentText(notificationText)
             .setStyle(new NotificationCompat.BigTextStyle()
