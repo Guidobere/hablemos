@@ -89,4 +89,6 @@
     <string name="cancelar">Cancelar</string>
     <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>
     <string name="el_mensaje_va_aca">EL MENSAJE VA ACA</string>
+
+    <string name="configurar">configurar</string>
 </resources>
