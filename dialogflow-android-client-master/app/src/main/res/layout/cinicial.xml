@@ -149,10 +149,47 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/relative4"
+                    android:id="@+id/relativeRepetirPwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/relative3"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView_passIcon2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:padding="3dp"
+                        android:src="@drawable/candado"
+                        android:contentDescription="@string/imgpassicon2"
+                        tools:ignore="DuplicateIds" />
+
+                    <EditText
+                        android:id="@+id/txtContra2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_passIcon2"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon2"
+                        android:background="@color/editTextColor"
+                        android:hint="@string/repetir_pwd"
+                        android:inputType="textPassword"
+                        android:padding="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:id="@+id/relative4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relativeRepetirPwd"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="10dp">
@@ -293,6 +330,10 @@
                     android:id="@+id/lblGlucosa">
 
                     <EditText
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -493,6 +534,10 @@
                     android:layout_below="@+id/checkboxGlucosaNoche">
 
                     <EditText
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
