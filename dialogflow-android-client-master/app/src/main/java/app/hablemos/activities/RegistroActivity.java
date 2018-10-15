@@ -154,7 +154,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioGlucTarde = RecordatoriosGlucosaTarde();
         String diasRecordatorioGlucNoche = RecordatoriosGlucosaNoche();
 
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         if (diasRecordatorioGlucManiana != null && !diasRecordatorioGlucManiana.equals("")) {
             String recordatorioID = myRecordatoriosGlucosaFb.push().getKey();
             myRecordatoriosGlucosaFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioGlucManiana, "mañana"));
@@ -221,7 +221,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioPresionTarde = RecordatoriosPresionTarde();
         String diasRecordatorioPresionNoche = RecordatoriosPresionNoche();
 
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         if (diasRecordatorioPresionManiana != null && !diasRecordatorioPresionManiana.equals("")) {
             String recordatorioID = myRecordatoriosPresionFb.push().getKey();
             myRecordatoriosPresionFb.push().setValue(new Recordatorio(recordatorioID,email, diasRecordatorioPresionManiana, "mañana"));
@@ -273,10 +273,10 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void crearUsuario() {
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         String password = contra.getText().toString();
 
-        if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
+        if (TextUtils.isEmpty(nombreAbuelo.getText())) {
             Toast.makeText(getApplicationContext(), getString(R.string.nombreAbueloVacio), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -313,7 +313,7 @@ public class RegistroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //Si no se repite o algo, lo guarda en la base
-                            String userID=writeNewUser( nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString());
+                            String userID=writeNewUser( nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),equipoFavorito.getText().toString().toLowerCase(),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase());
                             if(userID != "" && userID != null) {
                                 CrearNuevoRecordatoriosGlucosa();
                                 CrearNuevoRecordatoriosPresion();
@@ -327,7 +327,7 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void guardarUsuario() {
-        String email = mailTutor.getText().toString();
+        String email = mailTutor.getText().toString().toLowerCase();
         String password = contra.getText().toString();
 
         if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
@@ -441,7 +441,7 @@ public class RegistroActivity extends AppCompatActivity {
         //Inserto un nuevo valor con su respectivo ID y le Asigno el valor del nuevo
         String userID=UserID !=null? UserID : "" ;
         if(userID!= "")
-            myUsersFb.child(userID).setValue(new User(userID,nombreAbuelo.getText().toString(),mailTutor.getText().toString(),equipoFavorito.getText().toString(),medicamentosM.getText().toString(), medicamentosT.getText().toString(),medicamentosN.getText().toString()
+            myUsersFb.child(userID).setValue(new User(userID,nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),equipoFavorito.getText().toString().toLowerCase(),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase()
         ));
     }
 
