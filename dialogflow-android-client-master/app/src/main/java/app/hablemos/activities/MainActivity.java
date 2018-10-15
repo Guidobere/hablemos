@@ -1,13 +1,13 @@
 package app.hablemos.activities;
 
 import android.Manifest;
-import android.app.AlarmManager;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -16,17 +16,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +38,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import ai.api.AIListener;
@@ -51,10 +58,9 @@ import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
 import app.hablemos.backgroundServices.SchedulerService;
+import app.hablemos.model.Function;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
-import app.hablemos.receivers.EmailReceiver;
-import app.hablemos.receivers.WeatherReceiver;
 import app.hablemos.services.InteractionsService;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
@@ -70,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private TextToSpeech myTTS;
 
     private TextView resultTextView;
+    private TextView resultTextView2;
     private EditText queryEditText;
     private Button micButton;
     private Button send;
@@ -77,15 +84,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private int HORARIO_MANANA;
     private int HORARIO_TARDE;
     private int HORARIO_NOCHE;
-
-    private int CANTIDAD_HORAS_CLIMA;
-
-    //PARA EL MENSAJE ANTERIOR
-    //DONDE SE GUARDA EL MSJ ANTERIOR
-    private String dialogoAnterior = "";
-
-    //Donde se muestra el msj anterior
-    private TextView resultTextViewAnterior;
 
     //Lo que dice y muestra en la aplicacion
     private String speech;
@@ -111,7 +109,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     private InteractionsService interactionsService;
     private PendingIntent pendingEmailIntent;
-    private PendingIntent pendingWeatherIntent;
+
+    //-------------------------------------------*CLIMA VERSION CARO
+    private TextView selectCity, cityField, detailsField, currentTemperatureField, humidity_field, pressure_field, weatherIcon, updatedField;
+    private ProgressBar loader;
+    private Typeface weatherFont;
+    private String city = "Buenos Aires, AR"; //Asi lo muestra la app cuando pedis en la web
+
+    /* Please Put your API KEY here */
+    private String OPEN_WEATHER_MAP_API = "ea574594b9d36ab688642d5fbeab847e";
+    /* Please Put your API KEY here */
+
+    //-------------------------------------------*CLIMA VERSION CARO
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,21 +135,20 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         TAG = getString(R.string.tagMain);
 
         diaSemana = getDiaSemana(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
-        
+
         HORARIO_MANANA = Integer.parseInt(getString(R.string.horarioManiana));
         HORARIO_TARDE = Integer.parseInt(getString(R.string.horarioTarde));
         HORARIO_NOCHE = Integer.parseInt(getString(R.string.horarioNoche));
 
-         CANTIDAD_HORAS_CLIMA = Integer.parseInt(getString(R.string.horasClima));
-
         resultTextView = (TextView) findViewById(R.id.resultTextView);
+        resultTextView2 = (TextView) findViewById(R.id.resultTextView2);
         queryEditText = (EditText) findViewById(R.id.textQuery);
         queryEditText.setVisibility(View.VISIBLE);
 
         micButton = (Button) findViewById(R.id.micButton);
         send = (Button) findViewById(R.id.buttonSend);
 
-      //  findViewById(R.id.buttonSend).setOnClickListener(this);
+        //  findViewById(R.id.buttonSend).setOnClickListener(this);
         send.setOnClickListener(this);
 
         final AIConfiguration config = new AIConfiguration(getString(R.string.accessToken), AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
@@ -153,11 +161,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
 
-        registerReceiver(respuestasClimaReceiver, new IntentFilter("respuestasClima"));
-        setearCronClima();
-
         queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     sendRequest();
@@ -167,8 +172,107 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             }
         });
 
+             //-------------------------------------------*CLIMA VERSION CARO
+
+        loader = (ProgressBar) findViewById(R.id.loader);
+        selectCity = (TextView) findViewById(R.id.selectCity);
+        cityField = (TextView) findViewById(R.id.city_field);
+        updatedField = (TextView) findViewById(R.id.updated_field);
+        detailsField = (TextView) findViewById(R.id.details_field);
+        currentTemperatureField = (TextView) findViewById(R.id.current_temperature_field);
+        humidity_field = (TextView) findViewById(R.id.humidity_field);
+        pressure_field = (TextView) findViewById(R.id.pressure_field);
+        weatherIcon = (TextView) findViewById(R.id.weather_icon);
+        weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weathericons-regular-webfont.ttf");
+        weatherIcon.setTypeface(weatherFont);
+
+        taskLoadUp(city);
+
+        selectCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+                alertDialog.setTitle("Change City");
+                final EditText input = new EditText(MainActivity.this);
+                input.setText(city);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                alertDialog.setView(input);
+
+                alertDialog.setPositiveButton("Change",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                city = input.getText().toString();
+                                taskLoadUp(city);
+                            }
+                        });
+                alertDialog.setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
+
+
     }
 
+    public void taskLoadUp(String query) {
+        if (Function.isNetworkAvailable(getApplicationContext())) {
+            DownloadWeather task = new DownloadWeather();
+            task.execute(query);
+        } else {
+            Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class DownloadWeather extends AsyncTask < String, Void, String > {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loader.setVisibility(View.VISIBLE);
+
+        }
+        protected String doInBackground(String...args) {
+            String xml = Function.excuteGet("http://api.openweathermap.org/data/2.5/weather?q=" + args[0] +
+                    "&units=metric&appid=" + OPEN_WEATHER_MAP_API);
+            return xml;
+        }
+        @Override
+        protected void onPostExecute(String xml) {
+
+            try {
+                JSONObject json = new JSONObject(xml);
+                if (json != null) {
+                    JSONObject details = json.getJSONArray("weather").getJSONObject(0);
+                    JSONObject main = json.getJSONObject("main");
+                    DateFormat df = DateFormat.getDateTimeInstance();
+
+                    cityField.setText(json.getString("name").toUpperCase(Locale.US) + ", " + json.getJSONObject("sys").getString("country"));
+                    detailsField.setText(details.getString("description").toUpperCase(Locale.US));
+                    currentTemperatureField.setText(String.format("%.2f", main.getDouble("temp")) + "°");
+                    humidity_field.setText("Humidity: " + main.getString("humidity") + "%");
+                    pressure_field.setText("Pressure: " + main.getString("pressure") + " hPa");
+                    updatedField.setText(df.format(new Date(json.getLong("dt") * 1000)));
+                    weatherIcon.setText(Html.fromHtml(Function.setWeatherIcon(details.getInt("id"),
+                            json.getJSONObject("sys").getLong("sunrise") * 1000,
+                            json.getJSONObject("sys").getLong("sunset") * 1000)));
+
+                    loader.setVisibility(View.GONE);
+
+                }
+            } catch (JSONException e) {
+
+                Toast.makeText(getApplicationContext(), "Error, Check City", Toast.LENGTH_SHORT).show();
+            }
+        }
+}
+    //-------------------------------------------*CLIMA VERSION CARO
 
     //mostrar menu de opciones
     @Override
@@ -188,24 +292,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-    // Add this inside your class
-    BroadcastReceiver respuestasClimaReceiver =  new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String isHot = intent.getExtras().getString("isHot");
-            String isSuitableForOutdoor = intent.getExtras().getString("isSuitableForOutdoor");
-            if (Boolean.parseBoolean(isHot)) {
-                //TODO: mandar a tomar agua
-                System.out.println("isHot:" + isHot);
-            }
-            if (Boolean.parseBoolean(isSuitableForOutdoor)) {
-                //TODO: mandar pregunta para caminar
-                System.out.println("isSuitableForOutdoor: " + isSuitableForOutdoor);
-            }
-        }
-    };
 
     private String getDiaSemana(int i) {
         String dia = "";
@@ -303,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     recordPermissionGranted = true;
                 } else {
                     Toast.makeText(this, getString(R.string.permisoGrabarDenegado), Toast.LENGTH_LONG).show();
+                    myTTS.speak(getString(R.string.permisoGrabarDenegado), 0, null, "default");
                 }
                 break;
             }
@@ -312,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     escucharAbuelo();
                 } else {
                     Toast.makeText(this, getString(R.string.permisoGrabarDenegado), Toast.LENGTH_LONG).show();
+                    myTTS.speak(getString(R.string.permisoGrabarDenegado), 0, null, "default");
                 }
                 break;
             }
@@ -345,14 +433,17 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
             final String queryString = String.valueOf(queryEditText.getText());
 
+
             queryEditText.setText("");
 
             send.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
             if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
+            myTTS.speak(getString(R.string.non_empty_query), 0, null, "default");
             return;
         }
+            resultTextView2.setText(queryString);
 
         final AsyncTask<String, Void, AIResponse> task = new AsyncTask<String, Void, AIResponse>() {
 
@@ -385,11 +476,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 };
                 task.execute(queryString);
             }
-/*
-    public void mostrarMensajeAnterior(){
-      dialogoAnterior=speech;
-      resultTextViewAnterior.setText(speech);
-    }*/
 
     private String getSaludo() {
         Calendar rightNow = Calendar.getInstance();
@@ -613,12 +699,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonClear:
-             //   clearEditText();
-                break;
-        case R.id.buttonClearHistorial:
-           // clearEditTextHistorial();
-            break;
             case R.id.buttonSend:
                 sendRequest();
                 break;
@@ -675,20 +755,15 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
     }
 
-    public void setearCronClima(){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent weatherIntent = new Intent(this, WeatherReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, weatherIntent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, CANTIDAD_HORAS_CLIMA);
-
-        // Clear previous everyday pending intent if exists.
-        if (null != pendingWeatherIntent) {
-            alarmManager.cancel(pendingWeatherIntent);
-        }
-        pendingWeatherIntent = pendingIntent;
-        /* INTERVAL_HOUR: CADA HORA */
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HOUR * CANTIDAD_HORAS_CLIMA, pendingWeatherIntent);
+    public void onStop(){
+            super.onStop();
+        myTTS.shutdown();
     }
+
+    public void onResume(){
+        super.onResume();
+        myTTS = new TextToSpeech(this, this);
+    }
+
+
 }
