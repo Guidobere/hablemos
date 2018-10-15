@@ -632,11 +632,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                                 loQueDiceYescribe(u.remediosManiana);}
                           break;
                         case "noche":
-                            if(TextUtils.isEmpty(u.remediosTarde)){
+                            if(TextUtils.isEmpty(u.remediosNoche)){
                                 loQueDiceYescribe("Nada que tomar");
                             }
                             else{
-                            loQueDiceYescribe(u.remediosTarde);}
+                                loQueDiceYescribe(u.remediosNoche);}
                             break;
                         default:
                             break;
