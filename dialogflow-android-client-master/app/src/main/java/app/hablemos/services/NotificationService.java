@@ -19,7 +19,7 @@ import app.hablemos.activities.MainActivity;
 
 public class NotificationService {
     private static final String CANAL_NOTIFICACION = "1";
-    private static final int TIPO_SONIDO = RingtoneManager.TYPE_NOTIFICATION;
+    private static final int TIPO_SONIDO_DEFAULT = RingtoneManager.TYPE_NOTIFICATION;
     private static final int ID_NOTIFICACION_AVISO_MAIL = 1;
     private String mailQueInicioSesion;
 
@@ -30,10 +30,17 @@ public class NotificationService {
     public void enviarNotificacionAvisoMail(Context context, String nombreAbuelo) {
         String notificationTitle = "Hola " + nombreAbuelo + "!!";
         String notificationText = context.getString(R.string.notificacionAvisoMail);
-        enviarNotificacion(context, notificationTitle, notificationText);
+        enviarNotificacion(context, notificationTitle, notificationText, null);
     }
 
-    private void enviarNotificacion(Context context, String notificationTitle, String notificationText) {
+    public void enviarNotificacionMedicamentos(Context context, String nombreAbuelo, String turno) {
+        String notificationTitle = nombreAbuelo + ", hora de tus remedios de la " + turno;
+        String notificationText = "Tocá acá para saber cuales.";
+        //String notificationText = context.getString(R.string.notificacionAvisoMail);
+        enviarNotificacion(context, notificationTitle, notificationText, RingtoneManager.TYPE_ALARM);
+    }
+
+    private void enviarNotificacion(Context context, String notificationTitle, String notificationText, Integer tipoSonido) {
         //Icono chico
         int smallIcon = R.mipmap.notification_icon;
 
@@ -45,7 +52,7 @@ public class NotificationService {
         largeIcon = Bitmap.createScaledBitmap(largeIcon, width, height, false);
 
         //Sonido
-        Uri alarmSound = RingtoneManager.getDefaultUri(TIPO_SONIDO);
+        Uri alarmSound = RingtoneManager.getDefaultUri(tipoSonido!=null?tipoSonido: TIPO_SONIDO_DEFAULT);
 
         //Intent para ejecutar cuando toca la notificación
         Intent intent = new Intent(context, MainActivity.class);

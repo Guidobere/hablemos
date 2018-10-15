@@ -35,7 +35,9 @@
 
         <receiver android:name=".receivers.EmailReceiver"></receiver>
         <receiver android:name=".receivers.WeatherReceiver"></receiver>
+        <receiver android:name=".receivers.HealthReceiver"></receiver>
 
+        <service android:name=".backgroundServices.SchedulerService" />
     </application>
 
 </manifest>

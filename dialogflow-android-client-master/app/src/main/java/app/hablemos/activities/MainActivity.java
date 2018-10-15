@@ -50,6 +50,7 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
+import app.hablemos.backgroundServices.SchedulerService;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
 import app.hablemos.receivers.EmailReceiver;
@@ -648,6 +649,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void setearCronReporte(){
+
+        Intent intent = new Intent(this, SchedulerService.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putString("1", mailQueInicioSesion);
+        mBundle.putString("2", nombreAbuelo);
+        intent.putExtras(mBundle);
+        startService(intent);
+/*
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent emailIntent = new Intent(this, EmailReceiver.class);
         emailIntent.putExtra("nombreAbuelo", nombreAbuelo);
@@ -661,9 +670,9 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         if (null != pendingEmailIntent) {
             alarmManager.cancel(pendingEmailIntent);
         }
-        pendingEmailIntent = pendingIntent;
+        pendingEmailIntent = pendingIntent;*/
         /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
     }
 
     public void setearCronClima(){

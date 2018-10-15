@@ -11,6 +11,12 @@
     <string name="pass">aprobamoscomosea</string>
     <string name="urlImagenReporte">https://i.postimg.cc/MpTs8h49/hablemos-320x240-fenix.png</string>
 
+    <!-- Salud -->
+    <string name="horarioSaludManiana">10</string>
+    <string name="horarioSaludTarde">18</string>
+    <!--string name="horarioSaludTarde">16</string-->
+    <string name="horarioSaludNoche">21</string>
+
     <string name="action_settings">Settings</string>
     <string name="non_empty_query">No se ha ingresado un texto</string>
     <string name="escuchando">Escuchando…</string>
