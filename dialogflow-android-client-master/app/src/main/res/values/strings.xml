@@ -54,6 +54,7 @@
     <string name="nombre_abuelo">Nombre Abuelo</string>
     <string name="email_del_tutor">Email del tutor</string>
     <string name="contrase_a_tutor">Contraseña tutor</string>
+    <string name="repetir_pwd">Repetir Contraseña</string>
     <string name="equipo_futbol">Equipo fútbol</string>
     <string name="medicamentos_turno_ma_ana">Medicamentos Mañana</string>
     <string name="medicamentos_turno_tarde">Medicamentos Tarde</string>
@@ -65,7 +66,7 @@
     <string name="imgturnomaniana">imgTurnoManiana</string>
     <string name="imgturnotarde">imgTurnoTarde</string>
     <string name="imgturnonoche">imgTurnoNoche</string>
-    <string name="glucosa">Glucosa (No obligatorio)</string>
+    <string name="glucosa">Recordatorio Glucosa (No obligatorio)</string>
     <string name="ma_ana">Mañana</string>
     <string name="lunes_vista">L</string>
     <string name="martes_vista">Ma</string>
@@ -76,7 +77,7 @@
     <string name="domingo_vista">D</string>
     <string name="tarde">Tarde</string>
     <string name="noche">Noche</string>
-    <string name="presion_vista">Presion (No obligatorio)</string>
+    <string name="presion_vista">Recordatorio Presion (No obligatorio)</string>
 
     <!-- Validaciones registro -->
     <string name="regexEmail">[a\u002DzA\u002DZ0\u002D9\._]{3,30}@([a\u002DzA\u002DZ]{3,10}\.[a\u002DzA\u002DZ]{2,10})[\.[a\u002DzA\u002DZ]{2,10}]*</string>
@@ -85,6 +86,7 @@
     <string name="emailVacio">El email no puede estar vacío</string>
     <string name="emailMalFormado">El email ingresado no es correcto</string>
     <string name="contraseniaVacia">La contraseña no puede estar vacía</string>
+    <string name="contraseñasNoCoinciden">Las contraseñas no coinciden</string>
     <string name="contraseniaMalFormada">La contraseña ingresada no esta correctamente formada</string>
     <string name="equipoVacio">El equipo de fútbol no puede estar vacío</string>
 
