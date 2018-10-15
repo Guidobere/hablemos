@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private TextToSpeech myTTS;
 
     private TextView resultTextView;
+    private TextView resultTextView2;
     private EditText queryEditText;
     private Button micButton;
     private Button send;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         HORARIO_NOCHE = Integer.parseInt(getString(R.string.horarioNoche));
 
         resultTextView = (TextView) findViewById(R.id.resultTextView);
+        resultTextView2 = (TextView) findViewById(R.id.resultTextView2);
         queryEditText = (EditText) findViewById(R.id.textQuery);
         queryEditText.setVisibility(View.VISIBLE);
 
@@ -389,6 +391,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     recordPermissionGranted = true;
                 } else {
                     Toast.makeText(this, getString(R.string.permisoGrabarDenegado), Toast.LENGTH_LONG).show();
+                    myTTS.speak(getString(R.string.permisoGrabarDenegado), 0, null, "default");
                 }
                 break;
             }
@@ -398,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     escucharAbuelo();
                 } else {
                     Toast.makeText(this, getString(R.string.permisoGrabarDenegado), Toast.LENGTH_LONG).show();
+                    myTTS.speak(getString(R.string.permisoGrabarDenegado), 0, null, "default");
                 }
                 break;
             }
@@ -431,14 +435,17 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
             final String queryString = String.valueOf(queryEditText.getText());
 
+
             queryEditText.setText("");
 
             send.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
             if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
+            myTTS.speak(getString(R.string.non_empty_query), 0, null, "default");
             return;
         }
+            resultTextView2.setText(queryString);
 
         final AsyncTask<String, Void, AIResponse> task = new AsyncTask<String, Void, AIResponse>() {
 
@@ -694,12 +701,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonClear:
-             //   clearEditText();
-                break;
-        case R.id.buttonClearHistorial:
-           // clearEditTextHistorial();
-            break;
             case R.id.buttonSend:
                 sendRequest();
                 break;
@@ -746,6 +747,16 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         pendingEmailIntent = pendingIntent;
         /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
+    }
+
+    public void onStop(){
+            super.onStop();
+        myTTS.shutdown();
+    }
+
+    public void onResume(){
+        super.onResume();
+        myTTS = new TextToSpeech(this, this);
     }
 
 
