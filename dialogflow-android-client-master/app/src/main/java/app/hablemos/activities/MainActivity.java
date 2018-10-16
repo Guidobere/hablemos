@@ -61,6 +61,7 @@ import app.hablemos.backgroundServices.SchedulerService;
 import app.hablemos.model.Function;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
+import app.hablemos.services.FootballService;
 import app.hablemos.services.InteractionsService;
 import app.hablemos.services.NotificationService;
 
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private AIDataService aiDataService;
     private AIService aiService;
     private String mailQueInicioSesion;
+    private FootballService footballService;
 
     private String diaSemana;
 
@@ -158,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
         aiDataService = new AIDataService(this, config);
+
+        footballService = new FootballService();
 
         //check for TTS data
         Intent checkTTSIntent = new Intent();
