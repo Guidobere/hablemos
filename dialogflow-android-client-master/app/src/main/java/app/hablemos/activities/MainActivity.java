@@ -469,9 +469,9 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 try {
                     return aiDataService.request(request, requestExtras);
                 } catch (final AIServiceException e) {
-                aiError = new AIError(e);
-                        return null;
-                    }
+                    aiError = new AIError(e);
+                    return null;
+                }
             }
 
             @Override
@@ -668,8 +668,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             @Override
             public void run() {
                 final Result result = response.getResult();
-              //  queryEditText.setText(result.getResolvedQuery());
-
+                resultTextView2.setText(result.getResolvedQuery());
                 //ACA ES DONDE SE USA SPEECH PARA PEDIRLE QUE LO DIGA EN VOZ ALTA Y LO ESCRIBA
                 speech = result.getFulfillment().getSpeech();
                 personalizarMensaje();
