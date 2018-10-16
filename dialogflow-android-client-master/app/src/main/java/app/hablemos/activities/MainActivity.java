@@ -55,6 +55,7 @@ import ai.api.android.AIService;
 import ai.api.model.AIError;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
+import ai.api.model.ResponseMessage;
 import ai.api.model.Result;
 import app.hablemos.R;
 import app.hablemos.backgroundServices.SchedulerService;
@@ -669,8 +670,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             public void run() {
                 final Result result = response.getResult();
                 resultTextView2.setText(result.getResolvedQuery());
-                //ACA ES DONDE SE USA SPEECH PARA PEDIRLE QUE LO DIGA EN VOZ ALTA Y LO ESCRIBA
-                speech = result.getFulfillment().getSpeech();
+
+                try{
+                    speech = ((ResponseMessage.ResponseSpeech) result.getFulfillment().getMessages().get(0)).getSpeech().get(0);
+                } catch (Exception e){
+                    speech = result.getFulfillment().getSpeech();
+                }
+
                 personalizarMensaje();
             }
         });
