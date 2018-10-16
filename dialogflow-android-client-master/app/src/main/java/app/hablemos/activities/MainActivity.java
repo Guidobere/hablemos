@@ -2,7 +2,6 @@ package app.hablemos.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -24,7 +23,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -59,11 +57,12 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import app.hablemos.R;
+import app.hablemos.backgroundServices.SchedulerService;
 import app.hablemos.model.Function;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
-import app.hablemos.receivers.EmailReceiver;
 import app.hablemos.services.InteractionsService;
+import app.hablemos.services.NotificationService;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private String TAG;
@@ -102,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     boolean yaSaludo = false;
     boolean vieneDeNotificacion;
+    boolean rtaNotificacionManejada;
 
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         mailQueInicioSesion = getIntent().getExtras().getString("1");
         vieneDeNotificacion = getIntent().getExtras().getBoolean("vieneDeNotificacion");
+        rtaNotificacionManejada = false;
 
         TAG = getString(R.string.tagMain);
 
@@ -351,7 +352,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public void onInit(int initStatus) {
         if (initStatus == TextToSpeech.SUCCESS) {
             myTTS.setLanguage(new Locale("es", "AR"));
-            if(!yaSaludo) {
+            if(vieneDeNotificacion) {
+                if(!rtaNotificacionManejada) {
+                    manejarRespuestaNotificacion(getIntent().getExtras());
+                    rtaNotificacionManejada = true;
+                }
+            } else if(!yaSaludo) {
                 pedirAlaBase("saludo");
                 yaSaludo = true;
             }
@@ -431,53 +437,54 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     /*
      * AIRequest should have query OR event
      */
-        private void sendRequest()  {
+    private void sendRequest()  {
 
-            final String queryString = String.valueOf(queryEditText.getText());
+        final String queryString = String.valueOf(queryEditText.getText());
 
 
-            queryEditText.setText("");
+        queryEditText.setText("");
 
-            send.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        send.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
-            if (TextUtils.isEmpty(queryString)) {
+        if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
             myTTS.speak(getString(R.string.non_empty_query), 0, null, "default");
             return;
         }
-            resultTextView2.setText(queryString);
+        resultTextView2.setText(queryString);
 
         final AsyncTask<String, Void, AIResponse> task = new AsyncTask<String, Void, AIResponse>() {
 
             private AIError aiError;
 
-                    @Nullable
-                    @Override
-                    protected AIResponse doInBackground(final String... params) {
-                        final AIRequest request = new AIRequest();
-                        String query  = params[0];
-                        RequestExtras requestExtras = null;
+            @Nullable
+            @Override
+            protected AIResponse doInBackground(final String... params) {
+                final AIRequest request = new AIRequest();
+                String query  = params[0];
+                RequestExtras requestExtras = null;
                 if (!TextUtils.isEmpty(query))
                     request.setQuery(query);
 
-                        try {
-                            return aiDataService.request(request, requestExtras);
-                        } catch (final AIServiceException e) {
+                try {
+                    return aiDataService.request(request, requestExtras);
+                } catch (final AIServiceException e) {
                     aiError = new AIError(e);
-                            return null;
-                        }
-                    }
-
-                    @Override
-            protected void onPostExecute(final AIResponse response) {
-                        if (response != null) {
-                            onResult(response);
-                        }
-                    }
-
-                };
-                task.execute(queryString);
+                    return null;
+                }
             }
+
+            @Override
+            protected void onPostExecute(final AIResponse response) {
+                if (response != null) {
+                    onResult(response);
+                }
+            }
+
+        };
+
+        task.execute(queryString);
+    }
 
     private String getSaludo() {
         Calendar rightNow = Calendar.getInstance();
@@ -615,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             nombreAbuelo = parsearNombre(u.username);
                             loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ");
                             interactionsService.guardarInteraccion(
-                                mailQueInicioSesion, getString(R.string.interaccionAbrirApp), "-", "-");
+                                mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
                                 setearCronReporte();
                             break;
@@ -624,21 +631,21 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                                 loQueDiceYescribe("Nada que tomar");
                             }
                             else{
-                                loQueDiceYescribe(u.remediosTarde);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosTarde);}
                              break;
                         case "mañana":
                            if(TextUtils.isEmpty(u.remediosManiana)){
                                 loQueDiceYescribe("Nada que tomar");
                             }
                             else{
-                                loQueDiceYescribe(u.remediosManiana);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosManiana);}
                           break;
                         case "noche":
-                            if(TextUtils.isEmpty(u.remediosTarde)){
+                            if(TextUtils.isEmpty(u.remediosNoche)){
                                 loQueDiceYescribe("Nada que tomar");
                             }
                             else{
-                            loQueDiceYescribe(u.remediosTarde);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosNoche);}
                             break;
                         default:
                             break;
@@ -661,8 +668,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             @Override
             public void run() {
                 final Result result = response.getResult();
-              //  queryEditText.setText(result.getResolvedQuery());
-
+                resultTextView2.setText(result.getResolvedQuery());
                 //ACA ES DONDE SE USA SPEECH PARA PEDIRLE QUE LO DIGA EN VOZ ALTA Y LO ESCRIBA
                 speech = result.getFulfillment().getSpeech();
                 personalizarMensaje();
@@ -731,6 +737,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void setearCronReporte(){
+
+        Intent intent = new Intent(this, SchedulerService.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putString("1", mailQueInicioSesion);
+        mBundle.putString("2", nombreAbuelo);
+        intent.putExtras(mBundle);
+        startService(intent);
+/*
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent emailIntent = new Intent(this, EmailReceiver.class);
         emailIntent.putExtra("nombreAbuelo", nombreAbuelo);
@@ -744,13 +758,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         if (null != pendingEmailIntent) {
             alarmManager.cancel(pendingEmailIntent);
         }
-        pendingEmailIntent = pendingIntent;
+        pendingEmailIntent = pendingIntent;*/
         /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
     }
 
     public void onStop(){
-            super.onStop();
+        super.onStop();
         myTTS.shutdown();
     }
 
@@ -759,5 +773,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         myTTS = new TextToSpeech(this, this);
     }
 
-
+    private void manejarRespuestaNotificacion(Bundle extras) {
+        int tipoNotificacion = extras.getInt("tipoNotificacion");
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD){
+            String turno = extras.getString("extraInfo");
+            pedirAlaBase(turno);
+            interactionsService.guardarInteraccion(mailQueInicioSesion,
+                getString(R.string.interaccionTitulo_NotificacionSalud), "Si",
+                getString(R.string.interaccionTexto_AbrirNotificacionSalud));
+        }
+    }
 }
