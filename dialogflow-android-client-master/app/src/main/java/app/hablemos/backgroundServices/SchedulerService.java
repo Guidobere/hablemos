@@ -16,6 +16,7 @@ import android.util.Log;
 import java.util.Calendar;
 
 import app.hablemos.R;
+import app.hablemos.receivers.EmailReceiver;
 import app.hablemos.receivers.HealthReceiver;
 
 public class SchedulerService extends Service{
@@ -24,18 +25,21 @@ public class SchedulerService extends Service{
     private PendingIntent intentSaludManiana;
     private PendingIntent intentSaludTarde;
     private PendingIntent intentSaludNoche;
+    private PendingIntent intentReporte;
 
-    private boolean alarmasSaludSeteadas = false;
+    private boolean alarmasSeteadas = false;
 
     private int horarioSaludManiana;
     private int horarioSaludTarde;
     private int horarioSaludNoche;
+    private int horaReporte;
 
     @Override
     public void onCreate() {
         horarioSaludManiana = Integer.parseInt(getString(R.string.horarioSaludManiana));
         horarioSaludTarde = Integer.parseInt(getString(R.string.horarioSaludTarde));
         horarioSaludNoche = Integer.parseInt(getString(R.string.horarioSaludNoche));
+        horaReporte = Integer.parseInt(getString(R.string.horaReporte));
 
         // Se crea un thread para el scheduler, sino usaría el thread principal
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
@@ -79,8 +83,8 @@ public class SchedulerService extends Service{
                 String mailQueInicioSesion = msg.getData().getString("1");
                 String nombreAbuelo = msg.getData().getString("2");
 
-                if(!alarmasSaludSeteadas)
-                    setAlarmasSalud(mailQueInicioSesion, nombreAbuelo);
+                if(!alarmasSeteadas)
+                    setAlarmas(mailQueInicioSesion, nombreAbuelo);
 
             } catch (Exception e) {
                 Log.e(this.getClass().getName(), "Error en el servicio Scheduler", e);
@@ -90,31 +94,40 @@ public class SchedulerService extends Service{
         }
     }
 
-    private void setAlarmasSalud(String mailQueInicioSesion, String nombreAbuelo) {
+    private void setAlarmas(String mailQueInicioSesion, String nombreAbuelo) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        //Notificación de los remedios de la mañana
-        intentSaludManiana = setAlarmaSalud(mailQueInicioSesion, nombreAbuelo,
-            horarioSaludManiana, intentSaludManiana, alarmManager);
+        // Notificación de los remedios de la mañana
+        intentSaludManiana = setAlarma(mailQueInicioSesion, nombreAbuelo,
+            horarioSaludManiana, 0, intentSaludManiana, alarmManager,
+            HealthReceiver.class, AlarmManager.INTERVAL_DAY);
 
-        //Notificación de los remedios de la tarde
-        intentSaludTarde = setAlarmaSalud(mailQueInicioSesion, nombreAbuelo,
-            horarioSaludTarde, intentSaludTarde, alarmManager);
+        // Notificación de los remedios de la tarde
+        intentSaludTarde = setAlarma(mailQueInicioSesion, nombreAbuelo,
+            horarioSaludTarde, 0, intentSaludTarde, alarmManager,
+            HealthReceiver.class, AlarmManager.INTERVAL_DAY);
 
-        //Notificación de los remedios de la noche
-        intentSaludNoche = setAlarmaSalud(mailQueInicioSesion, nombreAbuelo,
-            horarioSaludNoche, intentSaludNoche, alarmManager);
+        // Notificación de los remedios de la noche
+        intentSaludNoche = setAlarma(mailQueInicioSesion, nombreAbuelo,
+            horarioSaludNoche, 0, intentSaludNoche, alarmManager,
+            HealthReceiver.class, AlarmManager.INTERVAL_DAY);
 
-        alarmasSaludSeteadas = true;
+        // Mail de reporte al tutor
+        intentReporte = setAlarma(mailQueInicioSesion, nombreAbuelo,
+            horaReporte, 0, intentReporte, alarmManager,
+            EmailReceiver.class, AlarmManager.INTERVAL_DAY);
+
+        alarmasSeteadas = true;
 
     }
 
-    private PendingIntent setAlarmaSalud(String mailQueInicioSesion, String nombreAbuelo, int horaAlarma,
-        PendingIntent pendingIntentAlarma, AlarmManager alarmManager) {
+    private PendingIntent setAlarma(String mailQueInicioSesion, String nombreAbuelo, int horaAlarma,
+                                    int minutosAlarma, PendingIntent pendingIntentAlarma, AlarmManager alarmManager,
+                                    Class<?> receiverClass, long periodicidad) {
 
         // Intent asociado al receiver que va a mandar la notificación (si corresponde)
         // Es necesario un _id disinto para cada una de las alarmas de salud, sino quedaba seteada sólo la última
-        Intent intent = new Intent(getBaseContext(), HealthReceiver.class);
+        Intent intent = new Intent(getBaseContext(), receiverClass);
         intent.putExtra("nombreAbuelo", nombreAbuelo);
         intent.putExtra("mailQueInicioSesion", mailQueInicioSesion);
         final int _id = (int) System.currentTimeMillis();
@@ -127,22 +140,15 @@ public class SchedulerService extends Service{
 
         // Fecha y hora de la primera ejecución. Si ya pasó la hora se programa para el día siguiente.
         Calendar calendar = Calendar.getInstance();
-
-        //if(calendar.get(Calendar.HOUR_OF_DAY)>=horaAlarma) // TODO prueba
-        if(calendar.get(Calendar.HOUR_OF_DAY)>horaAlarma)
+        if(calendar.get(Calendar.HOUR_OF_DAY)>=horaAlarma)
             calendar.add(Calendar.DAY_OF_MONTH, 1);
-
-
         calendar.set(Calendar.HOUR_OF_DAY, horaAlarma);
-
-        //calendar.set(Calendar.MINUTE, 0); //TODO prueba
-        calendar.set(Calendar.MINUTE, 50);
-
+        calendar.set(Calendar.MINUTE, minutosAlarma);
         calendar.set(Calendar.SECOND, 0);
 
         // Se configura la alarma para ejecutar todos los días a la misma hora.
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-            calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntentAlarma);
+            calendar.getTimeInMillis(), periodicidad, pendingIntentAlarma);
         return pendingIntentAlarma;
     }
 
@@ -154,6 +160,7 @@ public class SchedulerService extends Service{
             alarmManager.cancel(intentSaludManiana);
             alarmManager.cancel(intentSaludTarde);
             alarmManager.cancel(intentSaludNoche);
+            alarmManager.cancel(intentReporte);
         } catch (Exception e){
             Log.e(this.getClass().getName(), "Error al cancelar las alarmas.");
         }

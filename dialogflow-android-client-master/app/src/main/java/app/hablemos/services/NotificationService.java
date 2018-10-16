@@ -14,33 +14,52 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.res.ResourcesCompat;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import app.hablemos.R;
 import app.hablemos.activities.MainActivity;
+import app.hablemos.receivers.NotificationDismissReceiver;
 
 public class NotificationService {
     private static final String CANAL_NOTIFICACION = "1";
     private static final int TIPO_SONIDO_DEFAULT = RingtoneManager.TYPE_NOTIFICATION;
-    private static final int ID_NOTIFICACION_AVISO_MAIL = 1;
+
+    public static final int ID_NOTIFICACION_AVISO_MAIL = 1;
+    public static final int ID_NOTIFICACION_SALUD = 2;
+
     private String mailQueInicioSesion;
+
+    private DatabaseReference fbRefInteracciones;
 
     public NotificationService(String mailQueInicioSesion){
         this.mailQueInicioSesion = mailQueInicioSesion;
+        this.fbRefInteracciones = FirebaseDatabase.getInstance().getReference().child("interacciones");
+
     }
 
     public void enviarNotificacionAvisoMail(Context context, String nombreAbuelo) {
         String notificationTitle = "Hola " + nombreAbuelo + "!!";
         String notificationText = context.getString(R.string.notificacionAvisoMail);
-        enviarNotificacion(context, notificationTitle, notificationText, null);
+        enviarNotificacion(context, notificationTitle, notificationText,
+            null, ID_NOTIFICACION_AVISO_MAIL, "");
     }
 
     public void enviarNotificacionMedicamentos(Context context, String nombreAbuelo, String turno) {
+        InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
         String notificationTitle = nombreAbuelo + ", hora de tus remedios de la " + turno;
-        String notificationText = "Tocá acá para saber cuales.";
-        //String notificationText = context.getString(R.string.notificacionAvisoMail);
-        enviarNotificacion(context, notificationTitle, notificationText, RingtoneManager.TYPE_ALARM);
+        String notificationText = context.getString(R.string.notificacionTexto_Salud);
+
+        enviarNotificacion(context, notificationTitle, notificationText,
+            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_SALUD, turno);
+
+        interactionsService.guardarInteraccion(
+            mailQueInicioSesion, context.getString(R.string.interaccionTitulo_NotificacionSalud),
+                "-", context.getString(R.string.interaccionTexto_EnviarNotificacionSalud));
     }
 
-    private void enviarNotificacion(Context context, String notificationTitle, String notificationText, Integer tipoSonido) {
+    private void enviarNotificacion(Context context, String notificationTitle, String notificationText,
+                                    Integer tipoSonido, Integer tipoNotificacion, String extraInfo) {
         //Icono chico
         int smallIcon = R.mipmap.notification_icon;
 
@@ -55,14 +74,24 @@ public class NotificationService {
         Uri alarmSound = RingtoneManager.getDefaultUri(tipoSonido!=null?tipoSonido: TIPO_SONIDO_DEFAULT);
 
         //Intent para ejecutar cuando toca la notificación
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent intentAbrir = new Intent(context, MainActivity.class);
+        intentAbrir.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intentAbrir.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); Con esto se resumia el estado anterior
         Bundle mBundle = new Bundle();
         mBundle.putString("1", mailQueInicioSesion);
         mBundle.putBoolean("vieneDeNotificacion", true);
-        intent.putExtras(mBundle);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-            context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBundle.putInt("tipoNotificacion", tipoNotificacion);
+        mBundle.putString("extraInfo", extraInfo);
+
+        intentAbrir.putExtras(mBundle);
+        PendingIntent pendingIntentAbrir = PendingIntent.getActivity(
+            context, 0, intentAbrir, PendingIntent.FLAG_ONE_SHOT);
+            //context, 0, intentAbrir, PendingIntent.FLAG_UPDATE_CURRENT); Con esto se resumia el estado anterior
+
+        //Intent para ejecutar cuando borra la notificación
+        Intent intentCerrar = new Intent(context, NotificationDismissReceiver.class);
+        intentCerrar.putExtras(mBundle);
+        PendingIntent pendingIntentCerrar = PendingIntent.getBroadcast(context, 1, intentCerrar, 0);
 
         //Color de logo y título
         int color = ResourcesCompat.getColor(context.getResources(), R.color.colorPrimary, null);
@@ -78,11 +107,18 @@ public class NotificationService {
                 .bigText(notificationText))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSound(alarmSound)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true) //Para que se cierra al tocar
+            .setContentIntent(pendingIntentAbrir) //Se ejecuta cuando el usuario toca la notificación
+            .setDeleteIntent(pendingIntentCerrar) //Se ejecuta cuando el usuario borra la notificación
+            .setTimeoutAfter(Integer.valueOf(context.getString(R.string.minutosTimeoutNotificacion)))
+            .setAutoCancel(true) //Para que se cierre cuando el usuario toca la notificación (y va a la app)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC); //Visibilidad con la pantalla bloqueada
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(ID_NOTIFICACION_AVISO_MAIL, notificationBuilder.build());
+        notificationManager.notify(tipoNotificacion, notificationBuilder.build());
+    }
+
+    public void registrarCerrarNotificacion(Context context, String titulo, String observacion, String mailQueInicioSesion){
+        InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
+        interactionsService.guardarInteraccion(mailQueInicioSesion, titulo, "No", observacion);
     }
 }
