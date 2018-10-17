@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/CHANGES'
+        exclude 'META-INF/README.md'
+    }
 }
 
 dependencies {
@@ -38,6 +42,9 @@ dependencies {
     implementation files('libs/activation.jar')
     implementation files('libs/mail.jar')
     implementation files('libs/additionnal.jar')
+    implementation files('libs/jsoup-1.11.3.jar')
+    implementation files('libs/jsoup-1.11.3-javadoc.jar')
+    implementation files('libs/jsoup-1.11.3-sources.jar')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
