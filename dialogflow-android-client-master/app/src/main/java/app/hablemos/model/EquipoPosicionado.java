@@ -109,4 +109,16 @@ public class EquipoPosicionado {
     public void setDiferencia(int diferencia) {
         this.diferencia = diferencia;
     }
+
+    @Override
+    public String toString() {
+        return nombre + " está en la posición " + posicion + ", tiene " + puntos +
+                " puntos, jugó " + partidosJugados +
+                " partidos, ganó " + partidosGanados +
+                " partidos, empató " + partidosEmpatados +
+                " partidos, perdió " + partidosPerdidos +
+                " partidos, hizo " + golesAFavor +
+                " goles, le convirtieron " + golesEnContra +
+                " goles y su diferencia de gol es " + diferencia;
+    }
 }

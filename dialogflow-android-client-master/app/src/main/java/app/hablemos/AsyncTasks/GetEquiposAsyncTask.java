@@ -1,4 +1,4 @@
-package app.hablemos.AsyncTasks;
+package app.hablemos.asynctasks;
 
 import android.os.AsyncTask;
 
@@ -23,14 +23,14 @@ public class GetEquiposAsyncTask extends AsyncTask<Void, Void, List<Equipo>> {
         }
 
         List<Equipo> eqs = new ArrayList<Equipo>();
-
-        Elements equipos = document.select(".expand-down ul li");
-        for (int i = 0; i<equipos.size(); i++) {
-            String nombre = document.select(".expand-down ul li a img").get(i).attributes().get("onmouseover").replace("equipo('", "").replace("');", "");
-            String pagina = document.select(".expand-down ul li a").get(i).attributes().get("href");
-            eqs.add(new Equipo(nombre, pagina.replace(".html", ""), "http://www.promiedos.com.ar/" + pagina));
+        if(document != null) {
+            Elements equipos = document.select(".expand-down ul li");
+            for (int i = 0; i < equipos.size(); i++) {
+                String nombre = document.select(".expand-down ul li a img").get(i).attributes().get("onmouseover").replace("equipo('", "").replace("');", "");
+                String pagina = document.select(".expand-down ul li a").get(i).attributes().get("href");
+                eqs.add(new Equipo(nombre, pagina.replace(".html", ""), "http://www.promiedos.com.ar/" + pagina));
+            }
         }
-
         return eqs;
     }
 }
