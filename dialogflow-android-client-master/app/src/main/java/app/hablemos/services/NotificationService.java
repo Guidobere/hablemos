@@ -31,6 +31,7 @@ public class NotificationService {
 
     public static final int ID_NOTIFICACION_AVISO_MAIL = 1;
     public static final int ID_NOTIFICACION_SALUD = 2;
+    public static final int ID_NOTIFICACION_CLIMA = 3;
 
     private String mailQueInicioSesion;
 
@@ -60,6 +61,13 @@ public class NotificationService {
         interactionsService.guardarInteraccion(
             mailQueInicioSesion, context.getString(R.string.interaccionTitulo_NotificacionSalud),
                 "-", context.getString(R.string.interaccionTexto_EnviarNotificacionSalud));
+    }
+
+    public void enviarNotificacionClima(Context context, String turno) {
+        String notificationTitle = "Que lindo dia";
+        String notificationText = context.getString(R.string.notificacionTexto_Clima);
+        enviarNotificacion(context, notificationTitle, notificationText,
+                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA, turno);
     }
 
     private void enviarNotificacion(Context context, String notificationTitle, String notificationText,
