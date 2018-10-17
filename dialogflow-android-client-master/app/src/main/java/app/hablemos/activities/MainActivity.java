@@ -165,9 +165,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         footballService = new FootballService();
 
         //check for TTS data
-        Intent checkTTSIntent = new Intent();
-        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        checkForTTSData();
 
         queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -227,6 +225,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         });
 
 
+    }
+
+    private void checkForTTSData() {
+        Intent checkTTSIntent = new Intent();
+        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
     }
 
     public void taskLoadUp(String query) {
@@ -389,7 +393,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     private void escucharAbuelo() {
-        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
         micButton.setEnabled(false);
         aiService.startListening();
     }
@@ -421,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     public void onListeningStarted() {
-        // show recording indicator
+        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -629,7 +632,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
-                                setearCronReporte();
+                                iniciarServicioScheduler();
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
@@ -694,8 +697,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 Log.w(TAG, error.toString());
 
                 //Si error es del reconocimiento de voz se muestra un mensaje preestablecido.
-                if(error.toString().contains(getString(R.string.errorSpeechRecog)))
+                if(error.toString().contains(getString(R.string.errorSpeechRecog))) {
                     resultTextView.setText(getString(R.string.errorReconVoz));
+                    myTTS.speak(getString(R.string.errorReconVoz), 0, null, "default");
+                }
                 else
                     resultTextView.setText(error.toString());
 
@@ -746,41 +751,23 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-    public void setearCronReporte(){
-
+    public void iniciarServicioScheduler(){
         Intent intent = new Intent(this, SchedulerService.class);
         Bundle mBundle = new Bundle();
         mBundle.putString("1", mailQueInicioSesion);
         mBundle.putString("2", nombreAbuelo);
         intent.putExtras(mBundle);
         startService(intent);
-/*
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent emailIntent = new Intent(this, EmailReceiver.class);
-        emailIntent.putExtra("nombreAbuelo", nombreAbuelo);
-        emailIntent.putExtra("mailQueInicioSesion", mailQueInicioSesion);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, emailIntent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
-
-        // Clear previous everyday pending intent if exists.
-        if (null != pendingEmailIntent) {
-            alarmManager.cancel(pendingEmailIntent);
-        }
-        pendingEmailIntent = pendingIntent;*/
-        /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
     }
 
     public void onStop(){
         super.onStop();
-        myTTS.shutdown();
+        if(myTTS!=null && myTTS.isSpeaking())
+            myTTS.stop();
     }
 
     public void onResume(){
         super.onResume();
-        myTTS = new TextToSpeech(this, this);
     }
 
     private void manejarRespuestaNotificacion(Bundle extras) {

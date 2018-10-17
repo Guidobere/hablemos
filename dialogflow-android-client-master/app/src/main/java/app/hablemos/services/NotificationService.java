@@ -1,5 +1,6 @@
 package app.hablemos.services;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +11,12 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -60,6 +64,12 @@ public class NotificationService {
 
     private void enviarNotificacion(Context context, String notificationTitle, String notificationText,
                                     Integer tipoSonido, Integer tipoNotificacion, String extraInfo) {
+
+        // Se verifica si la notificación anterior del mismo tipo sigue visible.
+        // En ese caso se cancela y se registra en BD
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        verificarNotificacionAnterior(context, tipoNotificacion, notificationManager);
+
         //Icono chico
         int smallIcon = R.mipmap.notification_icon;
 
@@ -84,8 +94,9 @@ public class NotificationService {
         mBundle.putString("extraInfo", extraInfo);
 
         intentAbrir.putExtras(mBundle);
+        final int _id = (int) System.currentTimeMillis();
         PendingIntent pendingIntentAbrir = PendingIntent.getActivity(
-            context, 0, intentAbrir, PendingIntent.FLAG_ONE_SHOT);
+            context, _id, intentAbrir, PendingIntent.FLAG_ONE_SHOT);
             //context, 0, intentAbrir, PendingIntent.FLAG_UPDATE_CURRENT); Con esto se resumia el estado anterior
 
         //Intent para ejecutar cuando borra la notificación
@@ -109,16 +120,56 @@ public class NotificationService {
             .setSound(alarmSound)
             .setContentIntent(pendingIntentAbrir) //Se ejecuta cuando el usuario toca la notificación
             .setDeleteIntent(pendingIntentCerrar) //Se ejecuta cuando el usuario borra la notificación
-            .setTimeoutAfter(Integer.valueOf(context.getString(R.string.minutosTimeoutNotificacion)))
             .setAutoCancel(true) //Para que se cierre cuando el usuario toca la notificación (y va a la app)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC); //Visibilidad con la pantalla bloqueada
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        //Se envía la notificación
         notificationManager.notify(tipoNotificacion, notificationBuilder.build());
     }
 
-    public void registrarCerrarNotificacion(Context context, String titulo, String observacion, String mailQueInicioSesion){
+    private void verificarNotificacionAnterior(Context context, Integer tipoNotificacion,
+                                               NotificationManagerCompat notificationManager) {
+        try{
+            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(
+                    Context.NOTIFICATION_SERVICE);
+
+            StatusBarNotification[] activeNotifications = mNotificationManager.getActiveNotifications();
+
+            for (StatusBarNotification notification : activeNotifications) {
+                if (notification.getId() == tipoNotificacion) {
+                    this.registrarNotificacionVencida(context, tipoNotificacion);
+                    notificationManager.cancel(tipoNotificacion);
+                }
+            }
+        } catch (Exception e){
+            Log.w(this.getClass().getName(), "No se pudieron verificar las notificaciones anteriores.");
+        }
+    }
+
+    public void registrarCerrarNotificacion(Context context, int tipoNotificacion){
+        //Se obtiene título y observación para la interacción, si corresponde
+        String titulo="";
+        String observacion="";
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD) {
+            titulo = context.getString(R.string.interaccionTitulo_NotificacionSalud);
+            observacion = context.getString(R.string.interaccionTexto_CerrarNotificacionSalud);
+        }
+
         InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
         interactionsService.guardarInteraccion(mailQueInicioSesion, titulo, "No", observacion);
+    }
+
+    public void registrarNotificacionVencida(Context context, int tipoNotificacion){
+        //Se obtiene título y observación para la interacción, si corresponde
+        String titulo="";
+        String observacion="";
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD) {
+            titulo = context.getString(R.string.interaccionTitulo_NotificacionSalud);
+            observacion = context.getString(R.string.interaccionTexto_VencerNotificacionSalud);
+        }
+        if(!TextUtils.isEmpty(titulo)){
+            InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
+            interactionsService.guardarInteraccion(mailQueInicioSesion, titulo, "No", observacion);
+        }
     }
 }
