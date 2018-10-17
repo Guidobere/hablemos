@@ -16,6 +16,7 @@ import android.util.Log;
 import java.util.Calendar;
 
 import app.hablemos.R;
+import app.hablemos.receivers.ClimaReceiver;
 import app.hablemos.receivers.EmailReceiver;
 import app.hablemos.receivers.HealthReceiver;
 
@@ -26,12 +27,14 @@ public class SchedulerService extends Service{
     private PendingIntent intentSaludTarde;
     private PendingIntent intentSaludNoche;
     private PendingIntent intentReporte;
+    private PendingIntent intentClima;
 
     private boolean alarmasSeteadas = false;
 
     private int horarioSaludManiana;
     private int horarioSaludTarde;
     private int horarioSaludNoche;
+    private int horarioClima;
     private int horaReporte;
 
     @Override
@@ -39,6 +42,8 @@ public class SchedulerService extends Service{
         horarioSaludManiana = Integer.parseInt(getString(R.string.horarioSaludManiana));
         horarioSaludTarde = Integer.parseInt(getString(R.string.horarioSaludTarde));
         horarioSaludNoche = Integer.parseInt(getString(R.string.horarioSaludNoche));
+        horarioClima = Integer.parseInt(getString(R.string.horarioClima));
+
         horaReporte = Integer.parseInt(getString(R.string.horaReporte));
 
         // Se crea un thread para el scheduler, sino usaría el thread principal
@@ -117,6 +122,10 @@ public class SchedulerService extends Service{
             horaReporte, 0, intentReporte, alarmManager,
             EmailReceiver.class, AlarmManager.INTERVAL_DAY);
 
+        intentClima = setAlarma(mailQueInicioSesion, nombreAbuelo,
+                horarioClima, 0, intentClima, alarmManager,
+                ClimaReceiver.class, AlarmManager.INTERVAL_DAY);
+
         alarmasSeteadas = true;
 
     }
@@ -140,8 +149,8 @@ public class SchedulerService extends Service{
 
         // Fecha y hora de la primera ejecución. Si ya pasó la hora se programa para el día siguiente.
         Calendar calendar = Calendar.getInstance();
-        if(calendar.get(Calendar.HOUR_OF_DAY)>=horaAlarma)
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        //if(calendar.get(Calendar.HOUR_OF_DAY)>=horaAlarma)
+          //  calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, horaAlarma);
         calendar.set(Calendar.MINUTE, minutosAlarma);
         calendar.set(Calendar.SECOND, 0);
@@ -161,6 +170,7 @@ public class SchedulerService extends Service{
             alarmManager.cancel(intentSaludTarde);
             alarmManager.cancel(intentSaludNoche);
             alarmManager.cancel(intentReporte);
+            alarmManager.cancel(intentClima);
         } catch (Exception e){
             Log.e(this.getClass().getName(), "Error al cancelar las alarmas.");
         }

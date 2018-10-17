@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private String OPEN_WEATHER_MAP_API = "ea574594b9d36ab688642d5fbeab847e";
     /* Please Put your API KEY here */
 
+    int temperatura;
+
     //-------------------------------------------*CLIMA VERSION CARO
 
     @Override
@@ -191,8 +193,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         weatherIcon = (TextView) findViewById(R.id.weather_icon);
         weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weathericons-regular-webfont.ttf");
         weatherIcon.setTypeface(weatherFont);
-
-        taskLoadUp(city);
 
         selectCity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     cityField.setText(json.getString("name").toUpperCase(Locale.US) + ", " + json.getJSONObject("sys").getString("country"));
                     detailsField.setText(details.getString("description").toUpperCase(Locale.US));
-                    currentTemperatureField.setText(String.format("%.2f", main.getDouble("temp")) + "°");
+                    currentTemperatureField.setText(main.getString("temp"));
                     humidity_field.setText("Humidity: " + main.getString("humidity") + "%");
                     pressure_field.setText("Pressure: " + main.getString("pressure") + " hPa");
                     updatedField.setText(df.format(new Date(json.getLong("dt") * 1000)));
@@ -770,8 +770,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         super.onResume();
     }
 
+    //enviarNotificacionMedicamentos
     private void manejarRespuestaNotificacion(Bundle extras) {
         int tipoNotificacion = extras.getInt("tipoNotificacion");
+
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD){
             String turno = extras.getString("extraInfo");
             pedirAlaBase(turno);
@@ -779,5 +781,16 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 getString(R.string.interaccionTitulo_NotificacionSalud), "Si",
                 getString(R.string.interaccionTexto_AbrirNotificacionSalud));
         }
+
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){
+
+            loQueDiceYescribe("¿Queres ir a pasear?");
+        }
+
+    }
+
+    public boolean estaLindo(){
+        taskLoadUp(city);
+        return (Integer.parseInt(currentTemperatureField.getText().toString())>15);
     }
 }
