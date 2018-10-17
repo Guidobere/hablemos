@@ -165,9 +165,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         footballService = new FootballService();
 
         //check for TTS data
-        Intent checkTTSIntent = new Intent();
-        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        checkForTTSData();
 
         queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -227,6 +225,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         });
 
 
+    }
+
+    private void checkForTTSData() {
+        Intent checkTTSIntent = new Intent();
+        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
     }
 
     public void taskLoadUp(String query) {
@@ -389,7 +393,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     private void escucharAbuelo() {
-        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
         micButton.setEnabled(false);
         aiService.startListening();
     }
@@ -421,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     public void onListeningStarted() {
-        // show recording indicator
+        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -694,8 +697,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 Log.w(TAG, error.toString());
 
                 //Si error es del reconocimiento de voz se muestra un mensaje preestablecido.
-                if(error.toString().contains(getString(R.string.errorSpeechRecog)))
+                if(error.toString().contains(getString(R.string.errorSpeechRecog))) {
                     resultTextView.setText(getString(R.string.errorReconVoz));
+                    myTTS.speak(getString(R.string.errorReconVoz), 0, null, "default");
+                }
                 else
                     resultTextView.setText(error.toString());
 
@@ -757,13 +762,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     public void onStop(){
         super.onStop();
-        myTTS.shutdown();
+        if(myTTS!=null && myTTS.isSpeaking())
+            myTTS.stop();
     }
 
     public void onResume(){
         super.onResume();
-        if(myTTS==null)
-            myTTS = new TextToSpeech(this, this);
     }
 
     private void manejarRespuestaNotificacion(Bundle extras) {
