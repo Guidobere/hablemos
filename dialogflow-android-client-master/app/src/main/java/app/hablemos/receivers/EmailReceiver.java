@@ -19,13 +19,14 @@ public class EmailReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String nombreAbuelo = intent.getExtras().getString("nombreAbuelo");
         String mailQueInicioSesion = intent.getExtras().getString("mailQueInicioSesion");
+        if(nombreAbuelo!=null && mailQueInicioSesion!=null){
+            InteractionsService interactionsService = new InteractionsService(context, context.getAssets(),
+                    FirebaseDatabase.getInstance().getReference().child("interacciones"));
+            interactionsService.enviarReporteInteracciones(nombreAbuelo, mailQueInicioSesion);
 
-        InteractionsService interactionsService = new InteractionsService(context, context.getAssets(),
-            FirebaseDatabase.getInstance().getReference().child("interacciones"));
-        interactionsService.enviarReporteInteracciones(nombreAbuelo, mailQueInicioSesion);
-
-        NotificationService notificationService = new NotificationService(mailQueInicioSesion);
-        notificationService.enviarNotificacionAvisoMail(context, nombreAbuelo);
+            NotificationService notificationService = new NotificationService(mailQueInicioSesion);
+            notificationService.enviarNotificacionAvisoMail(context, nombreAbuelo);
+        }
     }
 
 

@@ -107,7 +107,7 @@
     <string name="interaccionTexto_AbrirNotificacionSalud">El usuario tocó la notificación de salud</string>
 
     <!-- Notificaciones -->
-    <string name="notificacionTexto_Salud">Tocá acá para saber cuales.</string>
+    <string name="notificacionTexto_Salud">Tocá una vez acá para saber cuáles.</string>
 
     <string name="cancelar">Cancelar</string>
     <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>

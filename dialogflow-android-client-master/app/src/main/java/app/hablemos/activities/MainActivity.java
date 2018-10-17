@@ -625,7 +625,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
-                                setearCronReporte();
+                                iniciarServicioScheduler();
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
@@ -742,31 +742,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-    public void setearCronReporte(){
-
+    public void iniciarServicioScheduler(){
         Intent intent = new Intent(this, SchedulerService.class);
         Bundle mBundle = new Bundle();
         mBundle.putString("1", mailQueInicioSesion);
         mBundle.putString("2", nombreAbuelo);
         intent.putExtras(mBundle);
         startService(intent);
-/*
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent emailIntent = new Intent(this, EmailReceiver.class);
-        emailIntent.putExtra("nombreAbuelo", nombreAbuelo);
-        emailIntent.putExtra("mailQueInicioSesion", mailQueInicioSesion);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, emailIntent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
-
-        // Clear previous everyday pending intent if exists.
-        if (null != pendingEmailIntent) {
-            alarmManager.cancel(pendingEmailIntent);
-        }
-        pendingEmailIntent = pendingIntent;*/
-        /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
     }
 
     public void onStop(){
@@ -776,7 +758,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     public void onResume(){
         super.onResume();
-        myTTS = new TextToSpeech(this, this);
+        if(myTTS==null)
+            myTTS = new TextToSpeech(this, this);
     }
 
     private void manejarRespuestaNotificacion(Bundle extras) {
