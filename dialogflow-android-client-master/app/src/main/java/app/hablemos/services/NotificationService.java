@@ -102,7 +102,7 @@ public class NotificationService {
         mBundle.putString("extraInfo", extraInfo);
 
         intentAbrir.putExtras(mBundle);
-        final int _id = (int) System.currentTimeMillis();
+        int _id = (int) System.currentTimeMillis();
         PendingIntent pendingIntentAbrir = PendingIntent.getActivity(
             context, _id, intentAbrir, PendingIntent.FLAG_ONE_SHOT);
             //context, 0, intentAbrir, PendingIntent.FLAG_UPDATE_CURRENT); Con esto se resumia el estado anterior
@@ -110,7 +110,8 @@ public class NotificationService {
         //Intent para ejecutar cuando borra la notificación
         Intent intentCerrar = new Intent(context, NotificationDismissReceiver.class);
         intentCerrar.putExtras(mBundle);
-        PendingIntent pendingIntentCerrar = PendingIntent.getBroadcast(context, 1, intentCerrar, 0);
+        _id = (int) System.currentTimeMillis();
+        PendingIntent pendingIntentCerrar = PendingIntent.getBroadcast(context, _id, intentCerrar, 0);
 
         //Color de logo y título
         int color = ResourcesCompat.getColor(context.getResources(), R.color.colorPrimary, null);
