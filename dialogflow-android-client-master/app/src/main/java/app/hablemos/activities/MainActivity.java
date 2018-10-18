@@ -507,38 +507,88 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void personalizarMensaje(){
-        switch (speech) {
-            case "tarde":
-                pedirAlaBase("tarde");
-                break;
-            case "mañana":
-                pedirAlaBase("mañana");
-                break;
-            case "noche":
-                pedirAlaBase("noche");
-                break;
-            case "glucosa-mañana":
-                pedirAlaBaseSobreGlucosa("mañana");
-                break;
-            case "glucosa-noche":
-                pedirAlaBaseSobreGlucosa("noche");
-                break;
-            case "glucosa-tarde":
-                pedirAlaBaseSobreGlucosa("tarde");
-                break;
-            case "presión-mañana":
-                pedirAlaBaseSobrePresion("mañana");
-                break;
-            case "presión-noche":
-                pedirAlaBaseSobrePresion("noche");
-                break;
-            case "presión-tarde":
-                pedirAlaBaseSobrePresion("tarde");
-                break;
-            default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
-                resultTextView.setText(speech);
-                myTTS.speak(speech,0,null, "default");
-                break;
+        if (speech.contains("_")) {
+            String result = "";
+            String[] pedido = speech.split("_");
+            String accion = pedido[0];
+            String equipo = "";
+            switch (accion) {
+                case "posicion":
+                    equipo = pedido[1];
+                    result = footballService.getPosicionEquipo(equipo);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "posicionEquipo");
+                    break;
+                case "topN":
+                    int n = Integer.parseInt(pedido[1]);
+                    result = footballService.getTopNEquipos(n);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "topN");
+                    break;
+                case "equipoEnPosicion":
+                    int posicion = Integer.parseInt(pedido[1]);
+                    result = footballService.getEquipoEnPosicion(posicion);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "equipoEnPosicion");
+                    break;
+                case "proximoPartido":
+                    equipo = pedido[1];
+                    //TODO
+                    break;
+                case "ultimoPartido":
+                    equipo = pedido[1];
+                    //TODO
+                    break;
+                case "datos":
+                    equipo = pedido[1];
+                    result = footballService.getDatosEquipo(equipo);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "datosEquipo");
+                    break;
+                case "estadisticas":
+                    equipo = pedido[1];
+                    //TODO
+                    break;
+                case "comparacion":
+                    String equipo1 = pedido[1];
+                    String equipo2 = pedido[2];
+                    //TODO
+                    break;
+            }
+        } else {
+            switch (speech) {
+                case "tarde":
+                    pedirAlaBase("tarde");
+                    break;
+                case "mañana":
+                    pedirAlaBase("mañana");
+                    break;
+                case "noche":
+                    pedirAlaBase("noche");
+                    break;
+                case "glucosa-mañana":
+                    pedirAlaBaseSobreGlucosa("mañana");
+                    break;
+                case "glucosa-noche":
+                    pedirAlaBaseSobreGlucosa("noche");
+                    break;
+                case "glucosa-tarde":
+                    pedirAlaBaseSobreGlucosa("tarde");
+                    break;
+                case "presión-mañana":
+                    pedirAlaBaseSobrePresion("mañana");
+                    break;
+                case "presión-noche":
+                    pedirAlaBaseSobrePresion("noche");
+                    break;
+                case "presión-tarde":
+                    pedirAlaBaseSobrePresion("tarde");
+                    break;
+                default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
+                    resultTextView.setText(speech);
+                    myTTS.speak(speech, 0, null, "default");
+                    break;
+            }
         }
     }
 
