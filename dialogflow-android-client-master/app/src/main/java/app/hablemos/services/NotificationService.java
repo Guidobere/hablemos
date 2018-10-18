@@ -2,6 +2,7 @@ package app.hablemos.services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -89,7 +90,18 @@ public class NotificationService {
         largeIcon = Bitmap.createScaledBitmap(largeIcon, width, height, false);
 
         //Sonido
-        Uri alarmSound = RingtoneManager.getDefaultUri(tipoSonido!=null?tipoSonido: TIPO_SONIDO_DEFAULT);
+        //Uri alarmSound = RingtoneManager.getDefaultUri(tipoSonido!=null?tipoSonido: TIPO_SONIDO_DEFAULT);
+        Uri alarmSound;
+        if(tipoSonido!=null && tipoSonido==RingtoneManager.TYPE_ALARM) {
+            try {
+                alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                        + "://" + context.getPackageName() + "/" + R.raw.ticktac_ringtone_1min);
+            } catch (Exception e){
+                alarmSound = RingtoneManager.getDefaultUri(tipoSonido!=null?tipoSonido: TIPO_SONIDO_DEFAULT);
+            }
+        } else {
+            alarmSound = RingtoneManager.getDefaultUri(tipoSonido != null ? tipoSonido : TIPO_SONIDO_DEFAULT);
+        }
 
         //Intent para ejecutar cuando toca la notificación
         Intent intentAbrir = new Intent(context, MainActivity.class);
