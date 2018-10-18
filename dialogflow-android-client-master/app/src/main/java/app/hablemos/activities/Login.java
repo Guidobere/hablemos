@@ -61,6 +61,7 @@ public class Login extends AppCompatActivity {
                 //FirebaseUser user = mAuth.getCurrentUser();
                 if (currentUser != null) {
                     // User is signed in
+                    email = currentUser.getEmail();
                     startActivity(MainActivity.class);
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + currentUser.getUid());
                 } else {

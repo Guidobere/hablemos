@@ -149,8 +149,8 @@ public class SchedulerService extends Service{
 
         // Fecha y hora de la primera ejecución. Si ya pasó la hora se programa para el día siguiente.
         Calendar calendar = Calendar.getInstance();
-        //if(calendar.get(Calendar.HOUR_OF_DAY)>=horaAlarma)
-          //  calendar.add(Calendar.DAY_OF_MONTH, 1);
+        if(calendar.get(Calendar.HOUR_OF_DAY)>=horaAlarma)
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, horaAlarma);
         calendar.set(Calendar.MINUTE, minutosAlarma);
         calendar.set(Calendar.SECOND, 0);
