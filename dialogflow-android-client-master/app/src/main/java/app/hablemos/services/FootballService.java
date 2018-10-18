@@ -29,6 +29,14 @@ public class FootballService {
         }
     }
 
+    public HashMap<String, String> getMapaEquiposDePrimera() {
+        HashMap<String, String> mapaEquiposPrimera = new HashMap<>();
+        for (Equipo equipo : this.equiposDePrimera) {
+            mapaEquiposPrimera.put(equipo.getNombreReferencia(), equipo.getNombre());
+        }
+        return mapaEquiposPrimera;
+    }
+
     private HashMap<String,String> llenarMapaEquipos() {
         HashMap<String, String> mapa = new HashMap<>();
         mapa.put("aldosivi", "Aldosivi");
