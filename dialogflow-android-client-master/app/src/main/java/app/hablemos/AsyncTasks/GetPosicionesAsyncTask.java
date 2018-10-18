@@ -22,7 +22,7 @@ public class GetPosicionesAsyncTask extends AsyncTask<Void, Void, List<EquipoPos
             e.printStackTrace();
         }
 
-        List<EquipoPosicionado> eqs = new ArrayList<EquipoPosicionado>();
+        List<EquipoPosicionado> eqs = new ArrayList<>();
         if(document != null) {
             Elements rows = document.select("#posiciones tbody tr");
             for (int i = 0; i < rows.size(); i++) {

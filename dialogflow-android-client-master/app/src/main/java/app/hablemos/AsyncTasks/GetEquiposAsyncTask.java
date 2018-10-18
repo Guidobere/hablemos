@@ -22,7 +22,7 @@ public class GetEquiposAsyncTask extends AsyncTask<Void, Void, List<Equipo>> {
             e.printStackTrace();
         }
 
-        List<Equipo> eqs = new ArrayList<Equipo>();
+        List<Equipo> eqs = new ArrayList<>();
         if(document != null) {
             Elements equipos = document.select(".expand-down ul li");
             for (int i = 0; i < equipos.size(); i++) {

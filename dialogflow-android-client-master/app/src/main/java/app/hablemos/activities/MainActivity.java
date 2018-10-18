@@ -507,52 +507,52 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void personalizarMensaje(){
-        if (speech.contains("_")) {
+        if (speech.startsWith("futbol")) {
             String result = "";
             String[] pedido = speech.split("_");
-            String accion = pedido[0];
+            String accion = pedido[1].trim();
             String equipo = "";
             switch (accion) {
                 case "posicion":
-                    equipo = pedido[1];
+                    equipo = pedido[2].trim();
                     result = footballService.getPosicionEquipo(equipo);
-                    resultTextView.setText(result);
-                    myTTS.speak(result,0,null, "posicionEquipo");
+                    loQueDiceYescribe(result,"posicionEquipo");
                     break;
                 case "topN":
-                    int n = Integer.parseInt(pedido[1]);
+                    int n = Integer.parseInt(pedido[2].trim());
                     result = footballService.getTopNEquipos(n);
-                    resultTextView.setText(result);
-                    myTTS.speak(result,0,null, "topN");
+                    loQueDiceYescribe(result,"topN");
                     break;
                 case "equipoEnPosicion":
-                    int posicion = Integer.parseInt(pedido[1]);
+                    int posicion = Integer.parseInt(pedido[2].trim());
                     result = footballService.getEquipoEnPosicion(posicion);
-                    resultTextView.setText(result);
-                    myTTS.speak(result,0,null, "equipoEnPosicion");
+                    loQueDiceYescribe(result,"equipoEnPosicion");
                     break;
                 case "proximoPartido":
-                    equipo = pedido[1];
-                    //TODO
+                    equipo = pedido[2].trim();
+                    //TODO: result = footballService.getProximoPartido(equipo);
+                    loQueDiceYescribe(result,"proximoPartido");
                     break;
                 case "ultimoPartido":
-                    equipo = pedido[1];
-                    //TODO
+                    equipo = pedido[2].trim();
+                    //TODO: result = footballService.getUltimoPartido(equipo);
+                    loQueDiceYescribe(result,"ultimoPartido");
                     break;
                 case "datos":
-                    equipo = pedido[1];
+                    equipo = pedido[2].trim();
                     result = footballService.getDatosEquipo(equipo);
-                    resultTextView.setText(result);
-                    myTTS.speak(result,0,null, "datosEquipo");
+                    loQueDiceYescribe(result,"datosEquipo");
                     break;
                 case "estadisticas":
-                    equipo = pedido[1];
-                    //TODO
+                    equipo = pedido[2].trim();
+                    result = footballService.getEstadisticasEquipo(equipo);
+                    loQueDiceYescribe(result,"estadisticasEquipo");
                     break;
                 case "comparacion":
-                    String equipo1 = pedido[1];
-                    String equipo2 = pedido[2];
-                    //TODO
+                    String equipo1 = pedido[2].trim();
+                    String equipo2 = pedido[3].trim();
+                    result = footballService.getComparacionEquipos(equipo1, equipo2);
+                    loQueDiceYescribe(result,"comparacionEquipos");
                     break;
             }
         } else {
@@ -585,8 +585,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     pedirAlaBaseSobrePresion("tarde");
                     break;
                 default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
-                    resultTextView.setText(speech);
-                    myTTS.speak(speech, 0, null, "default");
+                    loQueDiceYescribe(speech,"default");
                     break;
             }
         }
@@ -612,12 +611,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     if(elturno.equalsIgnoreCase(turnoPresion) && losdias.contains(diaSemana)){
                         a=1;
                        // speech="Hoy si";
-                        loQueDiceYescribe("Hoy si");
+                        loQueDiceYescribe("Hoy si","default");
                     }
                 }
 
                 if(a == 0) {
-                    loQueDiceYescribe("Hoy no");
+                    loQueDiceYescribe("Hoy no","default");
                 }
             }
 
@@ -647,12 +646,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
                         a=1;
-                       loQueDiceYescribe("Hoy si");
+                       loQueDiceYescribe("Hoy si","default");
                     }
                 }
 
                 if(a == 0) {
-                     loQueDiceYescribe("Hoy no");
+                     loQueDiceYescribe("Hoy no","default");
                 }
             }
 
@@ -678,7 +677,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     switch (turno) {
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
-                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ");
+                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ","default");
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
@@ -686,24 +685,24 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
-                                loQueDiceYescribe("Nada que tomar");
+                                loQueDiceYescribe("Nada que tomar","default");
                             }
                             else{
-                                loQueDiceYescribe("Tenés que tomar " + u.remediosTarde);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosTarde,"default");}
                              break;
                         case "mañana":
                            if(TextUtils.isEmpty(u.remediosManiana)){
-                                loQueDiceYescribe("Nada que tomar");
+                                loQueDiceYescribe("Nada que tomar","default");
                             }
                             else{
-                                loQueDiceYescribe("Tenés que tomar " + u.remediosManiana);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosManiana,"default");}
                           break;
                         case "noche":
                             if(TextUtils.isEmpty(u.remediosNoche)){
-                                loQueDiceYescribe("Nada que tomar");
+                                loQueDiceYescribe("Nada que tomar","default");
                             }
                             else{
-                                loQueDiceYescribe("Tenés que tomar " + u.remediosNoche);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosNoche,"default");}
                             break;
                         default:
                             break;
@@ -783,11 +782,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         startActivity(intent);
     }
 
-    public void loQueDiceYescribe(String unTexto){
+    public void loQueDiceYescribe(String texto, String id){
         try {
-            speech = unTexto;
-            resultTextView.setText(speech);
-            myTTS.speak(speech, 0, null, "default");
+            resultTextView.setText(texto);
+            myTTS.speak(texto, 0, null, id);
         } catch (Exception e){
             Log.e(this.getClass().getName(), "Error al emitir respuesta.", e);
         }
@@ -834,7 +832,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){
 
-            loQueDiceYescribe("¿Queres ir a pasear?");
+            loQueDiceYescribe("¿Queres ir a pasear?", "default");
         }
 
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import app.hablemos.asynctasks.GetComparacionAsyncTask;
 import app.hablemos.asynctasks.GetDatosAsyncTask;
 import app.hablemos.asynctasks.GetEquiposAsyncTask;
 import app.hablemos.asynctasks.GetPosicionesAsyncTask;
@@ -18,8 +19,8 @@ public class FootballService {
     private HashMap<String, String> mapaEquipos;
 
     public FootballService() {
-        this.equiposPosicionados = new ArrayList<EquipoPosicionado>();
-        this.equiposDePrimera = new ArrayList<Equipo>();
+        this.equiposPosicionados = new ArrayList<>();
+        this.equiposDePrimera = new ArrayList<>();
         this.mapaEquipos = llenarMapaEquipos();
         try {
             this.equiposDePrimera = new GetEquiposAsyncTask().execute().get();
@@ -29,7 +30,7 @@ public class FootballService {
     }
 
     private HashMap<String,String> llenarMapaEquipos() {
-        HashMap<String, String> mapa = new HashMap<String, String>();
+        HashMap<String, String> mapa = new HashMap<>();
         mapa.put("aldosivi", "Aldosivi");
         mapa.put("argentinos", "Argentinos");
         mapa.put("atltucuman", "Atl Tucuman");
@@ -60,6 +61,18 @@ public class FootballService {
     }
 
     public String getTopNEquipos(int n) {
+        llenarEquiposPosicionados();
+        StringBuilder respuesta = new StringBuilder("Los equipos que estan entre los mejores " + n + " son: ");
+        String separador = "";
+        List<EquipoPosicionado> topN = equiposPosicionados.subList(0,n);
+        for (EquipoPosicionado ep : topN) {
+            respuesta.append(separador).append(ep.getNombre());
+            separador = ", ";
+        }
+        return respuesta.toString();
+    }
+
+    private void llenarEquiposPosicionados() {
         if (this.equiposPosicionados.size() == 0) {
             try {
                 this.equiposPosicionados = new GetPosicionesAsyncTask().execute().get();
@@ -67,26 +80,11 @@ public class FootballService {
                 e.printStackTrace();
             }
         }
-        String respuesta = "Los equipos que estan entre los mejores " + n + " son: ";
-        String separador = "";
-        List<EquipoPosicionado> topN = equiposPosicionados.subList(0,n);
-        for (EquipoPosicionado ep : topN) {
-            respuesta += separador + ep.getNombre();
-            separador = ", ";
-        }
-        return respuesta;
     }
 
     public String getPosicionEquipo(String equipo) {
-        if (this.equiposPosicionados.size() == 0) {
-            getTopNEquipos(1);
-        }
-        String equipoVisual = "";
-        for(Equipo eq : this.equiposDePrimera) {
-            if (eq.getNombreReferencia().equalsIgnoreCase(equipo)) {
-                equipoVisual = eq.getNombre();
-            }
-        }
+        llenarEquiposPosicionados();
+        String equipoVisual = obtenerEquipoVisual(equipo);
         int posicion = 0;
         for(EquipoPosicionado ep : this.equiposPosicionados) {
             if (ep.getNombre().equalsIgnoreCase(mapaEquipos.get(equipo))){
@@ -99,10 +97,18 @@ public class FootballService {
             return "El equipo solicitado no pudo ser encontrado";
     }
 
-    public String getEquipoEnPosicion(int posicion) {
-        if (this.equiposPosicionados.size() == 0) {
-            getTopNEquipos(1);
+    private String obtenerEquipoVisual(String equipo) {
+        String equipoVisual = "";
+        for(Equipo eq : this.equiposDePrimera) {
+            if (eq.getNombreReferencia().equalsIgnoreCase(equipo)) {
+                equipoVisual = eq.getNombre();
+            }
         }
+        return equipoVisual;
+    }
+
+    public String getEquipoEnPosicion(int posicion) {
+        llenarEquiposPosicionados();
         if (posicion < 1 || posicion > this.equiposPosicionados.size()) {
             return "La posicion deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente";
         }
@@ -117,11 +123,10 @@ public class FootballService {
 
     public String getDatosEquipo(String equipo) {
         String pagina = "";
-        String equipoVisual = "";
+        String equipoVisual = obtenerEquipoVisual(equipo);
         for(Equipo eq : this.equiposDePrimera) {
             if (eq.getNombreReferencia().equalsIgnoreCase(equipo)) {
                 pagina = eq.getPagina();
-                equipoVisual = eq.getNombre();
             }
         }
         if (!pagina.equals("")) {
@@ -131,10 +136,33 @@ public class FootballService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return equipoVisual + " es un equipo de primera división argentina ubicado en " + datos.getUbicacion() + ". Su fundación fue el " + datos.getFundacion() +
-                    ". Su apodo es " + datos.getApodos() + ". Su estadio se llama " + datos.getEstadio() + " con capacidad para " + datos.getCapacidad() +
-                    " y actualmente está siendo dirigido por " + datos.getDt();
+            return equipoVisual + datos.toString();
         } else
             return "El equipo solicitado no pudo ser encontrado";
+    }
+
+    public String getEstadisticasEquipo(String equipo) {
+        llenarEquiposPosicionados();
+        String estadisticas = "";
+        for(EquipoPosicionado ep : this.equiposPosicionados) {
+            if (ep.getNombre().equalsIgnoreCase(mapaEquipos.get(equipo))){
+                estadisticas = ep.toString();
+            }
+        }
+        if (!estadisticas.equals("")) return estadisticas;
+        else return "No pudieron encontrarse estadisticas para " + equipo;
+    }
+
+    public String getComparacionEquipos(String equipo1, String equipo2) {
+        String equipoVisual1 = obtenerEquipoVisual(equipo1);
+        String equipoVisual2 = obtenerEquipoVisual(equipo2);
+        String comparacion;
+        try {
+            comparacion = new GetComparacionAsyncTask(mapaEquipos.get(equipo1), mapaEquipos.get(equipo2)).execute().get();
+        } catch (Exception e) {
+            return "Al menos uno de los equipos ingresados no es correcto";
+        }
+        if (!comparacion.equals("")) return comparacion;
+        else return "La comparación entre " + equipoVisual1 + " y " + equipoVisual2 + " no pudo ser realizada";
     }
 }
