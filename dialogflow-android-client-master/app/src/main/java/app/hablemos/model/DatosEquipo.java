@@ -22,51 +22,10 @@ public class DatosEquipo {
         this.dt = dt;
     }
 
-    public String getFundacion() {
-        return fundacion;
-    }
-
-    public void setFundacion(String fundacion) {
-        this.fundacion = fundacion;
-    }
-
-    public String getApodos() {
-        return apodos;
-    }
-
-    public void setApodos(String apodos) {
-        this.apodos = apodos;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public String getEstadio() {
-        return estadio;
-    }
-
-    public void setEstadio(String estadio) {
-        this.estadio = estadio;
-    }
-
-    public String getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(String capacidad) {
-        this.capacidad = capacidad;
-    }
-
-    public String getDt() {
-        return dt;
-    }
-
-    public void setDt(String dt) {
-        this.dt = dt;
+    @Override
+    public String toString() {
+        return " es un equipo de primera división argentina ubicado en " + ubicacion + ". Su fundación fue el " + fundacion +
+                ". Su apodo es " + apodos + ". Su estadio es " + estadio + " y tiene capacidad para " + capacidad +
+                " y actualmente está siendo dirigido por " + dt;
     }
 }
