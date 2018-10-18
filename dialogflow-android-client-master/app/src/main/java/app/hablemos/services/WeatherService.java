@@ -1,14 +1,12 @@
 package app.hablemos.services;
 
-import android.os.AsyncTask;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import app.hablemos.AsyncTasks.GetWeatherAsyncTask;
 
-public class WeatherService extends AsyncTask<Void, Void, Boolean> {
+public class WeatherService {
 
     private static final Double HEAT_LIMIT_TEMPERATURE = 25.0D;
     private static final Double HEAT_LOWER_LIMIT_OUTDOOR_ACTIVITY = 10.0D;
@@ -74,8 +72,4 @@ public class WeatherService extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
-    @Override
-    protected Boolean doInBackground(Void... voids) {
-        return null;
-    }
 }
