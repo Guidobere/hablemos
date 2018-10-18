@@ -1,4 +1,4 @@
-package app.hablemos.AsyncTasks;
+package app.hablemos.asynctasks;
 
 import android.os.AsyncTask;
 
@@ -23,16 +23,16 @@ public class GetPosicionesAsyncTask extends AsyncTask<Void, Void, List<EquipoPos
         }
 
         List<EquipoPosicionado> eqs = new ArrayList<EquipoPosicionado>();
-
-        Elements rows = document.select("#posiciones tbody tr");
-        for (int i = 0; i<rows.size(); i++) {
-            Elements cells = rows.get(i).children();
-            eqs.add(new EquipoPosicionado(cells.get(1).text(), Integer.parseInt(cells.get(0).text()), Integer.parseInt(cells.get(2).text()),
-                    Integer.parseInt(cells.get(3).text()), Integer.parseInt(cells.get(4).text()), Integer.parseInt(cells.get(5).text()),
-                    Integer.parseInt(cells.get(6).text()), Integer.parseInt(cells.get(7).text()), Integer.parseInt(cells.get(8).text()),
-                    Integer.parseInt(cells.get(9).text())));
+        if(document != null) {
+            Elements rows = document.select("#posiciones tbody tr");
+            for (int i = 0; i < rows.size(); i++) {
+                Elements cells = rows.get(i).children();
+                eqs.add(new EquipoPosicionado(cells.get(1).text(), Integer.parseInt(cells.get(0).text()), Integer.parseInt(cells.get(2).text()),
+                        Integer.parseInt(cells.get(3).text()), Integer.parseInt(cells.get(4).text()), Integer.parseInt(cells.get(5).text()),
+                        Integer.parseInt(cells.get(6).text()), Integer.parseInt(cells.get(7).text()), Integer.parseInt(cells.get(8).text()),
+                        Integer.parseInt(cells.get(9).text())));
+            }
         }
-
         return eqs;
     }
 }

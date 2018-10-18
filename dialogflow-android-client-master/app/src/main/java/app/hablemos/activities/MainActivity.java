@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private String OPEN_WEATHER_MAP_API = "ea574594b9d36ab688642d5fbeab847e";
     /* Please Put your API KEY here */
 
+    int temperatura;
+
     //-------------------------------------------*CLIMA VERSION CARO
 
     @Override
@@ -165,9 +167,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         footballService = new FootballService();
 
         //check for TTS data
-        Intent checkTTSIntent = new Intent();
-        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        checkForTTSData();
 
         queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -193,8 +193,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         weatherIcon = (TextView) findViewById(R.id.weather_icon);
         weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weathericons-regular-webfont.ttf");
         weatherIcon.setTypeface(weatherFont);
-
-        taskLoadUp(city);
 
         selectCity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +225,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         });
 
 
+    }
+
+    private void checkForTTSData() {
+        Intent checkTTSIntent = new Intent();
+        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
     }
 
     public void taskLoadUp(String query) {
@@ -263,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     cityField.setText(json.getString("name").toUpperCase(Locale.US) + ", " + json.getJSONObject("sys").getString("country"));
                     detailsField.setText(details.getString("description").toUpperCase(Locale.US));
-                    currentTemperatureField.setText(String.format("%.2f", main.getDouble("temp")) + "°");
+                    currentTemperatureField.setText(main.getString("temp"));
                     humidity_field.setText("Humidity: " + main.getString("humidity") + "%");
                     pressure_field.setText("Pressure: " + main.getString("pressure") + " hPa");
                     updatedField.setText(df.format(new Date(json.getLong("dt") * 1000)));
@@ -389,7 +393,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     private void escucharAbuelo() {
-        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
         micButton.setEnabled(false);
         aiService.startListening();
     }
@@ -421,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     public void onListeningStarted() {
-        // show recording indicator
+        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -504,38 +507,88 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void personalizarMensaje(){
-        switch (speech) {
-            case "tarde":
-                pedirAlaBase("tarde");
-                break;
-            case "mañana":
-                pedirAlaBase("mañana");
-                break;
-            case "noche":
-                pedirAlaBase("noche");
-                break;
-            case "glucosa-mañana":
-                pedirAlaBaseSobreGlucosa("mañana");
-                break;
-            case "glucosa-noche":
-                pedirAlaBaseSobreGlucosa("noche");
-                break;
-            case "glucosa-tarde":
-                pedirAlaBaseSobreGlucosa("tarde");
-                break;
-            case "presión-mañana":
-                pedirAlaBaseSobrePresion("mañana");
-                break;
-            case "presión-noche":
-                pedirAlaBaseSobrePresion("noche");
-                break;
-            case "presión-tarde":
-                pedirAlaBaseSobrePresion("tarde");
-                break;
-            default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
-                resultTextView.setText(speech);
-                myTTS.speak(speech,0,null, "default");
-                break;
+        if (speech.contains("_")) {
+            String result = "";
+            String[] pedido = speech.split("_");
+            String accion = pedido[0];
+            String equipo = "";
+            switch (accion) {
+                case "posicion":
+                    equipo = pedido[1];
+                    result = footballService.getPosicionEquipo(equipo);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "posicionEquipo");
+                    break;
+                case "topN":
+                    int n = Integer.parseInt(pedido[1]);
+                    result = footballService.getTopNEquipos(n);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "topN");
+                    break;
+                case "equipoEnPosicion":
+                    int posicion = Integer.parseInt(pedido[1]);
+                    result = footballService.getEquipoEnPosicion(posicion);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "equipoEnPosicion");
+                    break;
+                case "proximoPartido":
+                    equipo = pedido[1];
+                    //TODO
+                    break;
+                case "ultimoPartido":
+                    equipo = pedido[1];
+                    //TODO
+                    break;
+                case "datos":
+                    equipo = pedido[1];
+                    result = footballService.getDatosEquipo(equipo);
+                    resultTextView.setText(result);
+                    myTTS.speak(result,0,null, "datosEquipo");
+                    break;
+                case "estadisticas":
+                    equipo = pedido[1];
+                    //TODO
+                    break;
+                case "comparacion":
+                    String equipo1 = pedido[1];
+                    String equipo2 = pedido[2];
+                    //TODO
+                    break;
+            }
+        } else {
+            switch (speech) {
+                case "tarde":
+                    pedirAlaBase("tarde");
+                    break;
+                case "mañana":
+                    pedirAlaBase("mañana");
+                    break;
+                case "noche":
+                    pedirAlaBase("noche");
+                    break;
+                case "glucosa-mañana":
+                    pedirAlaBaseSobreGlucosa("mañana");
+                    break;
+                case "glucosa-noche":
+                    pedirAlaBaseSobreGlucosa("noche");
+                    break;
+                case "glucosa-tarde":
+                    pedirAlaBaseSobreGlucosa("tarde");
+                    break;
+                case "presión-mañana":
+                    pedirAlaBaseSobrePresion("mañana");
+                    break;
+                case "presión-noche":
+                    pedirAlaBaseSobrePresion("noche");
+                    break;
+                case "presión-tarde":
+                    pedirAlaBaseSobrePresion("tarde");
+                    break;
+                default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
+                    resultTextView.setText(speech);
+                    myTTS.speak(speech, 0, null, "default");
+                    break;
+            }
         }
     }
 
@@ -629,7 +682,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
-                                setearCronReporte();
+                                iniciarServicioScheduler();
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
@@ -694,8 +747,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 Log.w(TAG, error.toString());
 
                 //Si error es del reconocimiento de voz se muestra un mensaje preestablecido.
-                if(error.toString().contains(getString(R.string.errorSpeechRecog)))
+                if(error.toString().contains(getString(R.string.errorSpeechRecog))) {
                     resultTextView.setText(getString(R.string.errorReconVoz));
+                    myTTS.speak(getString(R.string.errorReconVoz), 0, null, "default");
+                }
                 else
                     resultTextView.setText(error.toString());
 
@@ -746,45 +801,29 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-    public void setearCronReporte(){
-
+    public void iniciarServicioScheduler(){
         Intent intent = new Intent(this, SchedulerService.class);
         Bundle mBundle = new Bundle();
         mBundle.putString("1", mailQueInicioSesion);
         mBundle.putString("2", nombreAbuelo);
         intent.putExtras(mBundle);
         startService(intent);
-/*
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent emailIntent = new Intent(this, EmailReceiver.class);
-        emailIntent.putExtra("nombreAbuelo", nombreAbuelo);
-        emailIntent.putExtra("mailQueInicioSesion", mailQueInicioSesion);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, emailIntent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
-
-        // Clear previous everyday pending intent if exists.
-        if (null != pendingEmailIntent) {
-            alarmManager.cancel(pendingEmailIntent);
-        }
-        pendingEmailIntent = pendingIntent;*/
-        /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
     }
 
     public void onStop(){
         super.onStop();
-        myTTS.shutdown();
+        if(myTTS!=null && myTTS.isSpeaking())
+            myTTS.stop();
     }
 
     public void onResume(){
         super.onResume();
-        myTTS = new TextToSpeech(this, this);
     }
 
+    //enviarNotificacionMedicamentos
     private void manejarRespuestaNotificacion(Bundle extras) {
         int tipoNotificacion = extras.getInt("tipoNotificacion");
+
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD){
             String turno = extras.getString("extraInfo");
             pedirAlaBase(turno);
@@ -792,5 +831,16 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 getString(R.string.interaccionTitulo_NotificacionSalud), "Si",
                 getString(R.string.interaccionTexto_AbrirNotificacionSalud));
         }
+
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){
+
+            loQueDiceYescribe("¿Queres ir a pasear?");
+        }
+
+    }
+
+    public boolean estaLindo(){
+        taskLoadUp(city);
+        return (Integer.parseInt(currentTemperatureField.getText().toString())>15);
     }
 }

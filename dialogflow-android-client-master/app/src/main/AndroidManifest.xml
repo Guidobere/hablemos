@@ -38,6 +38,7 @@
 
         <receiver android:name=".receivers.EmailReceiver"></receiver>
         <receiver android:name=".receivers.HealthReceiver"></receiver>
+        <receiver android:name=".receivers.ClimaReceiver"></receiver>
         <receiver android:name=".receivers.NotificationDismissReceiver"></receiver>
 
         <service android:name=".backgroundServices.SchedulerService" />

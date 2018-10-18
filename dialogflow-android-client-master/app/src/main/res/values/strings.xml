@@ -10,8 +10,10 @@
     <string name="mail">hablemosproyectofinal@gmail.com</string>
     <string name="pass">aprobamoscomosea</string>
     <string name="urlImagenReporte">https://i.postimg.cc/MpTs8h49/hablemos-320x240-fenix.png</string>
-    <string name="minutosTimeoutNotificacion">120</string>
     <string name="horaReporte">9</string>
+
+    <!-- Clima -->
+    <string name="horarioClima">13</string>
 
     <!-- Salud -->
     <string name="horarioSaludManiana">10</string>
@@ -105,9 +107,11 @@
     <string name="interaccionTexto_EnviarNotificacionSalud">Se envió la notificación de salud</string>
     <string name="interaccionTexto_CerrarNotificacionSalud">El usuario cerró la notificación de salud</string>
     <string name="interaccionTexto_AbrirNotificacionSalud">El usuario tocó la notificación de salud</string>
+    <string name="interaccionTexto_VencerNotificacionSalud">El usuario no abrió la notificación de salud a tiempo</string>
 
     <!-- Notificaciones -->
-    <string name="notificacionTexto_Salud">Tocá acá para saber cuales.</string>
+    <string name="notificacionTexto_Salud">Tocá una vez acá para saber cuáles.</string>
+    <string name="notificacionTexto_Clima">¿Queres salir a pasear?.</string>
 
     <string name="cancelar">Cancelar</string>
     <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>
