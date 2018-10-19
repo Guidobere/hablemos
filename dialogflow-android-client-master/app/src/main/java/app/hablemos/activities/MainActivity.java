@@ -539,11 +539,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     break;
                 case "proximoPartido":
                     equipo = pedido[2].trim();
-                    /*TODO
                     if(equipo.equalsIgnoreCase("miEquipo"))
                         result = footballService.getProximoPartido(equipoAbuelo);
                     else
-                        result = footballService.getProximoPartido(equipo);*/
+                        result = footballService.getProximoPartido(equipo);
                     loQueDiceYescribe(result,"proximoPartido");
                     break;
                 case "ultimoPartido":

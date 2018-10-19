@@ -34,91 +34,16 @@ public class EquipoPosicionado {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public int getPosicion() {
         return posicion;
-    }
-
-    public void setPosicion(int posicion) {
-        this.posicion = posicion;
-    }
-
-    public int getPuntos() {
-        return puntos;
-    }
-
-    public void setPuntos(int puntos) {
-        this.puntos = puntos;
-    }
-
-    public int getPartidosJugados() {
-        return partidosJugados;
-    }
-
-    public void setPartidosJugados(int partidosJugados) {
-        this.partidosJugados = partidosJugados;
-    }
-
-    public int getPartidosGanados() {
-        return partidosGanados;
-    }
-
-    public void setPartidosGanados(int partidosGanados) {
-        this.partidosGanados = partidosGanados;
-    }
-
-    public int getPartidosEmpatados() {
-        return partidosEmpatados;
-    }
-
-    public void setPartidosEmpatados(int partidosEmpatados) {
-        this.partidosEmpatados = partidosEmpatados;
-    }
-
-    public int getPartidosPerdidos() {
-        return partidosPerdidos;
-    }
-
-    public void setPartidosPerdidos(int partidosPerdidos) {
-        this.partidosPerdidos = partidosPerdidos;
-    }
-
-    public int getGolesAFavor() {
-        return golesAFavor;
-    }
-
-    public void setGolesAFavor(int golesAFavor) {
-        this.golesAFavor = golesAFavor;
-    }
-
-    public int getGolesEnContra() {
-        return golesEnContra;
-    }
-
-    public void setGolesEnContra(int golesEnContra) {
-        this.golesEnContra = golesEnContra;
-    }
-
-    public int getDiferencia() {
-        return diferencia;
-    }
-
-    public void setDiferencia(int diferencia) {
-        this.diferencia = diferencia;
     }
 
     @Override
     public String toString() {
         return nombre + " está en la posición " + posicion + " con " + puntos +
-                " puntos, jugó " + partidosJugados +
-                " partidos, ganó " + partidosGanados +
-                ", empató " + partidosEmpatados +
-                ", perdió " + partidosPerdidos +
-                ", hizo " + golesAFavor +
-                " goles, le convirtieron " + golesEnContra +
-                " y su diferencia de gol es " + diferencia;
+                " puntos.\nJugó " + partidosJugados + " partidos, ganó " + partidosGanados +
+                ", empató " + partidosEmpatados + " y perdió " + partidosPerdidos +
+                ".\nHizo " + golesAFavor + " goles, le convirtieron " + golesEnContra +
+                " y su diferencia de gol es " + diferencia + ".";
     }
 }
