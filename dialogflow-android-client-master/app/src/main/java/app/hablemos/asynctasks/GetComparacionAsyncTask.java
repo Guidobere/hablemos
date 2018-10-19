@@ -25,7 +25,11 @@ public class GetComparacionAsyncTask extends AsyncTask<Void, Void, String> {
         }
 
         if (document != null) {
-            return document.select("#infoequipo").get(0).text().replace("Historial de " + equipo1, "").replace("Historial de " + equipo2, "").trim(); //$("#infoequipo")[0].innerText.replace("Historial de " + eq1, "").replace("Historial de " + eq2, "").trim();
+            String result = document.select("#infoequipo").get(0).text().replace("Historial de " + equipo1, "").replace("Historial de " + equipo2, "").trim(); //$("#infoequipo")[0].innerText.replace("Historial de " + eq1, "").replace("Historial de " + eq2, "").trim();
+            if (result.contains("Jugaron 0 veces")) {
+                return "No existe historial entre " + equipo1 + " y " + equipo2;
+            }
+            return result.replace("en Primera", "entre sí.");
         } else
             return "";
     }
