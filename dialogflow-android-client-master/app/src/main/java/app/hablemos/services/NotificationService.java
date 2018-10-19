@@ -176,8 +176,10 @@ public class NotificationService {
             observacion = context.getString(R.string.interaccionTexto_CerrarNotificacionSalud);
         }
 
-        InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
-        interactionsService.guardarInteraccion(mailQueInicioSesion, titulo, "No", observacion);
+        if(!TextUtils.isEmpty(titulo)){
+            InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
+            interactionsService.guardarInteraccion(mailQueInicioSesion, titulo, "No", observacion);
+        }
     }
 
     public void registrarNotificacionVencida(Context context, int tipoNotificacion){
