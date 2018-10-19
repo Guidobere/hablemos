@@ -40,8 +40,8 @@
                         android:layout_width="180dp"
                         android:layout_height="180dp"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/registro"
-                        android:contentDescription="@string/imagenregistro" />
+                        android:contentDescription="@string/imagenregistro"
+                        android:src="@drawable/registro" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -59,9 +59,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgusericon"
                         android:padding="3dp"
-                        android:src="@drawable/nombreabuelo"
-                        android:contentDescription="@string/imgusericon" />
+                        android:src="@drawable/nombreabuelo" />
 
                     <EditText
                         android:id="@+id/txtAbuelo"
@@ -73,11 +73,11 @@
                         android:layout_toEndOf="@id/imageView_userIcon"
                         android:background="@color/editTextColor"
                         android:hint="@string/nombre_abuelo"
+                        android:inputType="text"
                         android:padding="10dp"
-                        android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:textSize="15sp"
-                        android:inputType="text" />
+                        android:paddingStart="20dp"
+                        android:textSize="15sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -94,9 +94,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgpassicon"
                         android:padding="3dp"
-                        android:src="@drawable/sobre"
-                        android:contentDescription="@string/imgpassicon" />
+                        android:src="@drawable/sobre" />
 
                     <EditText
                         android:id="@+id/txtEmail"
@@ -107,11 +107,11 @@
                         android:layout_toEndOf="@+id/imageView_passIcon"
                         android:background="@color/editTextColor"
                         android:hint="@string/email_del_tutor"
+                        android:inputType="textEmailAddress"
                         android:padding="10dp"
-                        android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:textSize="15sp"
-                        android:inputType="textEmailAddress" />
+                        android:paddingStart="20dp"
+                        android:textSize="15sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -128,9 +128,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgpassicon2"
                         android:padding="3dp"
-                        android:src="@drawable/candado"
-                        android:contentDescription="@string/imgpassicon2"/>
+                        android:src="@drawable/candado" />
 
                     <EditText
                         android:id="@+id/txtContra"
@@ -143,8 +143,8 @@
                         android:hint="@string/contrase_a_tutor"
                         android:inputType="textPassword"
                         android:padding="10dp"
-                        android:paddingStart="20dp"
                         android:paddingEnd="20dp"
+                        android:paddingStart="20dp"
                         android:textSize="15sp" />
                 </RelativeLayout>
 
@@ -162,9 +162,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgpassicon2"
                         android:padding="3dp"
                         android:src="@drawable/candado"
-                        android:contentDescription="@string/imgpassicon2"
                         tools:ignore="DuplicateIds" />
 
                     <EditText
@@ -178,11 +178,10 @@
                         android:hint="@string/repetir_pwd"
                         android:inputType="textPassword"
                         android:padding="10dp"
-                        android:paddingStart="20dp"
                         android:paddingEnd="20dp"
+                        android:paddingStart="20dp"
                         android:textSize="15sp" />
                 </RelativeLayout>
-
 
 
                 <RelativeLayout
@@ -199,11 +198,11 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgpassicon3"
                         android:padding="3dp"
-                        android:src="@drawable/futbol"
-                        android:contentDescription="@string/imgpassicon3" />
+                        android:src="@drawable/futbol" />
 
-                    <EditText
+                    <!--                    <EditText
                         android:id="@+id/txtEquipo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -216,7 +215,22 @@
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
                         android:textSize="15sp"
-                        android:inputType="text" />
+                        android:inputType="text" />-->
+
+                    <Spinner
+                        android:layout_alignBottom="@+id/imageView_passIcon3"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imageView_passIcon3"
+
+                        android:padding="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingStart="20dp"
+                        android:textSize="15sp"
+                        android:id="@+id/spinnerEquipo"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -233,9 +247,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgturnomaniana"
                         android:padding="3dp"
-                        android:src="@drawable/medicamento"
-                        android:contentDescription="@string/imgturnomaniana" />
+                        android:src="@drawable/medicamento" />
 
                     <EditText
                         android:id="@+id/txtmañana"
@@ -246,11 +260,11 @@
                         android:layout_toEndOf="@+id/imageView_passIcon4"
                         android:background="@color/editTextColor"
                         android:hint="@string/medicamentos_turno_ma_ana"
+                        android:inputType="text"
                         android:padding="10dp"
-                        android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:textSize="15sp"
-                        android:inputType="text" />
+                        android:paddingStart="20dp"
+                        android:textSize="15sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -267,9 +281,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgturnotarde"
                         android:padding="3dp"
-                        android:src="@drawable/medicamento"
-                        android:contentDescription="@string/imgturnotarde"/>
+                        android:src="@drawable/medicamento" />
 
                     <EditText
                         android:id="@+id/txttarde"
@@ -280,11 +294,11 @@
                         android:layout_toEndOf="@+id/imageView_passIcon5"
                         android:background="@color/editTextColor"
                         android:hint="@string/medicamentos_turno_tarde"
+                        android:inputType="text"
                         android:padding="10dp"
-                        android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:textSize="15sp"
-                        android:inputType="text"/>
+                        android:paddingStart="20dp"
+                        android:textSize="15sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -301,9 +315,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
+                        android:contentDescription="@string/imgturnonoche"
                         android:padding="3dp"
-                        android:src="@drawable/medicamento"
-                        android:contentDescription="@string/imgturnonoche"/>
+                        android:src="@drawable/medicamento" />
 
                     <EditText
                         android:id="@+id/txtnoche"
@@ -314,30 +328,30 @@
                         android:layout_toEndOf="@+id/imageView_passIcon6"
                         android:background="@color/editTextColor"
                         android:hint="@string/medicamentos_turno_noche"
+                        android:inputType="text"
                         android:padding="10dp"
-                        android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:textSize="15sp"
-                        android:inputType="text" />
+                        android:paddingStart="20dp"
+                        android:textSize="15sp" />
                 </RelativeLayout>
 
                 <!-- GLUCOSA -->
                 <LinearLayout
+                    android:id="@+id/lblGlucosa"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
                     android:layout_below="@+id/relative7"
-                    android:id="@+id/lblGlucosa">
+                    android:orientation="horizontal">
 
                     <EditText
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:clickable="false"
+                        android:cursorVisible="false"
                         android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="none"
                         android:selectAllOnFocus="false"
                         android:text="@string/glucosa"
@@ -349,9 +363,9 @@
                     android:id="@+id/lblGlucosaMañana"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ma_ana"
+                    android:layout_below="@+id/lblGlucosa"
                     android:layout_marginStart="10dp"
-                    android:layout_below="@+id/lblGlucosa"/>
+                    android:text="@string/ma_ana" />
 
                 <LinearLayout
                     android:id="@+id/checkboxGlucosaDias"
@@ -409,9 +423,9 @@
                     android:id="@+id/lblGlucosaTarde"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tarde"
+                    android:layout_below="@+id/checkboxGlucosaDias"
                     android:layout_marginStart="10dp"
-                    android:layout_below="@+id/checkboxGlucosaDias"/>
+                    android:text="@string/tarde" />
 
                 <LinearLayout
                     android:id="@+id/checkboxGlucosaTarde"
@@ -469,10 +483,9 @@
                     android:id="@+id/lblGlucosaNoche"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/noche"
-                    android:layout_marginStart="10dp"
                     android:layout_below="@+id/checkboxGlucosaTarde"
-                    />
+                    android:layout_marginStart="10dp"
+                    android:text="@string/noche" />
 
                 <LinearLayout
                     android:id="@+id/checkboxGlucosaNoche"
@@ -530,18 +543,18 @@
                     android:id="@+id/lblPresion"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_below="@+id/checkboxGlucosaNoche">
+                    android:layout_below="@+id/checkboxGlucosaNoche"
+                    android:orientation="horizontal">
 
                     <EditText
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:clickable="false"
+                        android:cursorVisible="false"
                         android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="none"
                         android:selectAllOnFocus="false"
                         android:text="@string/presion_vista"
@@ -553,9 +566,9 @@
                     android:id="@+id/lblPresionMañana"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ma_ana"
+                    android:layout_below="@+id/lblPresion"
                     android:layout_marginStart="10dp"
-                    android:layout_below="@+id/lblPresion" />
+                    android:text="@string/ma_ana" />
 
                 <LinearLayout
                     android:id="@+id/checkboxPresionMañana"
@@ -613,9 +626,9 @@
                     android:id="@+id/lblPresionTarde"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tarde"
+                    android:layout_below="@+id/checkboxPresionMañana"
                     android:layout_marginStart="10dp"
-                    android:layout_below="@+id/checkboxPresionMañana" />
+                    android:text="@string/tarde" />
 
                 <LinearLayout
                     android:id="@+id/checkboxPresionTarde"
@@ -673,9 +686,9 @@
                     android:id="@+id/lblPresionNoche"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/noche"
+                    android:layout_below="@+id/checkboxPresionTarde"
                     android:layout_marginStart="10dp"
-                    android:layout_below="@+id/checkboxPresionTarde" />
+                    android:text="@string/noche" />
 
                 <LinearLayout
                     android:id="@+id/checkboxPresionNoche"
@@ -740,8 +753,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
 
                         <Button
                             android:id="@+id/btnRegister"
@@ -762,13 +774,13 @@
                             android:fontFamily="sans-serif-condensed"
                             android:text="Guardar"
                             android:textSize="13sp"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <Button
                             android:id="@+id/btnCancel"
                             android:layout_width="wrap_content"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:backgroundTint="@color/colorPrimary"
                             android:fontFamily="sans-serif-condensed"
                             android:text="@string/cancelar"

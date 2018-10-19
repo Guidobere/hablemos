@@ -8,9 +8,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,9 +26,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import app.hablemos.R;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
+import app.hablemos.services.FootballService;
 
 
 public class RegistroActivity extends AppCompatActivity {
@@ -52,13 +60,13 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText equipoFavorito;
     private EditText contra;
     private EditText repetirPwd;
-
+    private Spinner spinnerEquipo;
     //MEDICAMENTOS
     private EditText medicamentosM;
     private EditText medicamentosT;
     private EditText medicamentosN;
 
-
+    private FootballService footballService;
     private String mailQueInicioSesion;
     private int a=0;
 
@@ -80,7 +88,7 @@ public class RegistroActivity extends AppCompatActivity {
 
         nombreAbuelo = findViewById(R.id.txtAbuelo);
         mailTutor = findViewById(R.id.txtEmail);
-        equipoFavorito = findViewById(R.id.txtEquipo);
+        //equipoFavorito = findViewById(R.id.txtEquipo);
         contra = findViewById(R.id.txtContra);
         repetirPwd = findViewById(R.id.txtContra2);
         medicamentosM = findViewById(R.id.txtmañana);
@@ -89,6 +97,12 @@ public class RegistroActivity extends AppCompatActivity {
         Button botonRegistro = findViewById(R.id.btnRegister);
         Button botonGuardar = findViewById(R.id.btnGuardar);
         Button botonCancel = findViewById(R.id.btnCancel);
+
+        footballService = new FootballService();
+
+        spinnerEquipo = (Spinner) findViewById(R.id.spinnerEquipo);
+
+        cargarEquiposEnSpinner();
 
         if(mAuth.getCurrentUser() != null) {
             botonRegistro.setVisibility(View.GONE);
@@ -151,6 +165,23 @@ public class RegistroActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    private void cargarEquiposEnSpinner() {
+        List<String> equiposPrimera = footballService.getEquiposDePrimera();
+        List<String> spinnerArray = new ArrayList<>();
+        spinnerArray.add(0,"Ninguno");
+        Collections.sort(equiposPrimera, new Comparator<String>() {
+            @Override
+            public int compare(String equipo1, String equipo2) {
+                return equipo1.compareToIgnoreCase(equipo2);
+            }
+        });
+        spinnerArray.addAll(equiposPrimera);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEquipo.setAdapter(adapter);
     }
 
     //FUNCION PARA CREAR USUARIO EN FIREBASE
@@ -282,7 +313,7 @@ public class RegistroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //Si no se repite o algo, lo guarda en la base
-                            String userID=writeNewUser( nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),equipoFavorito.getText().toString().toLowerCase(),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase());
+                            String userID=writeNewUser( nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase());
                             if(userID != "" && userID != null) {
                                 CrearNuevoRecordatoriosGlucosa();
                                 CrearNuevoRecordatoriosPresion();
@@ -300,7 +331,7 @@ public class RegistroActivity extends AppCompatActivity {
         if(!CamposCompletadosCorrectamente())
             return;
 
-        UpdateUsuer();
+        UpdateUser();
         if(ActualizarRecordatorioPresion)
             UpdatePresion();
         else
@@ -351,11 +382,11 @@ public class RegistroActivity extends AppCompatActivity {
             camposEstanOk = false;
         }
 
-        if (TextUtils.isEmpty(equipoFavorito.getText().toString())) {
+/*        if (TextUtils.isEmpty(spinnerEquipo.getSelectedItem().toString())) {
             Toast.makeText(getApplicationContext(), getString(R.string.equipoVacio), Toast.LENGTH_SHORT).show();
             camposEstanOk = false;
             return camposEstanOk;
-        }
+        }*/
         return  camposEstanOk;
     }
 
@@ -399,10 +430,14 @@ public class RegistroActivity extends AppCompatActivity {
                     repetirPwd.setText("123456");
                     repetirPwd.setFocusable(false);
                     repetirPwd.setEnabled(false);
-                    equipoFavorito.setText(u.equipo);
+                    //equipoFavorito.setText(u.equipo);
                     medicamentosM.setText(u.remediosManiana);
                     medicamentosT.setText(u.remediosTarde);
                     medicamentosN.setText(u.remediosNoche);
+
+                    spinnerEquipo.setSelection(getIndex(spinnerEquipo, u.equipo));
+
+
 
 /*                    CrearNuevoRecordatoriosGlucosa();
                     CrearNuevoRecordatoriosPresion();*/
@@ -419,6 +454,17 @@ public class RegistroActivity extends AppCompatActivity {
 
         });
     }
+
+    private int getIndex(Spinner spinnerEquipo, String equipo){
+        for (int i=0;i<spinnerEquipo.getCount();i++){
+            if (spinnerEquipo.getItemAtPosition(i).toString().equalsIgnoreCase(equipo)){
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
 
 
     public void pedirAlaBaseSobreGlucosa(final String email){
@@ -563,12 +609,12 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
 
-    private void UpdateUsuer() {
+    private void UpdateUser() {
         //uso la variable global userID obtenida previamente en funcion "pedirAlaBaseUsuarioByEmail(email)"
         // luego Asigno en la tabla users en el child "userID" (con el valor de ese userID) los nuevos valores del usuario
         String userID=UserID !=null? UserID : "" ;
         if(userID!= "")
-            myUsersFb.child(userID).setValue(new User(userID,nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),equipoFavorito.getText().toString().toLowerCase(),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase()
+            myUsersFb.child(userID).setValue(new User(userID,nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase()
             ));
         else{
             Toast.makeText(RegistroActivity.this, "no se pudo actualizar al usuario", Toast.LENGTH_SHORT).show();

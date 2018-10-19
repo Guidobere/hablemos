@@ -29,12 +29,22 @@ public class FootballService {
         }
     }
 
-    public HashMap<String, String> getMapaEquiposDePrimera() {
-        HashMap<String, String> mapaEquiposPrimera = new HashMap<>();
+    public List<String> getEquiposDePrimera() {
+        List<String> equipos = new ArrayList<>();
         for (Equipo equipo : this.equiposDePrimera) {
-            mapaEquiposPrimera.put(equipo.getNombreReferencia(), equipo.getNombre());
+            equipos.add(equipo.getNombre());
         }
-        return mapaEquiposPrimera;
+        return equipos;
+    }
+
+    public String getNombreReferencia(String nombreReal) {
+        String nombreReferencia = "";
+        for(Equipo eq : this.equiposDePrimera) {
+            if (eq.getNombre().equalsIgnoreCase(nombreReal)) {
+                nombreReferencia = eq.getNombreReferencia();
+            }
+        }
+        return nombreReferencia;
     }
 
     private HashMap<String,String> llenarMapaEquipos() {
