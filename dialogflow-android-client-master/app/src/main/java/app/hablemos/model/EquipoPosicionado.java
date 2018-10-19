@@ -112,13 +112,13 @@ public class EquipoPosicionado {
 
     @Override
     public String toString() {
-        return nombre + " está en la posición " + posicion + ", tiene " + puntos +
+        return nombre + " está en la posición " + posicion + " con " + puntos +
                 " puntos, jugó " + partidosJugados +
                 " partidos, ganó " + partidosGanados +
-                " partidos, empató " + partidosEmpatados +
-                " partidos, perdió " + partidosPerdidos +
-                " partidos, hizo " + golesAFavor +
+                ", empató " + partidosEmpatados +
+                ", perdió " + partidosPerdidos +
+                ", hizo " + golesAFavor +
                 " goles, le convirtieron " + golesEnContra +
-                " goles y su diferencia de gol es " + diferencia;
+                " y su diferencia de gol es " + diferencia;
     }
 }

@@ -80,10 +80,22 @@ public class FootballService {
 
     public String getTopNEquipos(int n) {
         llenarEquiposPosicionados();
-        StringBuilder respuesta = new StringBuilder("Los equipos que estan entre los mejores " + n + " son: ");
+        StringBuilder respuesta = new StringBuilder("Los equipos que están entre los mejores " + n + " son: ");
         String separador = "";
         List<EquipoPosicionado> topN = equiposPosicionados.subList(0,n);
         for (EquipoPosicionado ep : topN) {
+            respuesta.append(separador).append(ep.getNombre());
+            separador = ", ";
+        }
+        return respuesta.toString();
+    }
+
+    public String getBottomNEquipos(int n) {
+        llenarEquiposPosicionados();
+        StringBuilder respuesta = new StringBuilder("Los últimos " + n + " equipos de la tabla son: ");
+        String separador = "";
+        List<EquipoPosicionado> bottomN = equiposPosicionados.subList(this.equiposPosicionados.size() - n, this.equiposPosicionados.size());
+        for (EquipoPosicionado ep : bottomN) {
             respuesta.append(separador).append(ep.getNombre());
             separador = ", ";
         }
@@ -115,7 +127,7 @@ public class FootballService {
             return "El equipo solicitado no pudo ser encontrado";
     }
 
-    private String obtenerEquipoVisual(String equipo) {
+    public String obtenerEquipoVisual(String equipo) {
         String equipoVisual = "";
         for(Equipo eq : this.equiposDePrimera) {
             if (eq.getNombreReferencia().equalsIgnoreCase(equipo)) {

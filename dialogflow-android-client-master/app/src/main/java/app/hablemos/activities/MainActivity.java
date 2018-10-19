@@ -527,6 +527,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     result = footballService.getTopNEquipos(n);
                     loQueDiceYescribe(result,"topN");
                     break;
+                case "bottomN":
+                    int j = Integer.parseInt(pedido[2].trim());
+                    result = footballService.getBottomNEquipos(j);
+                    loQueDiceYescribe(result,"topN");
+                    break;
                 case "equipoEnPosicion":
                     int posicion = Integer.parseInt(pedido[2].trim());
                     result = footballService.getEquipoEnPosicion(posicion);
