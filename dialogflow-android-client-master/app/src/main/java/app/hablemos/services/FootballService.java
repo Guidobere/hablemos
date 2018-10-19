@@ -1,16 +1,21 @@
 package app.hablemos.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import app.hablemos.asynctasks.GetComparacionAsyncTask;
 import app.hablemos.asynctasks.GetDatosAsyncTask;
 import app.hablemos.asynctasks.GetEquiposAsyncTask;
+import app.hablemos.asynctasks.GetPartidosAsyncTask;
 import app.hablemos.asynctasks.GetPosicionesAsyncTask;
 import app.hablemos.model.DatosEquipo;
 import app.hablemos.model.Equipo;
 import app.hablemos.model.EquipoPosicionado;
+import app.hablemos.model.Partido;
 
 public class FootballService {
 
@@ -152,13 +157,8 @@ public class FootballService {
     }
 
     public String getDatosEquipo(String equipo) {
-        String pagina = "";
         String equipoVisual = obtenerEquipoVisual(equipo);
-        for(Equipo eq : this.equiposDePrimera) {
-            if (eq.getNombreReferencia().equalsIgnoreCase(equipo)) {
-                pagina = eq.getPagina();
-            }
-        }
+        String pagina = getPagina(equipo);
         if (!pagina.equals("")) {
             DatosEquipo datos = new DatosEquipo();
             try {
@@ -171,8 +171,19 @@ public class FootballService {
             return "El equipo solicitado no pudo ser encontrado";
     }
 
+    private String getPagina(String equipo) {
+        String pagina = "";
+        for(Equipo eq : this.equiposDePrimera) {
+            if (eq.getNombreReferencia().equalsIgnoreCase(equipo)) {
+                pagina = eq.getPagina();
+            }
+        }
+        return pagina;
+    }
+
     public String getEstadisticasEquipo(String equipo) {
         llenarEquiposPosicionados();
+        String equipoVisual = obtenerEquipoVisual(equipo);
         String estadisticas = "";
         for(EquipoPosicionado ep : this.equiposPosicionados) {
             if (ep.getNombre().equalsIgnoreCase(mapaEquipos.get(equipo))){
@@ -180,7 +191,7 @@ public class FootballService {
             }
         }
         if (!estadisticas.equals("")) return estadisticas;
-        else return "No pudieron encontrarse estadisticas para " + equipo;
+        else return "No pudieron encontrarse estadísticas para " + equipoVisual;
     }
 
     public String getComparacionEquipos(String equipo1, String equipo2) {
@@ -194,5 +205,36 @@ public class FootballService {
         }
         if (!comparacion.equals("")) return comparacion;
         else return "La comparación entre " + equipoVisual1 + " y " + equipoVisual2 + " no pudo ser realizada";
+    }
+
+    public String getProximoPartido(String equipo) {
+        String equipoVisual = obtenerEquipoVisual(equipo);
+        String pagina = getPagina(equipo);
+        if (!pagina.equals("")) {
+            List<Partido> partidos = new ArrayList<>();
+            try {
+                partidos = new GetPartidosAsyncTask(pagina).execute().get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            List<Partido> partidosFiltrados = new ArrayList<>();
+            for (Partido partido : partidos) {
+                if (partido.getResultado().equals("-")) {
+                    partidosFiltrados.add(partido);
+                }
+            }
+            Collections.sort(partidosFiltrados, new Comparator<Partido>() {
+                @Override
+                public int compare(Partido partido1, Partido partido2) {
+                    return partido1.getDiaDePartido().compareTo(partido2.getDiaDePartido());
+                }
+            });
+            if (partidosFiltrados.get(0).getDia().contains("Post")) {
+                return equipoVisual + " tiene un partido postergado con " + partidosFiltrados.get(0).getRival() +
+                        " sin fecha asignada, en el siguiente encuentro" + partidosFiltrados.get(1).toString();
+            }
+            return equipoVisual + partidosFiltrados.get(0).toString();
+        } else
+            return "El equipo solicitado no pudo ser encontrado";
     }
 }

@@ -1,64 +1,54 @@
 package app.hablemos.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Partido {
 
-    private Equipo local;
-    private Equipo visitante;
-    private Date fechahora;
-    private int golesLocal;
-    private int golesVisitante;
+    private String fecha;
+    private String rival;
+    private String localia;
+    private String resultado;
+    private String dia;
+    private Date diaDePartido;
 
-    public Partido() {
-
+    public Partido(String fecha, String rival, String localia, String resultado, String dia) {
+        this.fecha = fecha;
+        this.rival = rival;
+        if (localia.equalsIgnoreCase("L")) this.localia = "local";
+        else this.localia = "visitante";
+        this.resultado = resultado;
+        this.dia = dia;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.diaDePartido = formatter.parse(this.dia);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Partido(Equipo local, Equipo visitante, Date fechahora, int golesLocal, int golesVisitante) {
-        this.local = local;
-        this.visitante = visitante;
-        this.fechahora = fechahora;
-        this.golesLocal = golesLocal;
-        this.golesVisitante = golesVisitante;
+    public String getResultado() {
+        return resultado;
     }
 
-    public Equipo getLocal() {
-        return local;
+    public String getDia() {
+        return dia;
     }
 
-    public void setLocal(Equipo local) {
-        this.local = local;
+    public String getRival() {
+        return rival;
     }
 
-    public Equipo getVisitante() {
-        return visitante;
+    public Date getDiaDePartido() {
+        if (diaDePartido == null) {
+            return new Date();
+        }
+        return diaDePartido;
     }
 
-    public void setVisitante(Equipo visitante) {
-        this.visitante = visitante;
-    }
-
-    public Date getFechahora() {
-        return fechahora;
-    }
-
-    public void setFechahora(Date fechahora) {
-        this.fechahora = fechahora;
-    }
-
-    public int getGolesLocal() {
-        return golesLocal;
-    }
-
-    public void setGolesLocal(int golesLocal) {
-        this.golesLocal = golesLocal;
-    }
-
-    public int getGolesVisitante() {
-        return golesVisitante;
-    }
-
-    public void setGolesVisitante(int golesVisitante) {
-        this.golesVisitante = golesVisitante;
+    @Override
+    public String toString() {
+        return " jugará de " + localia + " contra " + rival + " el día " + dia;
     }
 }

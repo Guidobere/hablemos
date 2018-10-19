@@ -26,8 +26,10 @@ public class DatosEquipo {
 
     @Override
     public String toString() {
-        return " es un equipo de primera división argentina ubicado en " + ubicacion + ". Tiene " + edad + ", habiéndose fundado el " + fundacion +
-                ". Su apodo es " + apodos + ". Su estadio es " + estadio + ", el cual tiene capacidad para " + capacidad +
+        return " es un equipo de primera división argentina ubicado en " + ubicacion +
+                ".\nTiene " + edad + ", habiéndose fundado el " + fundacion +
+                ".\nSe apodan " + apodos + ".\nSu estadio se llama " + estadio +
+                ", el cual tiene capacidad para " + capacidad +
                 " y actualmente está siendo dirigido por " + dt + ".";
     }
 }
