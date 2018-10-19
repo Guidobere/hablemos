@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private String speech;
 
     private String nombreAbuelo = "";
+    private String equipoAbuelo = "";
     
     private int a;
 
@@ -515,7 +516,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             switch (accion) {
                 case "posicion":
                     equipo = pedido[2].trim();
-                    result = footballService.getPosicionEquipo(equipo);
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getPosicionEquipo(equipoAbuelo);
+                    else
+                        result = footballService.getPosicionEquipo(equipo);
                     loQueDiceYescribe(result,"posicionEquipo");
                     break;
                 case "topN":
@@ -530,29 +534,51 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     break;
                 case "proximoPartido":
                     equipo = pedido[2].trim();
-                    //TODO: result = footballService.getProximoPartido(equipo);
+                    /*TODO
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getProximoPartido(equipoAbuelo);
+                    else
+                        result = footballService.getProximoPartido(equipo);*/
                     loQueDiceYescribe(result,"proximoPartido");
                     break;
                 case "ultimoPartido":
                     equipo = pedido[2].trim();
-                    //TODO: result = footballService.getUltimoPartido(equipo);
+                    /*TODO
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getUltimoPartido(equipoAbuelo);
+                    else
+                        result = footballService.getUltimoPartido(equipo);*/
                     loQueDiceYescribe(result,"ultimoPartido");
                     break;
                 case "datos":
                     equipo = pedido[2].trim();
-                    result = footballService.getDatosEquipo(equipo);
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getDatosEquipo(equipoAbuelo);
+                    else
+                        result = footballService.getDatosEquipo(equipo);
                     loQueDiceYescribe(result,"datosEquipo");
                     break;
                 case "estadisticas":
                     equipo = pedido[2].trim();
-                    result = footballService.getEstadisticasEquipo(equipo);
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getEstadisticasEquipo(equipoAbuelo);
+                    else
+                        result = footballService.getEstadisticasEquipo(equipo);
                     loQueDiceYescribe(result,"estadisticasEquipo");
                     break;
                 case "comparacion":
                     String equipo1 = pedido[2].trim();
                     String equipo2 = pedido[3].trim();
-                    result = footballService.getComparacionEquipos(equipo1, equipo2);
-                    loQueDiceYescribe(result,"comparacionEquipos");
+                    if (!equipo1.equalsIgnoreCase(equipo2)) {
+                        if (equipo1.equalsIgnoreCase("miEquipo"))
+                            result = footballService.getComparacionEquipos(equipoAbuelo, equipo2);
+                        else if (equipo2.equalsIgnoreCase("miEquipo"))
+                            result = footballService.getComparacionEquipos(equipo1, equipoAbuelo);
+                        else
+                            result = footballService.getComparacionEquipos(equipo1, equipo2);
+                        loQueDiceYescribe(result, "comparacionEquipos");
+                    } else
+                        loQueDiceYescribe("Ambos equipos son iguales, no se puede comparar", "comparacionEquipos");
                     break;
             }
         } else {
@@ -678,6 +704,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
                             loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ","default");
+                            equipoAbuelo = u.equipo;
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
