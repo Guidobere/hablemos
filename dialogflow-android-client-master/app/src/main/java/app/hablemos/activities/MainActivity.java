@@ -867,8 +867,4 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     }
 
-    public boolean estaLindo(){
-        taskLoadUp(city);
-        return (Integer.parseInt(currentTemperatureField.getText().toString())>15);
-    }
 }
