@@ -263,7 +263,7 @@ public class FootballService {
             Calendar calendar = Calendar.getInstance();
             String now = (calendar.get(Calendar.DATE)) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
             if (partidosFiltrados.get(partidosFiltrados.size()-1).getDia().equals(now)) {
-                retorno += "\nTené en cuenta que el partido se puede estar jugando en este momento.";
+                retorno += "\nTené en cuenta que el partido se puede estar jugando en este momento y el resultado puede variar.";
             }
             return retorno;
         } else
