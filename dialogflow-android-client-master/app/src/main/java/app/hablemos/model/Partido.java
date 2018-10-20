@@ -55,4 +55,8 @@ public class Partido {
     public String toStringUltimo() {
         return " jugó de " + localia + " contra " + rival + " el día " + dia + " por la fecha " + fecha + " y terminó " + resultado;
     }
+
+    public String toStringEnCurso() {
+        return " está jugando de " + localia + " contra " + rival + " por la fecha " + fecha + " y va " + resultado;
+    }
 }
