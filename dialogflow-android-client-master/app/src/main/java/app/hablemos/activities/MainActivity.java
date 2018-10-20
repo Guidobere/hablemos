@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,6 +63,7 @@ import ai.api.util.StringUtils;
 import app.hablemos.R;
 import app.hablemos.backgroundServices.SchedulerService;
 import app.hablemos.model.Function;
+import app.hablemos.model.MiContador;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.SacadorDeAcentos;
 import app.hablemos.model.User;
@@ -112,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     boolean vieneDeNotificacion;
     boolean rtaNotificacionManejada;
 
+    //Multi Tap en el boton "editar registro".
+    public int contadorClicksEditarRegistro;
+    private MiContador timer;
+
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
     DatabaseReference myUsersFb2 = FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
@@ -121,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private InteractionsService interactionsService;
     private PendingIntent pendingEmailIntent;
 
+    int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         mailQueInicioSesion = getIntent().getExtras().getString("1");
         vieneDeNotificacion = getIntent().getExtras().getBoolean("vieneDeNotificacion");
         rtaNotificacionManejada = false;
+        contadorClicksEditarRegistro = 0;
 
         TAG = getString(R.string.tagMain);
 
@@ -157,6 +166,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         aiDataService = new AIDataService(this, config);
 
         footballService = new FootballService();
+
+
+/*        timer = new MiContador(3000,1000);
+        timer.start();
+        timer.onFinish(contadorClicksEditarRegistro);*/
 
         //check for TTS data
         checkForTTSData();
@@ -193,9 +207,29 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
+
         if(id == R.id.configurar) {
-            startActivity(RegistroActivity.class);
-            return true;
+            contadorClicksEditarRegistro+=1;
+
+            new CountDownTimer(5000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    //Log.w("contador tiempo", "seconds remaining: " + millisUntilFinished / 1000);
+                    //resultTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                }
+
+                public void onFinish() {
+                    contadorClicksEditarRegistro =0;
+                    //resultTextView.setText("Done");
+                    //Log.w("contador tiempo", "done");
+                }
+            }.start();
+
+            if(contadorClicksEditarRegistro > 5){
+                startActivity(RegistroActivity.class);
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -738,6 +772,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void onResume(){
+        contadorClicksEditarRegistro =0;
         super.onResume();
     }
 
