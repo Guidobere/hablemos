@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import app.hablemos.asynctasks.GetComparacionAsyncTask;
 import app.hablemos.asynctasks.GetDatosAsyncTask;
 import app.hablemos.asynctasks.GetEquiposAsyncTask;
+import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
 import app.hablemos.asynctasks.GetPartidosAsyncTask;
 import app.hablemos.asynctasks.GetPosicionesAsyncTask;
 import app.hablemos.model.DatosEquipo;
 import app.hablemos.model.Equipo;
 import app.hablemos.model.EquipoPosicionado;
 import app.hablemos.model.Partido;
+import app.hablemos.model.PartidoActual;
 
 public class FootballService {
 
@@ -228,11 +229,26 @@ public class FootballService {
                 }
             }
             Collections.sort(partidosFiltrados, comparadorDeFecha);
+            String retorno = "";
+            int posEnLista = 0;
             if (partidosFiltrados.get(0).getDia().contains("Post")) {
-                return equipoVisual + " tiene un partido postergado con " + partidosFiltrados.get(0).getRival() +
+                retorno += equipoVisual + " tiene un partido postergado con " + partidosFiltrados.get(0).getRival() +
                         " sin fecha asignada, en el siguiente encuentro" + partidosFiltrados.get(1).toString();
+                posEnLista = 1;
             }
-            return equipoVisual + partidosFiltrados.get(0).toString();
+            retorno += equipoVisual + partidosFiltrados.get(0).toString();
+            Calendar calendar = Calendar.getInstance();
+            String now = (calendar.get(Calendar.DATE)) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
+            if (partidosFiltrados.get(posEnLista).getDia().equals(now)) {
+                List<PartidoActual> partidosActuales = getPartidosActuales();
+                for(PartidoActual partidoActual : partidosActuales) {
+                    if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
+                            partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
+                        retorno += " a las " + partidoActual.getHoraJuego();
+                    }
+                }
+            }
+            return retorno;
         } else
             return "El equipo solicitado no pudo ser encontrado";
     }
@@ -259,15 +275,63 @@ public class FootballService {
                 }
             }
             Collections.sort(partidosFiltrados, comparadorDeFecha);
-            String retorno = equipoVisual + partidosFiltrados.get(partidosFiltrados.size()-1).toStringUltimo();
+            String retorno = equipoVisual;
             Calendar calendar = Calendar.getInstance();
             String now = (calendar.get(Calendar.DATE)) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
             if (partidosFiltrados.get(partidosFiltrados.size()-1).getDia().equals(now)) {
-                retorno += "\nTené en cuenta que el partido se puede estar jugando en este momento y el resultado puede variar.";
+                List<PartidoActual> partidosActuales = getPartidosActuales();
+                for(PartidoActual partidoActual : partidosActuales) {
+                    if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
+                            partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
+                        if(partidoActual.getEstado().equalsIgnoreCase("jugandose")) {
+                            retorno += partidosFiltrados.get(partidosFiltrados.size()-1).toStringEnCurso() + " a los " + Integer.parseInt(partidoActual.getTiempoJuego().replace("'", "")) + " minutos.";
+                        } else if(partidoActual.getEstado().equalsIgnoreCase("finaliza")) {
+                            retorno += partidosFiltrados.get(partidosFiltrados.size()-1).toStringUltimo();
+                        }
+                        if (partidoActual.getGolesEquipoLocal()==1){
+                            retorno += "\nEl gol del local lo marcó " +
+                                    partidoActual.getGolesLocal().split("'")[1].replace(";", "").replace(".", "").trim() + " a los " +
+                                    partidoActual.getGolesLocal().split("'")[0] + " minutos.";
+                        } else if (partidoActual.getGolesEquipoLocal()>1){
+                            retorno += "\nLos goles del equipo local fueron marcados por " + obtenerMarcadores(partidoActual.getGolesLocal());
+                        }
+                        if (partidoActual.getGolesEquipoVisitante()==1){
+                            retorno += "\nEl gol de la visita lo marcó " +
+                                    partidoActual.getGolesVisitante().split("'")[1].replace(";", "").replace(".", "").trim() + " a los " +
+                                    partidoActual.getGolesVisitante().split("'")[0] + " minutos.";
+                        } else if (partidoActual.getGolesEquipoVisitante()>1){
+                            retorno += "\nLos goles de la visita fueron marcados por " + obtenerMarcadores(partidoActual.getGolesVisitante());
+                        }
+                    }
+                }
             }
             return retorno;
         } else
             return "El equipo solicitado no pudo ser encontrado";
+    }
+
+    private String obtenerMarcadores(String golesLocal) {
+        String separador = "";
+        String marcadores = "";
+        String[] marcadoresArray = golesLocal.split(";");
+        for (String str : marcadoresArray) {
+            String[] submarcadoresArray = str.split("'");
+            String tiempo = submarcadoresArray[0].trim();
+            String marcador = submarcadoresArray[1].trim().replace("e.c.", "en contra").replace(".", "");
+            marcadores += separador + marcador + " a los " + tiempo + " minutos";
+            separador = ", ";
+        }
+        return marcadores + ".";
+    }
+
+    public List<PartidoActual> getPartidosActuales() {
+        List<PartidoActual> partidosActuales = new ArrayList<>();
+        try {
+            partidosActuales = new GetPartidosActualesAsyncTask().execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return partidosActuales;
     }
 
     private Comparator<Partido> comparadorDeFecha = new Comparator<Partido>() {
