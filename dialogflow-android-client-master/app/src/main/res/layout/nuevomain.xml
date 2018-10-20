@@ -89,7 +89,7 @@
         android:layout_marginTop="380dp"
         android:id="@+id/ulti">
 
-        <TextView
+        <app.hablemos.view.JustifyTextView
             android:id="@+id/resultTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

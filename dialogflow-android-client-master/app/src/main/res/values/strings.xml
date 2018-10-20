@@ -20,6 +20,11 @@
     <string name="horarioSaludTarde">16</string>
     <string name="horarioSaludNoche">21</string>
 
+    <!-- JustifyTextView -->
+    <string name="justificarTextoDesde">50</string>
+    <string name="escalarLineaDesde">15</string>
+    <string name="completarLineaHasta">20</string>
+
     <string name="action_settings">Settings</string>
     <string name="non_empty_query">No se ha ingresado un texto</string>
     <string name="escuchando">Escuchando…</string>
