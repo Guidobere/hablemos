@@ -63,7 +63,6 @@ import ai.api.util.StringUtils;
 import app.hablemos.R;
 import app.hablemos.backgroundServices.SchedulerService;
 import app.hablemos.model.Function;
-import app.hablemos.model.MiContador;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.SacadorDeAcentos;
 import app.hablemos.model.User;
@@ -117,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     //Multi Tap en el boton "editar registro".
     public int contadorClicksEditarRegistro;
-    private MiContador timer;
 
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
@@ -210,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         if(id == R.id.configurar) {
             contadorClicksEditarRegistro+=1;
+            interrumpirBotty();
 
             new CountDownTimer(5000, 1000) {
 
@@ -309,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
      * @param view
      */
     public void micButtonOnClick(final View view) {
+        interrumpirBotty();
         //Se verifica primero con la variable local para mejor tiempo de respuesta del botón
         if (recordPermissionGranted) {
             escucharAbuelo();
@@ -376,6 +376,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
      */
     private void sendRequest()  {
 
+        interrumpirBotty();
         final String queryString = chauAcentos.stripAccents( String.valueOf(queryEditText.getText()));
 
         queryEditText.setText("");
@@ -746,6 +747,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         } catch (Exception e){
             Log.e(this.getClass().getName(), "Error al emitir respuesta.", e);
         }
+    }
+
+    private void interrumpirBotty(){
+        if(myTTS!=null && myTTS.isSpeaking())
+            myTTS.stop();
     }
 
     @Override
