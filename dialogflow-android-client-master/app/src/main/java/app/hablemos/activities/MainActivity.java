@@ -57,10 +57,12 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.ResponseMessage;
 import ai.api.model.Result;
+import ai.api.util.StringUtils;
 import app.hablemos.R;
 import app.hablemos.backgroundServices.SchedulerService;
 import app.hablemos.model.Function;
 import app.hablemos.model.Recordatorio;
+import app.hablemos.model.SacadorDeAcentos;
 import app.hablemos.model.User;
 import app.hablemos.services.FootballService;
 import app.hablemos.services.InteractionsService;
@@ -74,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
     private static final int REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID = 133;
     private boolean recordPermissionGranted = false;
+
+    //Sacador de acentos
+    private SacadorDeAcentos chauAcentos;
 
     //TTS object
     private TextToSpeech myTTS;
@@ -115,20 +120,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     private InteractionsService interactionsService;
     private PendingIntent pendingEmailIntent;
-
-    //-------------------------------------------*CLIMA VERSION CARO
-    private TextView selectCity, cityField, detailsField, currentTemperatureField, humidity_field, pressure_field, weatherIcon, updatedField;
-    private ProgressBar loader;
-    private Typeface weatherFont;
-    private String city = "Buenos Aires, AR"; //Asi lo muestra la app cuando pedis en la web
-
-    /* Please Put your API KEY here */
-    private String OPEN_WEATHER_MAP_API = "ea574594b9d36ab688642d5fbeab847e";
-    /* Please Put your API KEY here */
-
-    int temperatura;
-
-    //-------------------------------------------*CLIMA VERSION CARO
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,50 +172,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             }
         });
 
-             //-------------------------------------------*CLIMA VERSION CARO
-
-        loader = (ProgressBar) findViewById(R.id.loader);
-        selectCity = (TextView) findViewById(R.id.selectCity);
-        cityField = (TextView) findViewById(R.id.city_field);
-        updatedField = (TextView) findViewById(R.id.updated_field);
-        detailsField = (TextView) findViewById(R.id.details_field);
-        currentTemperatureField = (TextView) findViewById(R.id.current_temperature_field);
-        humidity_field = (TextView) findViewById(R.id.humidity_field);
-        pressure_field = (TextView) findViewById(R.id.pressure_field);
-        weatherIcon = (TextView) findViewById(R.id.weather_icon);
-        weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weathericons-regular-webfont.ttf");
-        weatherIcon.setTypeface(weatherFont);
-
-        selectCity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                alertDialog.setTitle("Change City");
-                final EditText input = new EditText(MainActivity.this);
-                input.setText(city);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                input.setLayoutParams(lp);
-                alertDialog.setView(input);
-
-                alertDialog.setPositiveButton("Change",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                city = input.getText().toString();
-                                taskLoadUp(city);
-                            }
-                        });
-                alertDialog.setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                alertDialog.show();
-            }
-        });
-
 
     }
 
@@ -234,60 +181,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
     }
 
-    public void taskLoadUp(String query) {
-        if (Function.isNetworkAvailable(getApplicationContext())) {
-            DownloadWeather task = new DownloadWeather();
-            task.execute(query);
-        } else {
-            Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    class DownloadWeather extends AsyncTask < String, Void, String > {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loader.setVisibility(View.VISIBLE);
-
-        }
-        protected String doInBackground(String...args) {
-            String xml = Function.excuteGet("http://api.openweathermap.org/data/2.5/weather?q=" + args[0] +
-                    "&units=metric&appid=" + OPEN_WEATHER_MAP_API);
-            return xml;
-        }
-        @Override
-        protected void onPostExecute(String xml) {
-
-            try {
-                JSONObject json = new JSONObject(xml);
-                if (json != null) {
-                    JSONObject details = json.getJSONArray("weather").getJSONObject(0);
-                    JSONObject main = json.getJSONObject("main");
-                    DateFormat df = DateFormat.getDateTimeInstance();
-
-                    cityField.setText(json.getString("name").toUpperCase(Locale.US) + ", " + json.getJSONObject("sys").getString("country"));
-                    detailsField.setText(details.getString("description").toUpperCase(Locale.US));
-                    currentTemperatureField.setText(main.getString("temp"));
-                    humidity_field.setText("Humidity: " + main.getString("humidity") + "%");
-                    pressure_field.setText("Pressure: " + main.getString("pressure") + " hPa");
-                    updatedField.setText(df.format(new Date(json.getLong("dt") * 1000)));
-                    weatherIcon.setText(Html.fromHtml(Function.setWeatherIcon(details.getInt("id"),
-                            json.getJSONObject("sys").getLong("sunrise") * 1000,
-                            json.getJSONObject("sys").getLong("sunset") * 1000)));
-
-                    loader.setVisibility(View.GONE);
-
-                }
-            } catch (JSONException e) {
-
-                Toast.makeText(getApplicationContext(), "Error, Check City", Toast.LENGTH_SHORT).show();
-            }
-        }
-}
-    //-------------------------------------------*CLIMA VERSION CARO
-
-    //mostrar menu de opciones
+      //mostrar menu de opciones
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menuacciones, menu);
@@ -448,8 +342,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
      */
     private void sendRequest()  {
 
-        final String queryString = String.valueOf(queryEditText.getText());
-
+        final String queryString = chauAcentos.stripAccents( String.valueOf(queryEditText.getText()));
 
         queryEditText.setText("");
 
