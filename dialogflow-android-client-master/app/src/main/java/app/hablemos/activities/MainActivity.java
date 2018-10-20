@@ -208,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         if(id == R.id.configurar) {
             contadorClicksEditarRegistro+=1;
-            interrumpirBotty();
 
             new CountDownTimer(5000, 1000) {
 
@@ -226,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             }.start();
 
             if(contadorClicksEditarRegistro > 5){
+                interrumpirBotty();
                 startActivity(RegistroActivity.class);
                 return true;
             }
