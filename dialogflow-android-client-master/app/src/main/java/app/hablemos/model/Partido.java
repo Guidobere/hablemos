@@ -51,4 +51,8 @@ public class Partido {
     public String toString() {
         return " jugará de " + localia + " contra " + rival + " el día " + dia;
     }
+
+    public String toStringUltimo() {
+        return " jugó de " + localia + " contra " + rival + " el día " + dia;
+    }
 }

@@ -1,6 +1,7 @@
 package app.hablemos.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -89,10 +90,20 @@ public class FootballService {
         String separador = "";
         List<EquipoPosicionado> topN = equiposPosicionados.subList(0,n);
         for (EquipoPosicionado ep : topN) {
-            respuesta.append(separador).append(ep.getNombre());
+            respuesta.append(separador).append(getNombreRealFromTabla(ep.getNombre()));
             separador = ", ";
         }
         return respuesta.toString();
+    }
+
+    private String getNombreRealFromTabla(String nombre) {
+        String nombreReal = "";
+        for (String key : mapaEquipos.keySet()) {
+            if (mapaEquipos.get(key).equalsIgnoreCase(nombre)) {
+                nombreReal = obtenerEquipoVisual(key);
+            }
+        }
+        return nombreReal;
     }
 
     public String getBottomNEquipos(int n) {
@@ -101,19 +112,17 @@ public class FootballService {
         String separador = "";
         List<EquipoPosicionado> bottomN = equiposPosicionados.subList(this.equiposPosicionados.size() - n, this.equiposPosicionados.size());
         for (EquipoPosicionado ep : bottomN) {
-            respuesta.append(separador).append(ep.getNombre());
+            respuesta.append(separador).append(getNombreRealFromTabla(ep.getNombre()));
             separador = ", ";
         }
         return respuesta.toString();
     }
 
     private void llenarEquiposPosicionados() {
-        if (this.equiposPosicionados.size() == 0) {
-            try {
-                this.equiposPosicionados = new GetPosicionesAsyncTask().execute().get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            this.equiposPosicionados = new GetPosicionesAsyncTask().execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -211,24 +220,14 @@ public class FootballService {
         String equipoVisual = obtenerEquipoVisual(equipo);
         String pagina = getPagina(equipo);
         if (!pagina.equals("")) {
-            List<Partido> partidos = new ArrayList<>();
-            try {
-                partidos = new GetPartidosAsyncTask(pagina).execute().get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            List<Partido> partidos = getPartidosAsync(pagina);
             List<Partido> partidosFiltrados = new ArrayList<>();
             for (Partido partido : partidos) {
                 if (partido.getResultado().equals("-")) {
                     partidosFiltrados.add(partido);
                 }
             }
-            Collections.sort(partidosFiltrados, new Comparator<Partido>() {
-                @Override
-                public int compare(Partido partido1, Partido partido2) {
-                    return partido1.getDiaDePartido().compareTo(partido2.getDiaDePartido());
-                }
-            });
+            Collections.sort(partidosFiltrados, comparadorDeFecha);
             if (partidosFiltrados.get(0).getDia().contains("Post")) {
                 return equipoVisual + " tiene un partido postergado con " + partidosFiltrados.get(0).getRival() +
                         " sin fecha asignada, en el siguiente encuentro" + partidosFiltrados.get(1).toString();
@@ -237,4 +236,44 @@ public class FootballService {
         } else
             return "El equipo solicitado no pudo ser encontrado";
     }
+
+    private List<Partido> getPartidosAsync(String pagina) {
+        List<Partido> partidos = new ArrayList<>();
+        try {
+            partidos = new GetPartidosAsyncTask(pagina).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return partidos;
+    }
+
+    public String getUltimoPartido(String equipo) {
+        String equipoVisual = obtenerEquipoVisual(equipo);
+        String pagina = getPagina(equipo);
+        if (!pagina.equals("")) {
+            List<Partido> partidos = getPartidosAsync(pagina);
+            List<Partido> partidosFiltrados = new ArrayList<>();
+            for (Partido partido : partidos) {
+                if (!partido.getResultado().equals("-")) {
+                    partidosFiltrados.add(partido);
+                }
+            }
+            Collections.sort(partidosFiltrados, comparadorDeFecha);
+            String retorno = equipoVisual + partidosFiltrados.get(partidosFiltrados.size()-1).toStringUltimo();
+            Calendar calendar = Calendar.getInstance();
+            String now = (calendar.get(Calendar.DATE)) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
+            if (partidosFiltrados.get(partidosFiltrados.size()-1).getDia().equals(now)) {
+                retorno += "\nTené en cuenta que el partido se puede estar jugando en este momento.";
+            }
+            return retorno;
+        } else
+            return "El equipo solicitado no pudo ser encontrado";
+    }
+
+    private Comparator<Partido> comparadorDeFecha = new Comparator<Partido>() {
+        @Override
+        public int compare(Partido partido1, Partido partido2) {
+            return partido1.getDiaDePartido().compareTo(partido2.getDiaDePartido());
+        }
+    };
 }
