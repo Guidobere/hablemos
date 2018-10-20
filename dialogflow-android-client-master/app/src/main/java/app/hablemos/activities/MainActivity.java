@@ -547,11 +547,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     break;
                 case "ultimoPartido":
                     equipo = pedido[2].trim();
-                    /*TODO
                     if(equipo.equalsIgnoreCase("miEquipo"))
                         result = footballService.getUltimoPartido(equipoAbuelo);
                     else
-                        result = footballService.getUltimoPartido(equipo);*/
+                        result = footballService.getUltimoPartido(equipo);
                     loQueDiceYescribe(result,"ultimoPartido");
                     break;
                 case "datos":
