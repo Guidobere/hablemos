@@ -73,6 +73,9 @@ import app.hablemos.services.NotificationService;
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private String TAG;
 
+    private String queryString;
+    private boolean esAutomatico=false;
+
     //status check code
     private int MY_DATA_CHECK_CODE = 0;
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
@@ -377,18 +380,24 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private void sendRequest()  {
 
         interrumpirBotty();
-        final String queryString = chauAcentos.stripAccents( String.valueOf(queryEditText.getText()));
 
-        queryEditText.setText("");
-
-        send.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        if (!esAutomatico) {
+            queryString = chauAcentos.stripAccents(String.valueOf(queryEditText.getText()));
+            queryEditText.setText("");
+        }
 
         if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
             myTTS.speak(getString(R.string.non_empty_query), 0, null, "default");
             return;
         }
-        resultTextView2.setText(queryString);
+
+
+        send.onEditorAction(EditorInfo.IME_ACTION_DONE);
+
+        if (!esAutomatico) {
+            resultTextView2.setText(queryString);
+        }
 
         final AsyncTask<String, Void, AIResponse> task = new AsyncTask<String, Void, AIResponse>() {
 
@@ -541,6 +550,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 case "presión-tarde":
                     pedirAlaBaseSobrePresion("tarde");
                     break;
+                case "caminarno":
+                    interactionsService.guardarInteraccion(mailQueInicioSesion,
+                            "Notificacion clima", "No",
+                            "El usuario no accedio a salir a caminar");
+                    loQueDiceYescribe("Entonces escribi o deci\nPasteleria\nFutbol\nSalud","default");
+                    break;
+                case "caminarsi":
+                    interactionsService.guardarInteraccion(mailQueInicioSesion,
+                            "Notificacion clima", "Si",
+                            "El usuario accedio a salir a caminar");
+                    loQueDiceYescribe("¡Buena suerte!","default");
+                    break;
                 default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
                     loQueDiceYescribe(speech,"default");
                     break;
@@ -683,7 +704,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             @Override
             public void run() {
                 final Result result = response.getResult();
-                resultTextView2.setText(result.getResolvedQuery());
 
                 try{
                     speech = ((ResponseMessage.ResponseSpeech) result.getFulfillment().getMessages().get(0)).getSpeech().get(0);
@@ -796,7 +816,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){
 
-            loQueDiceYescribe("¿Queres ir a pasear?", "default");
+            esAutomatico=true;
+            queryString="op_caminar";
+            sendRequest();
+            esAutomatico=false;
+
         }
 
     }
