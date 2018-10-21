@@ -6,4 +6,5 @@
     <color name="black">#FF000000</color>
     <color name="editTextColor">#fbfbfb</color>
     <color name="nuevo">#f67d5b</color>
+    <color name="grey">#9f9896</color>
 </resources>
