@@ -219,11 +219,33 @@
                         android:inputType="text" />
                 </RelativeLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/relative4"
+                    android:id="@+id/lblMedicamentos">
+
+                    <EditText
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="none"
+                        android:selectAllOnFocus="false"
+                        android:text="@string/medicamentos"
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
                 <RelativeLayout
                     android:id="@+id/relative5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/relative4"
+                    android:layout_below="@+id/lblMedicamentos"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="10dp">
@@ -234,7 +256,7 @@
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
                         android:padding="3dp"
-                        android:src="@drawable/medicamento"
+                        android:src="@drawable/amanecer"
                         android:contentDescription="@string/imgturnomaniana" />
 
                     <EditText
@@ -268,7 +290,7 @@
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
                         android:padding="3dp"
-                        android:src="@drawable/medicamento"
+                        android:src="@drawable/sol"
                         android:contentDescription="@string/imgturnotarde"/>
 
                     <EditText
@@ -302,7 +324,7 @@
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
                         android:padding="3dp"
-                        android:src="@drawable/medicamento"
+                        android:src="@drawable/noche"
                         android:contentDescription="@string/imgturnonoche"/>
 
                     <EditText
@@ -744,6 +766,17 @@
                         >
 
                         <Button
+                            android:id="@+id/btnCancel"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="@string/cancelar"
+                            android:textSize="13sp" />
+
+
+                        <Button
                             android:id="@+id/btnRegister"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -764,15 +797,6 @@
                             android:textSize="13sp"
                             android:visibility="gone"/>
 
-                        <Button
-                            android:id="@+id/btnCancel"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorPrimary"
-                            android:fontFamily="sans-serif-condensed"
-                            android:text="@string/cancelar"
-                            android:textSize="13sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
