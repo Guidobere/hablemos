@@ -49,20 +49,21 @@ public class Login extends AppCompatActivity {
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses btnLogin
-                //loguearUsuario();
-                //crearUsuario(user,pass);
-                singIn();
+            // Code here executes on main thread after user presses btnLogin
+            singIn();
             }
         });
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
+                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                //FirebaseUser user = mAuth.getCurrentUser();
+                if (currentUser != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    email = currentUser.getEmail();
+                    startActivity(MainActivity.class);
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + currentUser.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -76,31 +77,6 @@ public class Login extends AppCompatActivity {
 
             public void onClick(View v) {
                 startActivity(RegistroActivity.class);
-               // crearUsuario();
-            }
-        });
-    }
-
-    //CREAR O LOGEAR USUARIO
-    private void crearUsuario() {
-        email = mailTxtBox.getText().toString().toLowerCase();
-        password = passTxtBox.getText().toString();
-
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmailAndPassword:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    startActivity(MainActivity.class);
-                    //updateUI(user);
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmailAndPassword:failure", task.getException());
-                    Toast.makeText(Login.this, getString(R.string.fallo_autenticacion), Toast.LENGTH_SHORT).show();
-                    //updateUI(null);
-                }
             }
         });
     }
@@ -114,8 +90,8 @@ public class Login extends AppCompatActivity {
     }
 
     private void singIn(){
-        email = mailTxtBox.getText().toString().toLowerCase();
-        password = passTxtBox.getText().toString();
+            email = mailTxtBox.getText().toString().toLowerCase();
+            password = passTxtBox.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Coloque direccion de email", Toast.LENGTH_SHORT).show();
@@ -133,7 +109,6 @@ public class Login extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     Log.d(TAG, "signInWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
                     startActivity(MainActivity.class);
 
                 } else {
@@ -154,7 +129,7 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(mAuthListener);
     }
-  
+/*
     @Override
     public void onResume() {
         super.onResume();
@@ -166,7 +141,7 @@ public class Login extends AppCompatActivity {
     public void onPause() {
          super.onPause();
          mAuth.removeAuthStateListener(mAuthListener);
-    }
+    }*/
 
     @Override
     public void onStop() {

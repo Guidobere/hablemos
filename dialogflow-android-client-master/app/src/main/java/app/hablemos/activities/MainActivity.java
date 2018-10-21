@@ -2,7 +2,6 @@ package app.hablemos.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -11,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +25,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -57,13 +57,18 @@ import ai.api.android.AIService;
 import ai.api.model.AIError;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
+import ai.api.model.ResponseMessage;
 import ai.api.model.Result;
+import ai.api.util.StringUtils;
 import app.hablemos.R;
+import app.hablemos.backgroundServices.SchedulerService;
 import app.hablemos.model.Function;
 import app.hablemos.model.Recordatorio;
+import app.hablemos.model.SacadorDeAcentos;
 import app.hablemos.model.User;
-import app.hablemos.receivers.EmailReceiver;
+import app.hablemos.services.FootballService;
 import app.hablemos.services.InteractionsService;
+import app.hablemos.services.NotificationService;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private String TAG;
@@ -73,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
     private static final int REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID = 133;
     private boolean recordPermissionGranted = false;
+
+    //Sacador de acentos
+    private SacadorDeAcentos chauAcentos;
 
     //TTS object
     private TextToSpeech myTTS;
@@ -91,17 +99,23 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private String speech;
 
     private String nombreAbuelo = "";
+    private String equipoAbuelo = "";
     
     private int a;
 
     private AIDataService aiDataService;
     private AIService aiService;
     private String mailQueInicioSesion;
+    private FootballService footballService;
 
     private String diaSemana;
 
     boolean yaSaludo = false;
     boolean vieneDeNotificacion;
+    boolean rtaNotificacionManejada;
+
+    //Multi Tap en el boton "editar registro".
+    public int contadorClicksEditarRegistro;
 
     //FIREBASE
     DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
@@ -112,18 +126,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private InteractionsService interactionsService;
     private PendingIntent pendingEmailIntent;
 
-    //-------------------------------------------*CLIMA VERSION CARO
-    private TextView selectCity, cityField, detailsField, currentTemperatureField, humidity_field, pressure_field, weatherIcon, updatedField;
-    private ProgressBar loader;
-    private Typeface weatherFont;
-    private String city = "Buenos Aires, AR"; //Asi lo muestra la app cuando pedis en la web
-
-    /* Please Put your API KEY here */
-    private String OPEN_WEATHER_MAP_API = "ea574594b9d36ab688642d5fbeab847e";
-    /* Please Put your API KEY here */
-
-    //-------------------------------------------*CLIMA VERSION CARO
-
+    int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         mailQueInicioSesion = getIntent().getExtras().getString("1");
         vieneDeNotificacion = getIntent().getExtras().getBoolean("vieneDeNotificacion");
+        rtaNotificacionManejada = false;
+        contadorClicksEditarRegistro = 0;
 
         TAG = getString(R.string.tagMain);
 
@@ -158,10 +163,15 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         aiService.setListener(this);
         aiDataService = new AIDataService(this, config);
 
+        footballService = new FootballService();
+
+
+/*        timer = new MiContador(3000,1000);
+        timer.start();
+        timer.onFinish(contadorClicksEditarRegistro);*/
+
         //check for TTS data
-        Intent checkTTSIntent = new Intent();
-        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        checkForTTSData();
 
         queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -174,109 +184,16 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             }
         });
 
-             //-------------------------------------------*CLIMA VERSION CARO
-
-        loader = (ProgressBar) findViewById(R.id.loader);
-        selectCity = (TextView) findViewById(R.id.selectCity);
-        cityField = (TextView) findViewById(R.id.city_field);
-        updatedField = (TextView) findViewById(R.id.updated_field);
-        detailsField = (TextView) findViewById(R.id.details_field);
-        currentTemperatureField = (TextView) findViewById(R.id.current_temperature_field);
-        humidity_field = (TextView) findViewById(R.id.humidity_field);
-        pressure_field = (TextView) findViewById(R.id.pressure_field);
-        weatherIcon = (TextView) findViewById(R.id.weather_icon);
-        weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weathericons-regular-webfont.ttf");
-        weatherIcon.setTypeface(weatherFont);
-
-        taskLoadUp(city);
-
-        selectCity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                alertDialog.setTitle("Change City");
-                final EditText input = new EditText(MainActivity.this);
-                input.setText(city);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                input.setLayoutParams(lp);
-                alertDialog.setView(input);
-
-                alertDialog.setPositiveButton("Change",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                city = input.getText().toString();
-                                taskLoadUp(city);
-                            }
-                        });
-                alertDialog.setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                alertDialog.show();
-            }
-        });
-
 
     }
 
-    public void taskLoadUp(String query) {
-        if (Function.isNetworkAvailable(getApplicationContext())) {
-            DownloadWeather task = new DownloadWeather();
-            task.execute(query);
-        } else {
-            Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-        }
+    private void checkForTTSData() {
+        Intent checkTTSIntent = new Intent();
+        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class DownloadWeather extends AsyncTask < String, Void, String > {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loader.setVisibility(View.VISIBLE);
-
-        }
-        protected String doInBackground(String...args) {
-            String xml = Function.excuteGet("http://api.openweathermap.org/data/2.5/weather?q=" + args[0] +
-                    "&units=metric&appid=" + OPEN_WEATHER_MAP_API);
-            return xml;
-        }
-        @Override
-        protected void onPostExecute(String xml) {
-
-            try {
-                JSONObject json = new JSONObject(xml);
-                if (json != null) {
-                    JSONObject details = json.getJSONArray("weather").getJSONObject(0);
-                    JSONObject main = json.getJSONObject("main");
-                    DateFormat df = DateFormat.getDateTimeInstance();
-
-                    cityField.setText(json.getString("name").toUpperCase(Locale.US) + ", " + json.getJSONObject("sys").getString("country"));
-                    detailsField.setText(details.getString("description").toUpperCase(Locale.US));
-                    currentTemperatureField.setText(String.format("%.2f", main.getDouble("temp")) + "°");
-                    humidity_field.setText("Humidity: " + main.getString("humidity") + "%");
-                    pressure_field.setText("Pressure: " + main.getString("pressure") + " hPa");
-                    updatedField.setText(df.format(new Date(json.getLong("dt") * 1000)));
-                    weatherIcon.setText(Html.fromHtml(Function.setWeatherIcon(details.getInt("id"),
-                            json.getJSONObject("sys").getLong("sunrise") * 1000,
-                            json.getJSONObject("sys").getLong("sunset") * 1000)));
-
-                    loader.setVisibility(View.GONE);
-
-                }
-            } catch (JSONException e) {
-
-                Toast.makeText(getApplicationContext(), "Error, Check City", Toast.LENGTH_SHORT).show();
-            }
-        }
-}
-    //-------------------------------------------*CLIMA VERSION CARO
-
-    //mostrar menu de opciones
+      //mostrar menu de opciones
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menuacciones, menu);
@@ -288,9 +205,30 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
+
         if(id == R.id.configurar) {
-            startActivity(RegistroActivity.class);
-            return true;
+            contadorClicksEditarRegistro+=1;
+
+            new CountDownTimer(5000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    //Log.w("contador tiempo", "seconds remaining: " + millisUntilFinished / 1000);
+                    //resultTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                }
+
+                public void onFinish() {
+                    contadorClicksEditarRegistro =0;
+                    //resultTextView.setText("Done");
+                    //Log.w("contador tiempo", "done");
+                }
+            }.start();
+
+            if(contadorClicksEditarRegistro > 5){
+                interrumpirBotty();
+                startActivity(RegistroActivity.class);
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -351,7 +289,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public void onInit(int initStatus) {
         if (initStatus == TextToSpeech.SUCCESS) {
             myTTS.setLanguage(new Locale("es", "AR"));
-            if(!yaSaludo) {
+            if(vieneDeNotificacion) {
+                if(!rtaNotificacionManejada) {
+                    manejarRespuestaNotificacion(getIntent().getExtras());
+                    rtaNotificacionManejada = true;
+                }
+            } else if(!yaSaludo) {
                 pedirAlaBase("saludo");
                 yaSaludo = true;
             }
@@ -365,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
      * @param view
      */
     public void micButtonOnClick(final View view) {
+        interrumpirBotty();
         //Se verifica primero con la variable local para mejor tiempo de respuesta del botón
         if (recordPermissionGranted) {
             escucharAbuelo();
@@ -378,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     private void escucharAbuelo() {
-        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
         micButton.setEnabled(false);
         aiService.startListening();
     }
@@ -410,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     public void onListeningStarted() {
-        // show recording indicator
+        Toast.makeText(this, getString(R.string.escuchando), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -431,53 +374,54 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     /*
      * AIRequest should have query OR event
      */
-        private void sendRequest()  {
+    private void sendRequest()  {
 
-            final String queryString = String.valueOf(queryEditText.getText());
+        interrumpirBotty();
+        final String queryString = chauAcentos.stripAccents( String.valueOf(queryEditText.getText()));
 
+        queryEditText.setText("");
 
-            queryEditText.setText("");
+        send.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
-            send.onEditorAction(EditorInfo.IME_ACTION_DONE);
-
-            if (TextUtils.isEmpty(queryString)) {
+        if (TextUtils.isEmpty(queryString)) {
             onError(new AIError(getString(R.string.non_empty_query)));
             myTTS.speak(getString(R.string.non_empty_query), 0, null, "default");
             return;
         }
-            resultTextView2.setText(queryString);
+        resultTextView2.setText(queryString);
 
         final AsyncTask<String, Void, AIResponse> task = new AsyncTask<String, Void, AIResponse>() {
 
             private AIError aiError;
 
-                    @Nullable
-                    @Override
-                    protected AIResponse doInBackground(final String... params) {
-                        final AIRequest request = new AIRequest();
-                        String query  = params[0];
-                        RequestExtras requestExtras = null;
+            @Nullable
+            @Override
+            protected AIResponse doInBackground(final String... params) {
+                final AIRequest request = new AIRequest();
+                String query  = params[0];
+                RequestExtras requestExtras = null;
                 if (!TextUtils.isEmpty(query))
                     request.setQuery(query);
 
-                        try {
-                            return aiDataService.request(request, requestExtras);
-                        } catch (final AIServiceException e) {
+                try {
+                    return aiDataService.request(request, requestExtras);
+                } catch (final AIServiceException e) {
                     aiError = new AIError(e);
-                            return null;
-                        }
-                    }
-
-                    @Override
-            protected void onPostExecute(final AIResponse response) {
-                        if (response != null) {
-                            onResult(response);
-                        }
-                    }
-
-                };
-                task.execute(queryString);
+                    return null;
+                }
             }
+
+            @Override
+            protected void onPostExecute(final AIResponse response) {
+                if (response != null) {
+                    onResult(response);
+                }
+            }
+
+        };
+
+        task.execute(queryString);
+    }
 
     private String getSaludo() {
         Calendar rightNow = Calendar.getInstance();
@@ -492,38 +436,115 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void personalizarMensaje(){
-        switch (speech) {
-            case "tarde":
-                pedirAlaBase("tarde");
-                break;
-            case "mañana":
-                pedirAlaBase("mañana");
-                break;
-            case "noche":
-                pedirAlaBase("noche");
-                break;
-            case "glucosa-mañana":
-                pedirAlaBaseSobreGlucosa("mañana");
-                break;
-            case "glucosa-noche":
-                pedirAlaBaseSobreGlucosa("noche");
-                break;
-            case "glucosa-tarde":
-                pedirAlaBaseSobreGlucosa("tarde");
-                break;
-            case "presión-mañana":
-                pedirAlaBaseSobrePresion("mañana");
-                break;
-            case "presión-noche":
-                pedirAlaBaseSobrePresion("noche");
-                break;
-            case "presión-tarde":
-                pedirAlaBaseSobrePresion("tarde");
-                break;
-            default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
-                resultTextView.setText(speech);
-                myTTS.speak(speech,0,null, "default");
-                break;
+        if (speech.startsWith("futbol")) {
+            String result = "";
+            String[] pedido = speech.split("_");
+            String accion = pedido[1].trim();
+            String equipo = "";
+            switch (accion) {
+                case "posicion":
+                    equipo = pedido[2].trim();
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getPosicionEquipo(equipoAbuelo);
+                    else
+                        result = footballService.getPosicionEquipo(equipo);
+                    loQueDiceYescribe(result,"posicionEquipo");
+                    break;
+                case "topN":
+                    int n = Integer.parseInt(pedido[2].trim());
+                    result = footballService.getTopNEquipos(n);
+                    loQueDiceYescribe(result,"topN");
+                    break;
+                case "bottomN":
+                    int j = Integer.parseInt(pedido[2].trim());
+                    result = footballService.getBottomNEquipos(j);
+                    loQueDiceYescribe(result,"topN");
+                    break;
+                case "equipoEnPosicion":
+                    int posicion = Integer.parseInt(pedido[2].trim());
+                    result = footballService.getEquipoEnPosicion(posicion);
+                    loQueDiceYescribe(result,"equipoEnPosicion");
+                    break;
+                case "proximoPartido":
+                    equipo = pedido[2].trim();
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getProximoPartido(equipoAbuelo);
+                    else
+                        result = footballService.getProximoPartido(equipo);
+                    loQueDiceYescribe(result,"proximoPartido");
+                    break;
+                case "ultimoPartido":
+                    equipo = pedido[2].trim();
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getUltimoPartido(equipoAbuelo);
+                    else
+                        result = footballService.getUltimoPartido(equipo);
+                    loQueDiceYescribe(result,"ultimoPartido");
+                    break;
+                case "datos":
+                    equipo = pedido[2].trim();
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getDatosEquipo(equipoAbuelo);
+                    else
+                        result = footballService.getDatosEquipo(equipo);
+                    loQueDiceYescribe(result,"datosEquipo");
+                    break;
+                case "estadisticas":
+                    equipo = pedido[2].trim();
+                    if(equipo.equalsIgnoreCase("miEquipo"))
+                        result = footballService.getEstadisticasEquipo(equipoAbuelo);
+                    else
+                        result = footballService.getEstadisticasEquipo(equipo);
+                    loQueDiceYescribe(result,"estadisticasEquipo");
+                    break;
+                case "comparacion":
+                    String equipo1 = pedido[2].trim();
+                    String equipo2 = pedido[3].trim();
+                    if (!equipo1.equalsIgnoreCase(equipo2)) {
+                        if (equipo1.equalsIgnoreCase("miEquipo"))
+                            result = footballService.getComparacionEquipos(equipoAbuelo, equipo2);
+                        else if (equipo2.equalsIgnoreCase("miEquipo"))
+                            result = footballService.getComparacionEquipos(equipo1, equipoAbuelo);
+                        else
+                            result = footballService.getComparacionEquipos(equipo1, equipo2);
+                        loQueDiceYescribe(result, "comparacionEquipos");
+                    } else
+                        loQueDiceYescribe("Ambos equipos son iguales, no se puede comparar", "comparacionEquipos");
+                    break;
+            }
+        } else {
+            switch (speech) {
+                case "tarde":
+                    pedirAlaBase("tarde");
+                    break;
+                case "mañana":
+                    pedirAlaBase("mañana");
+                    break;
+                case "noche":
+                    pedirAlaBase("noche");
+                    break;
+                case "glucosa-mañana":
+                    pedirAlaBaseSobreGlucosa("mañana");
+                    break;
+                case "glucosa-noche":
+                    pedirAlaBaseSobreGlucosa("noche");
+                    break;
+                case "glucosa-tarde":
+                    pedirAlaBaseSobreGlucosa("tarde");
+                    break;
+                case "presión-mañana":
+                    pedirAlaBaseSobrePresion("mañana");
+                    break;
+                case "presión-noche":
+                    pedirAlaBaseSobrePresion("noche");
+                    break;
+                case "presión-tarde":
+                    pedirAlaBaseSobrePresion("tarde");
+                    break;
+                default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
+                    loQueDiceYescribe(speech,"default");
+                    break;
+            }
         }
     }
 
@@ -547,12 +568,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     if(elturno.equalsIgnoreCase(turnoPresion) && losdias.contains(diaSemana)){
                         a=1;
                        // speech="Hoy si";
-                        loQueDiceYescribe("Hoy si");
+                        loQueDiceYescribe("Hoy si","default");
                     }
                 }
 
                 if(a == 0) {
-                    loQueDiceYescribe("Hoy no");
+                    loQueDiceYescribe("Hoy no","default");
                 }
             }
 
@@ -582,12 +603,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
                         a=1;
-                       loQueDiceYescribe("Hoy si");
+                       loQueDiceYescribe("Hoy si","default");
                     }
                 }
 
                 if(a == 0) {
-                     loQueDiceYescribe("Hoy no");
+                     loQueDiceYescribe("Hoy no","default");
                 }
             }
 
@@ -613,32 +634,33 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     switch (turno) {
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
-                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ");
+                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ","default");
+                            equipoAbuelo = u.equipo;
                             interactionsService.guardarInteraccion(
-                                mailQueInicioSesion, getString(R.string.interaccionAbrirApp), "-", "-");
+                                mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
-                                setearCronReporte();
+                                iniciarServicioScheduler();
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
-                                loQueDiceYescribe("Nada que tomar");
+                                loQueDiceYescribe("Nada que tomar","default");
                             }
                             else{
-                                loQueDiceYescribe(u.remediosTarde);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosTarde,"default");}
                              break;
                         case "mañana":
                            if(TextUtils.isEmpty(u.remediosManiana)){
-                                loQueDiceYescribe("Nada que tomar");
+                                loQueDiceYescribe("Nada que tomar","default");
                             }
                             else{
-                                loQueDiceYescribe(u.remediosManiana);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosManiana,"default");}
                           break;
                         case "noche":
-                            if(TextUtils.isEmpty(u.remediosTarde)){
-                                loQueDiceYescribe("Nada que tomar");
+                            if(TextUtils.isEmpty(u.remediosNoche)){
+                                loQueDiceYescribe("Nada que tomar","default");
                             }
                             else{
-                            loQueDiceYescribe(u.remediosTarde);}
+                                loQueDiceYescribe("Tenés que tomar " + u.remediosNoche,"default");}
                             break;
                         default:
                             break;
@@ -661,10 +683,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             @Override
             public void run() {
                 final Result result = response.getResult();
-              //  queryEditText.setText(result.getResolvedQuery());
+                resultTextView2.setText(result.getResolvedQuery());
 
-                //ACA ES DONDE SE USA SPEECH PARA PEDIRLE QUE LO DIGA EN VOZ ALTA Y LO ESCRIBA
-                speech = result.getFulfillment().getSpeech();
+                try{
+                    speech = ((ResponseMessage.ResponseSpeech) result.getFulfillment().getMessages().get(0)).getSpeech().get(0);
+                } catch (Exception e){
+                    speech = result.getFulfillment().getSpeech();
+                }
+
                 personalizarMensaje();
             }
         });
@@ -678,8 +704,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 Log.w(TAG, error.toString());
 
                 //Si error es del reconocimiento de voz se muestra un mensaje preestablecido.
-                if(error.toString().contains(getString(R.string.errorSpeechRecog)))
+                if(error.toString().contains(getString(R.string.errorSpeechRecog))) {
                     resultTextView.setText(getString(R.string.errorReconVoz));
+                    myTTS.speak(getString(R.string.errorReconVoz), 0, null, "default");
+                }
                 else
                     resultTextView.setText(error.toString());
 
@@ -712,14 +740,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         startActivity(intent);
     }
 
-    public void loQueDiceYescribe(String unTexto){
+    public void loQueDiceYescribe(String texto, String id){
         try {
-            speech = unTexto;
-            resultTextView.setText(speech);
-            myTTS.speak(speech, 0, null, "default");
+            resultTextView.setText(texto);
+            myTTS.speak(texto, 0, null, id);
         } catch (Exception e){
             Log.e(this.getClass().getName(), "Error al emitir respuesta.", e);
         }
+    }
+
+    private void interrumpirBotty(){
+        if(myTTS!=null && myTTS.isSpeaking())
+            myTTS.stop();
     }
 
     @Override
@@ -730,34 +762,43 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-    public void setearCronReporte(){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent emailIntent = new Intent(this, EmailReceiver.class);
-        emailIntent.putExtra("nombreAbuelo", nombreAbuelo);
-        emailIntent.putExtra("mailQueInicioSesion", mailQueInicioSesion);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, emailIntent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
-
-        // Clear previous everyday pending intent if exists.
-        if (null != pendingEmailIntent) {
-            alarmManager.cancel(pendingEmailIntent);
-        }
-        pendingEmailIntent = pendingIntent;
-        /* INTERVAL_DAY: TODOS LOS DIAS A ESTA HORA */
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingEmailIntent);
+    public void iniciarServicioScheduler(){
+        Intent intent = new Intent(this, SchedulerService.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putString("1", mailQueInicioSesion);
+        mBundle.putString("2", nombreAbuelo);
+        intent.putExtras(mBundle);
+        startService(intent);
     }
 
     public void onStop(){
-            super.onStop();
-        myTTS.shutdown();
+        super.onStop();
+        if(myTTS!=null && myTTS.isSpeaking())
+            myTTS.stop();
     }
 
     public void onResume(){
+        contadorClicksEditarRegistro =0;
         super.onResume();
-        myTTS = new TextToSpeech(this, this);
     }
 
+    //enviarNotificacionMedicamentos
+    private void manejarRespuestaNotificacion(Bundle extras) {
+        int tipoNotificacion = extras.getInt("tipoNotificacion");
+
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD){
+            String turno = extras.getString("extraInfo");
+            pedirAlaBase(turno);
+            interactionsService.guardarInteraccion(mailQueInicioSesion,
+                getString(R.string.interaccionTitulo_NotificacionSalud), "Si",
+                getString(R.string.interaccionTexto_AbrirNotificacionSalud));
+        }
+
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){
+
+            loQueDiceYescribe("¿Queres ir a pasear?", "default");
+        }
+
+    }
 
 }
