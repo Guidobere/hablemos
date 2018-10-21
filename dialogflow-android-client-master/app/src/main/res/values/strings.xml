@@ -10,6 +10,20 @@
     <string name="mail">hablemosproyectofinal@gmail.com</string>
     <string name="pass">aprobamoscomosea</string>
     <string name="urlImagenReporte">https://i.postimg.cc/MpTs8h49/hablemos-320x240-fenix.png</string>
+    <string name="horaReporte">9</string>
+
+    <!-- Clima -->
+    <string name="horarioClima">13</string>
+
+    <!-- Salud -->
+    <string name="horarioSaludManiana">10</string>
+    <string name="horarioSaludTarde">16</string>
+    <string name="horarioSaludNoche">21</string>
+
+    <!-- JustifyTextView -->
+    <string name="justificarTextoDesde">50</string>
+    <string name="escalarLineaDesde">15</string>
+    <string name="completarLineaHasta">20</string>
 
     <string name="action_settings">Settings</string>
     <string name="non_empty_query">No se ha ingresado un texto</string>
@@ -92,7 +106,18 @@
     <string name="equipoVacio">El equipo de fútbol no puede estar vacío</string>
 
     <!-- Nombre interacciones -->
-    <string name="interaccionAbrirApp">Abrir Hablemos!</string>
+    <string name="interaccionTitulo_AbrirApp">Abrir Hablemos!</string>
+    <string name="interaccionTitulo_NotificacionSalud">Notificación de salud</string>
+
+    <!-- Texto interacciones -->
+    <string name="interaccionTexto_EnviarNotificacionSalud">Se envió la notificación de salud</string>
+    <string name="interaccionTexto_CerrarNotificacionSalud">El usuario cerró la notificación de salud</string>
+    <string name="interaccionTexto_AbrirNotificacionSalud">El usuario tocó la notificación de salud</string>
+    <string name="interaccionTexto_VencerNotificacionSalud">El usuario no abrió la notificación de salud a tiempo</string>
+
+    <!-- Notificaciones -->
+    <string name="notificacionTexto_Salud">Tocá una vez acá para saber cuáles.</string>
+    <string name="notificacionTexto_Clima">¿Queres salir a pasear?.</string>
 
     <string name="cancelar">Cancelar</string>
     <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>

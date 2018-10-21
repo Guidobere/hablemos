@@ -30,10 +30,16 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop">
+            android:screenOrientation="portrait">
+            <!--android:launchMode="singleTop">   Con esto se resumia el estado anterior  -->
         </activity>
 
+        <receiver android:name=".receivers.EmailReceiver"></receiver>
+        <receiver android:name=".receivers.HealthReceiver"></receiver>
+        <receiver android:name=".receivers.ClimaReceiver"></receiver>
+        <receiver android:name=".receivers.NotificationDismissReceiver"></receiver>
+
+        <service android:name=".backgroundServices.SchedulerService" />
     </application>
 
 </manifest>

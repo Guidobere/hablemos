@@ -36,8 +36,8 @@ public class InteractionsService {
 
     public void enviarReporteInteracciones(final String nombreAbuelo, final String mailRegistro){
         try {
-            //Obtener interacciones de Firebase
-            fbRefInteracciones.orderByChild("emailDia").equalTo(getKey(mailRegistro)).addListenerForSingleValueEvent(new ValueEventListener() {
+            //Obtener interacciones de Firebase (obtiene las del día anterior)
+            fbRefInteracciones.orderByChild("emailDia").equalTo(getReadKey(mailRegistro)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot interaccionesFb) {
                     List<Interaccion> interacciones = new ArrayList<>();
@@ -70,7 +70,7 @@ public class InteractionsService {
             public void run() {
                 try {
                     GmailSender sender = new GmailSender(getContext().getString(R.string.mail), getContext().getString(R.string.pass));
-                    sender.sendMail("Reporte del " + getDate(), bodyFinal, getContext().getString(R.string.remitente), emailsDestino);
+                    sender.sendMail("Reporte del " + getReportDate(), bodyFinal, getContext().getString(R.string.remitente), emailsDestino);
                 } catch (Exception e) {
                     Log.e(this.getClass().getName(), "Error al enviar reporte.", e);
                 }
@@ -117,9 +117,9 @@ public class InteractionsService {
         return bodyTablaInteracciones;
     }
 
-    private String getDate() {
+    private String getReportDate() {
         Calendar rightNow = Calendar.getInstance();
-        int dia = rightNow.get(Calendar.DAY_OF_MONTH);
+        int dia = rightNow.get(Calendar.DAY_OF_MONTH)-1;
         int mes = rightNow.get(Calendar.MONTH) + 1;
         int anio = rightNow.get(Calendar.YEAR);
         return "" + dia + "/" + mes + "/" + anio;
@@ -129,9 +129,17 @@ public class InteractionsService {
         return context;
     }
 
-    private String getKey(String email){
+    private String getSaveKey(String email){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String fecha = sdf.format(new Date());
+        return email+"-"+fecha;
+    }
+
+    private String getReadKey(String email){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        String fecha = sdf.format(calendar.getTime());
         return email+"-"+fecha;
     }
 
@@ -140,7 +148,7 @@ public class InteractionsService {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             String hora = sdf.format(new Date());
             fbRefInteracciones.push().setValue(
-                new Interaccion(getKey(email),hora, tipo, respuesta, observaciones));
+                new Interaccion(getSaveKey(email),hora, tipo, respuesta, observaciones));
         } catch (Exception e){
             Log.e(this.getClass().getName(), "Error al guardar interacción.", e);
         }
