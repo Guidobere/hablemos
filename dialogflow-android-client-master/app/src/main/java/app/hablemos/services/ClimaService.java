@@ -3,6 +3,9 @@ package app.hablemos.services;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.text.Html;
 import android.util.Log;
@@ -23,6 +26,7 @@ import java.util.Calendar;
 
 import app.hablemos.R;
 
+import static android.support.v4.content.ContextCompat.getSystemService;
 
 
 public class ClimaService {
@@ -35,7 +39,9 @@ public class ClimaService {
 
     JSONObject data = null;
     JSONObject main = null;
+    JSONObject details;
     String mensaje;
+    String id;
     int a=0;
 
     double temperatura;
@@ -48,7 +54,7 @@ public class ClimaService {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+"&APPID=ea574594b9d36ab688642d5fbeab847e");
+                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&APPID=ea574594b9d36ab688642d5fbeab847e");
 
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -66,10 +72,13 @@ public class ClimaService {
                     data = new JSONObject(json.toString());
                     main = data.getJSONObject("main");
                     mensaje = main.getString("temp");
+                    details = data.getJSONArray("weather").getJSONObject(0);
 
+                    id = details.getString("id");
+                    int numeroID = Integer.parseInt(id);
                     Double numero = Double.parseDouble(mensaje);
 
-                    if(numero>287.0){
+                    if(numero>14 && numeroID>799){
                         notificationService.enviarNotificacionClima(localContext, "mañana");
                     }
 
@@ -92,6 +101,7 @@ public class ClimaService {
             protected void onPostExecute(Void Void) {
                 if(data!=null){
                     Log.d("my weather received", mensaje);
+                    Log.d("holi", id);
                 }
 
             }

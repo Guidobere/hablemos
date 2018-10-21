@@ -49,6 +49,14 @@ public class Partido {
 
     @Override
     public String toString() {
-        return " jugará de " + localia + " contra " + rival + " el día " + dia;
+        return " jugará de " + localia + " contra " + rival + " el día " + dia + " por la fecha " + fecha;
+    }
+
+    public String toStringUltimo() {
+        return " jugó de " + localia + " contra " + rival + " el día " + dia + " por la fecha " + fecha + " y terminó " + resultado;
+    }
+
+    public String toStringEnCurso() {
+        return " está jugando de " + localia + " contra " + rival + " por la fecha " + fecha + " y va " + resultado;
     }
 }
