@@ -80,7 +80,8 @@
     <string name="imgturnomaniana">imgTurnoManiana</string>
     <string name="imgturnotarde">imgTurnoTarde</string>
     <string name="imgturnonoche">imgTurnoNoche</string>
-    <string name="glucosa">Recordatorio Glucosa (No obligatorio)</string>
+    <string name="glucosa">Recordatorios Glucosa (No obligatorio)</string>
+    <string name="medicamentos">Recordatorios Medicamentos(M/T/N)</string>
     <string name="ma_ana">Mañana</string>
     <string name="lunes_vista">L</string>
     <string name="martes_vista">Ma</string>
@@ -91,7 +92,7 @@
     <string name="domingo_vista">D</string>
     <string name="tarde">Tarde</string>
     <string name="noche">Noche</string>
-    <string name="presion_vista">Recordatorio Presion (No obligatorio)</string>
+    <string name="presion_vista">Recordatorios Presion (No obligatorio)</string>
 
     <!-- Validaciones registro -->
     <string name="regexEmail">[a\u002DzA\u002DZ0\u002D9\._]{3,30}@([a\u002DzA\u002DZ]{3,10}\.[a\u002DzA\u002DZ]{2,10})[\.[a\u002DzA\u002DZ]{2,10}]*</string>
