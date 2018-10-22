@@ -102,44 +102,46 @@ public class SchedulerService extends Service{
 
     private void setAlarmas(String mailQueInicioSesion, String nombreAbuelo) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Bundle bundle = new Bundle();
 
         // Notificación de los remedios de la mañana
-        intentSaludManiana = setAlarma(mailQueInicioSesion, nombreAbuelo,
-            horarioSaludManiana, 0, intentSaludManiana, alarmManager,
-            HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+        bundle.putString("turno", "mañana");
+        intentSaludManiana = setAlarma(mailQueInicioSesion, nombreAbuelo, bundle, horarioSaludManiana, 0,
+            intentSaludManiana, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
 
         // Notificación de los remedios de la tarde
-        intentSaludTarde = setAlarma(mailQueInicioSesion, nombreAbuelo,
-            horarioSaludTarde, 0, intentSaludTarde, alarmManager,
-            HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+        bundle.putString("turno", "tarde");
+        intentSaludTarde = setAlarma(mailQueInicioSesion, nombreAbuelo, bundle, horarioSaludTarde, 0,
+            intentSaludTarde, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
 
         // Notificación de los remedios de la noche
-        intentSaludNoche = setAlarma(mailQueInicioSesion, nombreAbuelo,
-            horarioSaludNoche, 0, intentSaludNoche, alarmManager,
-            HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+        bundle.putString("turno", "noche");
+        intentSaludNoche = setAlarma(mailQueInicioSesion, nombreAbuelo, bundle, horarioSaludNoche, 0,
+            intentSaludNoche, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
 
         // Mail de reporte al tutor
-        intentReporte = setAlarma(mailQueInicioSesion, nombreAbuelo,
-            horarioReporte, 0, intentReporte, alarmManager,
-            EmailReceiver.class, AlarmManager.INTERVAL_DAY);
+        intentReporte = setAlarma(mailQueInicioSesion, nombreAbuelo, null, horarioReporte, 0,
+            intentReporte, alarmManager, EmailReceiver.class, AlarmManager.INTERVAL_DAY);
 
-        intentClima = setAlarma(mailQueInicioSesion, nombreAbuelo,
-                horarioClima, 0, intentClima, alarmManager,
-                ClimaReceiver.class, AlarmManager.INTERVAL_DAY);
+        intentClima = setAlarma(mailQueInicioSesion, nombreAbuelo, null, horarioClima, 0,
+            intentClima, alarmManager, ClimaReceiver.class, AlarmManager.INTERVAL_DAY);
 
         alarmasSeteadas = true;
 
     }
 
-    private PendingIntent setAlarma(String mailQueInicioSesion, String nombreAbuelo, int horaAlarma,
+    private PendingIntent setAlarma(String mailQueInicioSesion, String nombreAbuelo, Bundle bundle, int horaAlarma,
                                     int minutosAlarma, PendingIntent pendingIntentAlarma, AlarmManager alarmManager,
                                     Class<?> receiverClass, long periodicidad) {
 
         // Intent asociado al receiver que va a mandar la notificación (si corresponde)
-        // Es necesario un _id disinto para cada una de las alarmas de salud, sino quedaba seteada sólo la última
+        // Es necesario un _id distinto para cada una de las alarmas de salud, sino quedaba seteada sólo la última
         Intent intent = new Intent(getBaseContext(), receiverClass);
         intent.putExtra("nombreAbuelo", nombreAbuelo);
         intent.putExtra("mailQueInicioSesion", mailQueInicioSesion);
+        if(bundle!=null)
+            intent.putExtras(bundle);
+
         final int _id = (int) System.currentTimeMillis();
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
 

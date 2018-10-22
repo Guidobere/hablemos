@@ -33,6 +33,8 @@ public class NotificationService {
     public static final int ID_NOTIFICACION_AVISO_MAIL = 1;
     public static final int ID_NOTIFICACION_SALUD = 2;
     public static final int ID_NOTIFICACION_CLIMA = 3;
+    public static final int ID_NOTIFICACION_PRESION = 4;
+    public static final int ID_NOTIFICACION_GLUCOSA = 5;
 
     private String mailQueInicioSesion;
 
@@ -53,22 +55,42 @@ public class NotificationService {
 
     public void enviarNotificacionMedicamentos(Context context, String nombreAbuelo, String turno) {
         InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
-        String notificationTitle = nombreAbuelo + ", hora de tus remedios de la " + turno;
+        String notificationTitle = "Hora de tus remedios de la " + turno;
         String notificationText = context.getString(R.string.notificacionTexto_Salud);
 
         enviarNotificacion(context, notificationTitle, notificationText,
             RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_SALUD, turno);
 
         interactionsService.guardarInteraccion(
-            mailQueInicioSesion, context.getString(R.string.interaccionTitulo_NotificacionSalud),
-                "-", context.getString(R.string.interaccionTexto_EnviarNotificacionSalud));
+            mailQueInicioSesion, context.getString(R.string.interaccionTitulo_Notificacion, "medicamentos"),
+                "-", context.getString(R.string.interaccionTexto_EnviarNotificacion));
     }
 
     public void enviarNotificacionClima(Context context, String turno) {
-        String notificationTitle = "Que lindo dia";
+        String notificationTitle = context.getString(R.string.notificacionTitulo_Clima);
         String notificationText = context.getString(R.string.notificacionTexto_Clima);
         enviarNotificacion(context, notificationTitle, notificationText,
-                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA, turno);
+            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA, turno);
+    }
+
+    public void enviarNotificacionChequeo(Context context, String nombreAbuelo, String turno, String chequeo) {
+        InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
+        String notificationTitle = context.getString(R.string.notificacionTitulo_Chequeo, chequeo, turno);
+        String notificationText = context.getString(R.string.notificacionTexto_Chequeo);
+        int tipoNotificacion = 0;
+        if(chequeo.equals("presion"))
+            tipoNotificacion = ID_NOTIFICACION_PRESION;
+        else if(chequeo.equals("glucosa"))
+            tipoNotificacion = ID_NOTIFICACION_GLUCOSA;
+
+        if(tipoNotificacion!=0) {
+            enviarNotificacion(context, notificationTitle, notificationText, RingtoneManager.TYPE_ALARM,
+                tipoNotificacion, turno);
+
+            interactionsService.guardarInteraccion(
+                mailQueInicioSesion, context.getString(R.string.interaccionTitulo_Notificacion, "chequeo de " + chequeo),
+                "-", context.getString(R.string.interaccionTexto_EnviarNotificacion));
+        }
     }
 
     private void enviarNotificacion(Context context, String notificationTitle, String notificationText,
@@ -172,8 +194,8 @@ public class NotificationService {
         String titulo="";
         String observacion="";
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD) {
-            titulo = context.getString(R.string.interaccionTitulo_NotificacionSalud);
-            observacion = context.getString(R.string.interaccionTexto_CerrarNotificacionSalud);
+            titulo = context.getString(R.string.interaccionTitulo_Notificacion, "medicamentos");
+            observacion = context.getString(R.string.interaccionTexto_Notificacion, "cerró", "medicamentos");
         }
 
         if(!TextUtils.isEmpty(titulo)){
@@ -187,8 +209,8 @@ public class NotificationService {
         String titulo="";
         String observacion="";
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_SALUD) {
-            titulo = context.getString(R.string.interaccionTitulo_NotificacionSalud);
-            observacion = context.getString(R.string.interaccionTexto_VencerNotificacionSalud);
+            titulo = context.getString(R.string.interaccionTitulo_Notificacion, "medicamentos");
+            observacion = context.getString(R.string.interaccionTexto_VencerNotificacion, "medicamentos");
         }
         if(!TextUtils.isEmpty(titulo)){
             InteractionsService interactionsService = new InteractionsService(context, context.getAssets(), fbRefInteracciones);
