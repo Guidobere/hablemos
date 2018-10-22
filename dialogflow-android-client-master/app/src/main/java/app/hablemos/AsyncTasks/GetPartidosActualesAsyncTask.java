@@ -61,6 +61,7 @@ public class GetPartidosActualesAsyncTask extends AsyncTask<Void, Void, List<Par
                         }
                         partidos.add(partidoActual);
                     }
+                    i = blocks.size();
                 }
             }
         }

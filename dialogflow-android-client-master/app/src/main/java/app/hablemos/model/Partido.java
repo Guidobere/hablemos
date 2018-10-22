@@ -28,6 +28,10 @@ public class Partido {
         }
     }
 
+    public String getFecha() {
+        return fecha;
+    }
+
     public String getResultado() {
         return resultado;
     }
@@ -47,16 +51,15 @@ public class Partido {
         return diaDePartido;
     }
 
-    @Override
-    public String toString() {
+    public String toString(String rival) {
         return " jugará de " + localia + " contra " + rival + " el día " + dia + " por la fecha " + fecha;
     }
 
-    public String toStringUltimo() {
+    public String toStringUltimo(String rival) {
         return " jugó de " + localia + " contra " + rival + " el día " + dia + " por la fecha " + fecha + " y terminó " + resultado;
     }
 
-    public String toStringEnCurso() {
+    public String toStringEnCurso(String rival) {
         return " está jugando de " + localia + " contra " + rival + " por la fecha " + fecha + " y va " + resultado;
     }
 }
