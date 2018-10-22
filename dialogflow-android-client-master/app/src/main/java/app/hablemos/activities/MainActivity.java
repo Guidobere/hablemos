@@ -1,24 +1,18 @@
 package app.hablemos.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,8 +23,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import ai.api.AIListener;
@@ -59,31 +46,25 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.ResponseMessage;
 import ai.api.model.Result;
-import ai.api.util.StringUtils;
 import app.hablemos.R;
 import app.hablemos.backgroundServices.SchedulerService;
-import app.hablemos.model.Function;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.SacadorDeAcentos;
 import app.hablemos.model.User;
 import app.hablemos.services.FootballService;
 import app.hablemos.services.InteractionsService;
 import app.hablemos.services.NotificationService;
+import app.hablemos.util.DateUtils;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private String TAG;
 
     private String queryString;
-    private boolean esAutomatico=false;
 
     //status check code
     private int MY_DATA_CHECK_CODE = 0;
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
     private static final int REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID = 133;
-    private boolean recordPermissionGranted = false;
-
-    //Sacador de acentos
-    private SacadorDeAcentos chauAcentos;
 
     //TTS object
     private TextToSpeech myTTS;
@@ -113,18 +94,21 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     private String diaSemana;
 
-    boolean yaSaludo = false;
-    boolean vieneDeNotificacion;
-    boolean rtaNotificacionManejada;
+    private boolean yaSaludo = false;
+    private boolean vieneDeNotificacion;
+    private boolean rtaNotificacionManejada;
+    private boolean esAutomatico = false;
+    private boolean recordPermissionGranted = false;
+    private boolean esHablado = false;
 
     //Multi Tap en el boton "editar registro".
     public int contadorClicksEditarRegistro;
 
     //FIREBASE
-    DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child("users");
-    DatabaseReference myUsersFb2 = FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
-    DatabaseReference myUsersFb3 = FirebaseDatabase.getInstance().getReference().child("recordatoriosPresion");
-    DatabaseReference fbRefInteracciones = FirebaseDatabase.getInstance().getReference().child("interacciones");
+    DatabaseReference usersFb;
+    DatabaseReference glucosaFb;
+    DatabaseReference presionFb;
+    DatabaseReference interaccionesFb;
 
     private InteractionsService interactionsService;
     private PendingIntent pendingEmailIntent;
@@ -133,7 +117,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        interactionsService = new InteractionsService(getBaseContext(), getAssets(), fbRefInteracciones);
+
+        this.usersFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbUsuarios));
+        this.glucosaFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosGlucosa));
+        this.presionFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosPresion));
+        this.interaccionesFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.rbInteracciones));
+
+        interactionsService = new InteractionsService(getBaseContext(), getAssets(), interaccionesFb);
 
         setContentView(R.layout.nuevomain);
 
@@ -144,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         TAG = getString(R.string.tagMain);
 
-        diaSemana = getDiaSemana(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+        diaSemana = DateUtils.getDiaSemanaActual();
 
         HORARIO_MANANA = Integer.parseInt(getString(R.string.horarioManiana));
         HORARIO_TARDE = Integer.parseInt(getString(R.string.horarioTarde));
@@ -236,33 +226,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         return super.onOptionsItemSelected(item);
     }
 
-    private String getDiaSemana(int i) {
-        String dia = "";
-        switch (i) {
-            case 1:
-                dia = "domingo";
-                break;
-            case 2:
-                dia = "lunes";
-                break;
-            case 3:
-                dia = "martes";
-                break;
-            case 4:
-                dia = "miercoles";
-                break;
-            case 5:
-                dia = "jueves";
-                break;
-            case 6:
-                dia = "viernes";
-                break;
-            case 7:
-                dia = "sabado";
-                break;
-        }
-        return dia;
-    }
+
 
     private String parsearNombre(String nombre) {
         String s1 = nombre.substring(0, 1).toUpperCase();
@@ -293,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         if (initStatus == TextToSpeech.SUCCESS) {
             myTTS.setLanguage(new Locale("es", "AR"));
             if(vieneDeNotificacion) {
+                send.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 if(!rtaNotificacionManejada) {
                     manejarRespuestaNotificacion(getIntent().getExtras());
                     rtaNotificacionManejada = true;
@@ -367,6 +332,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     public void onListeningFinished() {
         micButton.setEnabled(true);
+        esHablado = true;
     }
 
     @Override
@@ -382,11 +348,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         interrumpirBotty();
 
         if (!esAutomatico) {
-            queryString = chauAcentos.stripAccents(String.valueOf(queryEditText.getText()));
+            resultTextView2.setText(String.valueOf(queryEditText.getText()));
+            queryString = SacadorDeAcentos.stripAccents(String.valueOf(queryEditText.getText()));
             queryEditText.setText("");
         }
 
         if (TextUtils.isEmpty(queryString)) {
+            resultTextView2.setText("");
             onError(new AIError(getString(R.string.non_empty_query)));
             myTTS.speak(getString(R.string.non_empty_query), 0, null, "default");
             return;
@@ -394,10 +362,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
 
         send.onEditorAction(EditorInfo.IME_ACTION_DONE);
-
-        if (!esAutomatico) {
-            resultTextView2.setText(queryString);
-        }
 
         final AsyncTask<String, Void, AIResponse> task = new AsyncTask<String, Void, AIResponse>() {
 
@@ -571,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     public void pedirAlaBaseSobrePresion(final String turnoPresion){
         a = 0;
-        myUsersFb3.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
+        presionFb.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot users) {
 
@@ -607,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
    public void pedirAlaBaseSobreGlucosa(final String turnoGlucosa){
        a = 0;
-       myUsersFb2.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
+       glucosaFb.orderByChild("email").equalTo(mailQueInicioSesion).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot users) {
 
@@ -641,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void pedirAlaBase(final String turno){
-        myUsersFb.orderByChild("email").equalTo(mailQueInicioSesion).addListenerForSingleValueEvent(new ValueEventListener() {
+        usersFb.orderByChild("email").equalTo(mailQueInicioSesion).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot users) {
 
@@ -705,6 +669,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             public void run() {
                 final Result result = response.getResult();
 
+                //Se muestra el texto cuando se usa el botón Hablar
+                if(esHablado && !esAutomatico)
+                    resultTextView2.setText(result.getResolvedQuery());
+
                 try{
                     speech = ((ResponseMessage.ResponseSpeech) result.getFulfillment().getMessages().get(0)).getSpeech().get(0);
                 } catch (Exception e){
@@ -712,6 +680,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 }
 
                 personalizarMensaje();
+                esAutomatico = false;
+                esHablado = false;
             }
         });
     }
@@ -734,6 +704,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 //Cuando el error es "No speech input" se llama directamente al onError
                 //sin llamar a onListeningFinished. Por eso se habilita el micrófono acá.
                 micButton.setEnabled(true);
+
+                esAutomatico = false;
+                esHablado = false;
+                resultTextView2.setText("");
             }
         });
     }
@@ -802,6 +776,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         super.onResume();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(myTTS!=null && myTTS.isSpeaking())
+            myTTS.stop();
+    }
+
     //enviarNotificacionMedicamentos
     private void manejarRespuestaNotificacion(Bundle extras) {
         int tipoNotificacion = extras.getInt("tipoNotificacion");
@@ -810,8 +791,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             String turno = extras.getString("extraInfo");
             pedirAlaBase(turno);
             interactionsService.guardarInteraccion(mailQueInicioSesion,
-                getString(R.string.interaccionTitulo_NotificacionSalud), "Si",
-                getString(R.string.interaccionTexto_AbrirNotificacionSalud));
+                getString(R.string.interaccionTitulo_Notificacion, "medicamentos"), "Si",
+                getString(R.string.interaccionTexto_Notificacion, "abrió", "medicamentos"));
         }
 
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){
@@ -819,8 +800,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             esAutomatico=true;
             queryString="op_caminar";
             sendRequest();
-            esAutomatico=false;
-
         }
 
     }

@@ -10,7 +10,13 @@
     <string name="mail">hablemosproyectofinal@gmail.com</string>
     <string name="pass">aprobamoscomosea</string>
     <string name="urlImagenReporte">https://i.postimg.cc/MpTs8h49/hablemos-320x240-fenix.png</string>
-    <string name="horaReporte">9</string>
+    <string name="horarioReporte">9</string>
+
+    <!-- Firebase -->
+    <string name="fbRecordatoriosPresion">recordatoriosPresion</string>
+    <string name="fbRecordatoriosGlucosa">recordatorioglucosa</string>
+    <string name="fbUsuarios">users</string>
+    <string name="rbInteracciones">interacciones</string>
 
     <!-- Clima -->
     <string name="horarioClima">13</string>
@@ -107,17 +113,19 @@
 
     <!-- Nombre interacciones -->
     <string name="interaccionTitulo_AbrirApp">Abrir Hablemos!</string>
-    <string name="interaccionTitulo_NotificacionSalud">Notificación de salud</string>
+    <string name="interaccionTitulo_Notificacion">Notificación de %1$s</string>
 
     <!-- Texto interacciones -->
-    <string name="interaccionTexto_EnviarNotificacionSalud">Se envió la notificación de salud</string>
-    <string name="interaccionTexto_CerrarNotificacionSalud">El usuario cerró la notificación de salud</string>
-    <string name="interaccionTexto_AbrirNotificacionSalud">El usuario tocó la notificación de salud</string>
-    <string name="interaccionTexto_VencerNotificacionSalud">El usuario no abrió la notificación de salud a tiempo</string>
+    <string name="interaccionTexto_EnviarNotificacion">Se envió la notificación</string>
+    <string name="interaccionTexto_Notificacion">El usuario %1$s la notificación de %2$s</string>
+    <string name="interaccionTexto_VencerNotificacion">El usuario no abrió la notificación de %1$s a tiempo</string>
 
     <!-- Notificaciones -->
     <string name="notificacionTexto_Salud">Tocá una vez acá para saber cuáles.</string>
-    <string name="notificacionTexto_Clima">¿Queres salir a pasear?.</string>
+    <string name="notificacionTitulo_Clima">Qué lindo día</string>
+    <string name="notificacionTexto_Clima">¿Querés salir a pasear?</string>
+    <string name="notificacionTitulo_Chequeo">Chequeo de %1$s de la %2$s</string>
+    <string name="notificacionTexto_Chequeo">Tocá una vez acá para avisarme cuando lo hagas!</string>
 
     <string name="cancelar">Cancelar</string>
     <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>

@@ -84,7 +84,7 @@
             android:textStyle="bold"
             android:textSize="30sp"/>
 
-        <TextView
+        <app.hablemos.view.JustifyTextView
             android:id="@+id/resultTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

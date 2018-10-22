@@ -74,9 +74,9 @@ public class RegistroActivity extends AppCompatActivity {
     //ACCEDO A LOS USUARIOS DE FIREBASE y uso esta instancia como global
     private String TAG = "RegistroLog";
     private FirebaseAuth.AuthStateListener mAuthListener;
-    DatabaseReference myUsersFb =FirebaseDatabase.getInstance().getReference().child("users");
-    DatabaseReference myRecordatoriosGlucosaFb =FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
-    DatabaseReference myRecordatoriosPresionFb =FirebaseDatabase.getInstance().getReference().child("recordatoriosPresion");
+    DatabaseReference myUsersFb;
+    DatabaseReference myRecordatoriosGlucosaFb;
+    DatabaseReference myRecordatoriosPresionFb;
 
     //ESto es para la autenticacion
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -84,6 +84,11 @@ public class RegistroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        myUsersFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbUsuarios));
+        myRecordatoriosGlucosaFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosGlucosa));
+        myRecordatoriosPresionFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosPresion));
+
         setContentView(R.layout.cinicial);
 
         nombreAbuelo = findViewById(R.id.txtAbuelo);
@@ -434,8 +439,8 @@ public class RegistroActivity extends AppCompatActivity {
                     medicamentosM.setText(u.remediosManiana);
                     medicamentosT.setText(u.remediosTarde);
                     medicamentosN.setText(u.remediosNoche);
-
-                    spinnerEquipo.setSelection(getIndex(spinnerEquipo, u.equipo));
+                    String nombreEquipo = footballService.obtenerEquipoVisual(u.equipo);
+                    spinnerEquipo.setSelection(getIndex(spinnerEquipo, nombreEquipo));
 
 
 
