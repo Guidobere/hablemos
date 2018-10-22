@@ -589,12 +589,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     if(elturno.equalsIgnoreCase(turnoPresion) && losdias.contains(diaSemana)){
                         a=1;
                        // speech="Hoy si";
-                        loQueDiceYescribe("Hoy si","default");
+                        loQueDiceYescribe("Hoy a la "+ turnoPresion +" debes medirte la presion","default");
                     }
                 }
 
                 if(a == 0) {
-                    loQueDiceYescribe("Hoy no","default");
+                    loQueDiceYescribe("Hoy a la "+ turnoPresion +" no debes medirte la presion","default");
                 }
             }
 
@@ -624,12 +624,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
                         a=1;
-                       loQueDiceYescribe("Hoy si","default");
+                       loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" debes medirte la glucosa","default");
                     }
                 }
 
                 if(a == 0) {
-                     loQueDiceYescribe("Hoy no","default");
+                     loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" no debes medirte la glucosa","default");
                 }
             }
 
