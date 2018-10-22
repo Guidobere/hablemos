@@ -324,9 +324,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@color/colorPrimary"
-                        android:contentDescription="@string/imgturnonoche"
                         android:padding="3dp"
-                        android:src="@drawable/noche"/>
+                        android:src="@drawable/noche"
+                        android:contentDescription="@string/imgturnonoche"/>
 
                     <EditText
                         android:id="@+id/txtnoche"
