@@ -1,5 +1,6 @@
 package app.hablemos.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,7 +58,7 @@ public class RegistroActivity extends AppCompatActivity {
     //DATOS PERSONALES
     private EditText nombreAbuelo;
     private EditText mailTutor;
-    private EditText equipoFavorito;
+    private String equipoFavorito;
     private EditText contra;
     private EditText repetirPwd;
     private Spinner spinnerEquipo;
@@ -141,6 +142,9 @@ public class RegistroActivity extends AppCompatActivity {
                 //Aca actualiza al usuario existente
                 ActualizarUsuario();
                 if(a==1) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("equipoAbuelo", equipoFavorito);
+                    setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 }else {
                     startActivity(Login.class);
@@ -618,9 +622,13 @@ public class RegistroActivity extends AppCompatActivity {
         //uso la variable global userID obtenida previamente en funcion "pedirAlaBaseUsuarioByEmail(email)"
         // luego Asigno en la tabla users en el child "userID" (con el valor de ese userID) los nuevos valores del usuario
         String userID=UserID !=null? UserID : "" ;
-        if(userID!= "")
-            myUsersFb.child(userID).setValue(new User(userID,nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase()
-            ));
+        if(!userID.equals("")) {
+            equipoFavorito = footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString());
+            myUsersFb.child(userID).setValue(
+                    new User(userID, nombreAbuelo.getText().toString().toLowerCase(), mailTutor.getText().toString().toLowerCase(),
+                            equipoFavorito, medicamentosM.getText().toString().toLowerCase(),
+                            medicamentosT.getText().toString().toLowerCase(), medicamentosN.getText().toString().toLowerCase()));
+        }
         else{
             Toast.makeText(RegistroActivity.this, "no se pudo actualizar al usuario", Toast.LENGTH_SHORT).show();
         }
