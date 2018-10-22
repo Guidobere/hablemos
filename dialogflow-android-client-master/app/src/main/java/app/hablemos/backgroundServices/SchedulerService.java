@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -35,7 +36,7 @@ public class SchedulerService extends Service{
     private int horarioSaludTarde;
     private int horarioSaludNoche;
     private int horarioClima;
-    private int horaReporte;
+    private int horarioReporte;
 
     @Override
     public void onCreate() {
@@ -44,7 +45,7 @@ public class SchedulerService extends Service{
         horarioSaludNoche = Integer.parseInt(getString(R.string.horarioSaludNoche));
         horarioClima = Integer.parseInt(getString(R.string.horarioClima));
 
-        horaReporte = Integer.parseInt(getString(R.string.horaReporte));
+        horarioReporte = Integer.parseInt(getString(R.string.horarioReporte));
 
         // Se crea un thread para el scheduler, sino usaría el thread principal
         HandlerThread thread = new HandlerThread("ServiceStartArguments",

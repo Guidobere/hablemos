@@ -74,9 +74,9 @@ public class RegistroActivity extends AppCompatActivity {
     //ACCEDO A LOS USUARIOS DE FIREBASE y uso esta instancia como global
     private String TAG = "RegistroLog";
     private FirebaseAuth.AuthStateListener mAuthListener;
-    DatabaseReference myUsersFb =FirebaseDatabase.getInstance().getReference().child("users");
-    DatabaseReference myRecordatoriosGlucosaFb =FirebaseDatabase.getInstance().getReference().child("recordatorioglucosa");
-    DatabaseReference myRecordatoriosPresionFb =FirebaseDatabase.getInstance().getReference().child("recordatoriosPresion");
+    DatabaseReference myUsersFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbUsuarios));
+    DatabaseReference myRecordatoriosGlucosaFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosGlucosa));
+    DatabaseReference myRecordatoriosPresionFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosPresion));
 
     //ESto es para la autenticacion
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();

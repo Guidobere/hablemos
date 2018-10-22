@@ -10,7 +10,13 @@
     <string name="mail">hablemosproyectofinal@gmail.com</string>
     <string name="pass">aprobamoscomosea</string>
     <string name="urlImagenReporte">https://i.postimg.cc/MpTs8h49/hablemos-320x240-fenix.png</string>
-    <string name="horaReporte">9</string>
+    <string name="horarioReporte">9</string>
+
+    <!-- Firebase -->
+    <string name="fbRecordatoriosPresion">recordatoriosPresion</string>
+    <string name="fbRecordatoriosGlucosa">recordatorioglucosa</string>
+    <string name="fbUsuarios">users</string>
+    <string name="rbInteracciones">interacciones</string>
 
     <!-- Clima -->
     <string name="horarioClima">13</string>
