@@ -1,6 +1,7 @@
 package app.hablemos.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -61,8 +62,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     private String queryString;
 
-    //status check code
-    private int MY_DATA_CHECK_CODE = 0;
+    //Subintents
+    private final int TTS_CHECK_CODE = 0;
+    private final int MODIF_CONFIG_CODE = 1;
+
+    //Permisos
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
     private static final int REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID = 133;
 
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private void checkForTTSData() {
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        startActivityForResult(checkTTSIntent, TTS_CHECK_CODE);
     }
 
       //mostrar menu de opciones
@@ -211,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 }
 
                 public void onFinish() {
-                    contadorClicksEditarRegistro =0;
+                    contadorClicksEditarRegistro = 0;
                     //resultTextView.setText("Done");
                     //Log.w("contador tiempo", "done");
                 }
@@ -219,7 +223,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
             if(contadorClicksEditarRegistro > 5){
                 interrumpirBotty();
-                startActivity(RegistroActivity.class);
+                Intent intent = new Intent(this,RegistroActivity.class);
+                startActivityForResult(intent, MODIF_CONFIG_CODE);
                 return true;
             }
         }
@@ -233,23 +238,36 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         return s1 + nombre.substring(1).toLowerCase();
     }
 
-    //act on result of TTS data check
+    //Resultado de subintents
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSIONS_ID);
-        } else
-            recordPermissionGranted = true;
-        if (requestCode == MY_DATA_CHECK_CODE) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                //the user has the necessary data - create the TTS
-                myTTS = new TextToSpeech(this, this);
-            } else {
-                //no data - install it now
-                Intent installTTSIntent = new Intent();
-                installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installTTSIntent);
+        switch(requestCode) {
+            //act on result of TTS data check
+            case (TTS_CHECK_CODE) : {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSIONS_ID);
+                } else
+                    recordPermissionGranted = true;
+
+                if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                    //the user has the necessary data - create the TTS
+                    myTTS = new TextToSpeech(this, this);
+                } else {
+                    //no data - install it now
+                    Intent installTTSIntent = new Intent();
+                    installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                    startActivity(installTTSIntent);
+                }
+
+                break;
+            }
+            case (MODIF_CONFIG_CODE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    equipoAbuelo = data.getStringExtra("equipoAbuelo");
+                }
+                break;
             }
         }
+
     }
 
     //setup TTS
@@ -772,7 +790,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void onResume(){
-        contadorClicksEditarRegistro =0;
+        contadorClicksEditarRegistro = 0;
         super.onResume();
     }
 
