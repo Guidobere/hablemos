@@ -120,7 +120,7 @@ public class SchedulerService extends Service{
 
         // Mail de reporte al tutor
         intentReporte = setAlarma(mailQueInicioSesion, nombreAbuelo,
-            horaReporte, 0, intentReporte, alarmManager,
+            horarioReporte, 0, intentReporte, alarmManager,
             EmailReceiver.class, AlarmManager.INTERVAL_DAY);
 
         intentClima = setAlarma(mailQueInicioSesion, nombreAbuelo,
