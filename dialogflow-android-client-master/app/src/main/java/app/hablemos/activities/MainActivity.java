@@ -791,8 +791,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             String turno = extras.getString("extraInfo");
             pedirAlaBase(turno);
             interactionsService.guardarInteraccion(mailQueInicioSesion,
-                getString(R.string.interaccionTitulo_NotificacionSalud), "Si",
-                getString(R.string.interaccionTexto_AbrirNotificacionSalud));
+                getString(R.string.interaccionTitulo_Notificacion, "medicamentos"), "Si",
+                getString(R.string.interaccionTexto_Notificacion, "abrió", "medicamentos"));
         }
 
         if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){

@@ -31,6 +31,7 @@ public class HealthReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String nombreAbuelo = intent.getExtras().getString("nombreAbuelo");
         String mailQueInicioSesion = intent.getExtras().getString("mailQueInicioSesion");
-        healthService.sendHealthNotifications(context, nombreAbuelo, mailQueInicioSesion);
+        String turno = intent.getExtras().getString("turno");
+        healthService.sendHealthNotifications(context, nombreAbuelo, mailQueInicioSesion, turno);
     }
 }
