@@ -13,6 +13,7 @@ import app.hablemos.asynctasks.GetEquiposAsyncTask;
 import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
 import app.hablemos.asynctasks.GetPartidosAsyncTask;
 import app.hablemos.asynctasks.GetPosicionesAsyncTask;
+import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
 import app.hablemos.model.DatosEquipo;
 import app.hablemos.model.Equipo;
 import app.hablemos.model.EquipoPosicionado;
@@ -82,6 +83,7 @@ public class FootballService {
         mapa.put("tigre", "Tigre");
         mapa.put("union", "Union");
         mapa.put("velez", "Velez");
+        mapa.put("ninguno", "Ninguno");
         return mapa;
     }
 
@@ -229,14 +231,14 @@ public class FootballService {
                 }
             }
             Collections.sort(partidosFiltrados, comparadorDeFecha);
-            String retorno = "";
+            StringBuilder retorno = new StringBuilder();
             int posEnLista = 0;
             if (partidosFiltrados.get(0).getDia().contains("Post")) {
-                retorno += equipoVisual + " tiene un partido postergado con " + partidosFiltrados.get(0).getRival() +
-                        " sin fecha asignada, en el siguiente encuentro" + partidosFiltrados.get(1).toString();
+                retorno.append(equipoVisual).append(" tiene un partido postergado con ").append(getNombreRealFromTabla(partidosFiltrados.get(0).getRival())).append(" sin fecha asignada, en el siguiente encuentro").append(partidosFiltrados.get(1).toString(getNombreRealFromTabla(partidosFiltrados.get(1).getRival())));
                 posEnLista = 1;
+            } else {
+                retorno.append(equipoVisual).append(partidosFiltrados.get(0).toString(getNombreRealFromTabla(partidosFiltrados.get(0).getRival())));
             }
-            retorno += equipoVisual + partidosFiltrados.get(0).toString();
             Calendar calendar = Calendar.getInstance();
             String now = (calendar.get(Calendar.DATE)) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
             if (partidosFiltrados.get(posEnLista).getDia().equals(now)) {
@@ -244,11 +246,11 @@ public class FootballService {
                 for(PartidoActual partidoActual : partidosActuales) {
                     if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
                             partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
-                        retorno += " a las " + partidoActual.getHoraJuego();
+                        retorno.append(" a las ").append(partidoActual.getHoraJuego());
                     }
                 }
             }
-            return retorno;
+            return retorno.toString();
         } else
             return "El equipo solicitado no pudo ser encontrado";
     }
@@ -275,59 +277,72 @@ public class FootballService {
                 }
             }
             Collections.sort(partidosFiltrados, comparadorDeFecha);
-            String retorno = equipoVisual;
+            StringBuilder retorno = new StringBuilder(equipoVisual);
             Calendar calendar = Calendar.getInstance();
             String now = (calendar.get(Calendar.DATE)) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
+            List<PartidoActual> partidosActuales;
             if (partidosFiltrados.get(partidosFiltrados.size()-1).getDia().equals(now)) {
-                List<PartidoActual> partidosActuales = getPartidosActuales();
-                for(PartidoActual partidoActual : partidosActuales) {
-                    if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
-                            partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
-                        if(partidoActual.getEstado().equalsIgnoreCase("jugandose")) {
-                            retorno += partidosFiltrados.get(partidosFiltrados.size()-1).toStringEnCurso() + " a los " + Integer.parseInt(partidoActual.getTiempoJuego().replace("'", "")) + " minutos.";
-                        } else if(partidoActual.getEstado().equalsIgnoreCase("finaliza")) {
-                            retorno += partidosFiltrados.get(partidosFiltrados.size()-1).toStringUltimo();
+                partidosActuales = getPartidosActuales();
+            } else {
+                partidosActuales = getPartidosPasados(partidosFiltrados.get(partidosFiltrados.size()-1).getFecha());
+            }
+            for(PartidoActual partidoActual : partidosActuales) {
+                if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
+                        partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
+                    if(partidoActual.getEstado().equalsIgnoreCase("jugandose")) {
+                        if (partidoActual.getTiempoJuego().equalsIgnoreCase("e.t.")) {
+                            retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringEnCurso(getNombreRealFromTabla(partidosFiltrados.get(partidosFiltrados.size() - 1).getRival()))).append(", están en el entretiempo.");
+                        } else {
+                            retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringEnCurso(getNombreRealFromTabla(partidosFiltrados.get(partidosFiltrados.size() - 1).getRival()))).append(" a los ").append(Integer.parseInt(partidoActual.getTiempoJuego().replace("'", ""))).append(" minutos.");
                         }
-                        if (partidoActual.getGolesEquipoLocal()==1){
-                            retorno += "\nEl gol del local lo marcó " +
-                                    partidoActual.getGolesLocal().split("'")[1].replace(";", "").replace(".", "").trim() + " a los " +
-                                    partidoActual.getGolesLocal().split("'")[0] + " minutos.";
-                        } else if (partidoActual.getGolesEquipoLocal()>1){
-                            retorno += "\nLos goles del equipo local fueron marcados por " + obtenerMarcadores(partidoActual.getGolesLocal());
-                        }
-                        if (partidoActual.getGolesEquipoVisitante()==1){
-                            retorno += "\nEl gol de la visita lo marcó " +
-                                    partidoActual.getGolesVisitante().split("'")[1].replace(";", "").replace(".", "").trim() + " a los " +
-                                    partidoActual.getGolesVisitante().split("'")[0] + " minutos.";
-                        } else if (partidoActual.getGolesEquipoVisitante()>1){
-                            retorno += "\nLos goles de la visita fueron marcados por " + obtenerMarcadores(partidoActual.getGolesVisitante());
-                        }
+                    } else if(partidoActual.getEstado().equalsIgnoreCase("finaliza")) {
+                        retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringUltimo(getNombreRealFromTabla(partidosFiltrados.get(partidosFiltrados.size() - 1).getRival())));
+                    }
+                    if (partidoActual.getGolesEquipoLocal()==1){
+                        retorno.append("\nEl gol del local lo marcó ").append(partidoActual.getGolesLocal().split("'")[1].replace(";", "").replace(".", "").trim()).append(" a los ").append(partidoActual.getGolesLocal().split("'")[0]).append(" minutos.");
+                    } else if (partidoActual.getGolesEquipoLocal()>1){
+                        retorno.append("\nLos goles del equipo local fueron marcados por ").append(obtenerMarcadores(partidoActual.getGolesLocal()));
+                    }
+                    if (partidoActual.getGolesEquipoVisitante()==1){
+                        retorno.append("\nEl gol de la visita lo marcó ").append(partidoActual.getGolesVisitante().split("'")[1].replace(";", "").replace(".", "").trim()).append(" a los ").append(partidoActual.getGolesVisitante().split("'")[0]).append(" minutos.");
+                    } else if (partidoActual.getGolesEquipoVisitante()>1){
+                        retorno.append("\nLos goles de la visita fueron marcados por ").append(obtenerMarcadores(partidoActual.getGolesVisitante()));
                     }
                 }
             }
-            return retorno;
+            return retorno.toString();
         } else
             return "El equipo solicitado no pudo ser encontrado";
     }
 
     private String obtenerMarcadores(String golesLocal) {
         String separador = "";
-        String marcadores = "";
+        StringBuilder marcadores = new StringBuilder();
         String[] marcadoresArray = golesLocal.split(";");
         for (String str : marcadoresArray) {
             String[] submarcadoresArray = str.split("'");
             String tiempo = submarcadoresArray[0].trim();
             String marcador = submarcadoresArray[1].trim().replace("e.c.", "en contra").replace(".", "");
-            marcadores += separador + marcador + " a los " + tiempo + " minutos";
+            marcadores.append(separador).append(marcador).append(" a los ").append(tiempo).append(" minutos");
             separador = ", ";
         }
         return marcadores + ".";
     }
 
-    public List<PartidoActual> getPartidosActuales() {
+    private List<PartidoActual> getPartidosActuales() {
         List<PartidoActual> partidosActuales = new ArrayList<>();
         try {
             partidosActuales = new GetPartidosActualesAsyncTask().execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return partidosActuales;
+    }
+
+    private List<PartidoActual> getPartidosPasados(String fecha) {
+        List<PartidoActual> partidosActuales = new ArrayList<>();
+        try {
+            partidosActuales = new GetResultadoUltimoPartidoAsyncTask(fecha).execute().get();
         } catch (Exception e) {
             e.printStackTrace();
         }
