@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import app.hablemos.model.DatosEquipo;
+import app.hablemos.model.football.DatosEquipo;
 
 public class GetDatosAsyncTask extends AsyncTask<Void, Void, DatosEquipo> {
 

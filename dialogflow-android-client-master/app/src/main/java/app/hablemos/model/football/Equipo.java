@@ -1,4 +1,4 @@
-package app.hablemos.model;
+package app.hablemos.model.football;
 
 public class Equipo {
 

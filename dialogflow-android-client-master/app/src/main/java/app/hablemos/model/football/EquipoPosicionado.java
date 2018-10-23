@@ -1,4 +1,4 @@
-package app.hablemos.model;
+package app.hablemos.model.football;
 
 public class EquipoPosicionado {
 
@@ -12,6 +12,10 @@ public class EquipoPosicionado {
     private int golesAFavor;
     private int golesEnContra;
     private int diferencia;
+    private boolean libertadores;
+    private boolean sudamericana;
+    private boolean desciende;
+    private float promedio;
 
     public EquipoPosicionado() {
 
@@ -40,10 +44,42 @@ public class EquipoPosicionado {
 
     @Override
     public String toString() {
-        return nombre + " está en la posición " + posicion + " con " + puntos +
+        return " está en la posición " + posicion + " con " + puntos +
                 " puntos.\nJugó " + partidosJugados + " partidos, ganó " + partidosGanados +
                 ", empató " + partidosEmpatados + " y perdió " + partidosPerdidos +
                 ".\nHizo " + golesAFavor + " goles, le convirtieron " + golesEnContra +
                 " y su diferencia de gol es " + diferencia + ".";
+    }
+
+    public boolean isLibertadores() {
+        return libertadores;
+    }
+
+    public void setLibertadores(boolean libertadores) {
+        this.libertadores = libertadores;
+    }
+
+    public boolean isSudamericana() {
+        return sudamericana;
+    }
+
+    public void setSudamericana(boolean sudamericana) {
+        this.sudamericana = sudamericana;
+    }
+
+    public boolean isDesciende() {
+        return desciende;
+    }
+
+    public void setDesciende(boolean desciende) {
+        this.desciende = desciende;
+    }
+
+    public float getPromedio() {
+        return promedio;
+    }
+
+    public void setPromedio(float promedio) {
+        this.promedio = promedio;
     }
 }
