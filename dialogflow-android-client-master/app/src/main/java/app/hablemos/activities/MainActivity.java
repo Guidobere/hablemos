@@ -49,7 +49,6 @@ import ai.api.model.ResponseMessage;
 import ai.api.model.Result;
 import app.hablemos.R;
 import app.hablemos.backgroundServices.SchedulerService;
-import app.hablemos.footballActions.FootballActionExecutor;
 import app.hablemos.footballActions.FootballServiceActions;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.SacadorDeAcentos;
@@ -744,12 +743,17 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 getString(R.string.interaccionTexto_Notificacion, "abrió", "medicamentos"));
         }
 
-        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA){
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA_LINDO){
 
             esAutomatico=true;
             queryString="op_caminar";
             sendRequest();
         }
+
+        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA_FUERTE){
+            loQueDiceYescribe("Tomar mucha agua durante todo el día\nEvitar las bebidas alcohólicas, muy dulces y las infusiones calientes\nUsar ropa suelta, de materiales livianos y de colores claros\nno exponerse al sol","default");
+        }
+
 
     }
 

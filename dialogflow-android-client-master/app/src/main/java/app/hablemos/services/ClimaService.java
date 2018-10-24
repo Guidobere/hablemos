@@ -1,20 +1,9 @@
 package app.hablemos.services;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Typeface;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.text.Html;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -25,8 +14,6 @@ import java.net.URL;
 import java.util.Calendar;
 
 import app.hablemos.R;
-
-import static android.support.v4.content.ContextCompat.getSystemService;
 
 
 public class ClimaService {
@@ -78,8 +65,26 @@ public class ClimaService {
                     int numeroID = Integer.parseInt(id);
                     Double numero = Double.parseDouble(mensaje);
 
-                    if(numero>1){ //4 && numeroID>799
-                        notificationService.enviarNotificacionClima(localContext, "mañana");
+                    notificationService.enviarNotificacionMuchoCalor(localContext, "mañana");
+                    /*
+                    if(numero>33 && numeroID>799){ //
+                        notificationService.enviarNotificacionMuchoCalor(localContext, "mañana");
+                        return null;
+                    }
+
+                    if(numero>14 && numeroID>799){ //
+                        notificationService.enviarNotificacionClimaLindo(localContext, "mañana");
+                        return null;
+                    }
+
+                    if(numeroID>299){
+                        notificationService.enviarNotificacionClimaParaguas(localContext, "mañana");
+                        return null;
+                    }
+
+                    if(numeroID>199){
+                        notificationService.enviarNotificacionClimaHorrible(localContext, "mañana");
+                        return null;
                     }
 
                     if(data.getInt("cod") != 200) {
@@ -87,7 +92,7 @@ public class ClimaService {
                         return null;
                     }
 
-
+*/
                 } catch (Exception e) {
 
                     System.out.println("Exception "+ e.getMessage());
