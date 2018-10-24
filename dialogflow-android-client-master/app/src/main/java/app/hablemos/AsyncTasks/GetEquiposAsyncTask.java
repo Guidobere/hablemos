@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.hablemos.model.Equipo;
+import app.hablemos.model.football.Equipo;
 
 public class GetEquiposAsyncTask extends AsyncTask<Void, Void, List<Equipo>> {
 

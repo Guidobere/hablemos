@@ -14,11 +14,11 @@ import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
 import app.hablemos.asynctasks.GetPartidosAsyncTask;
 import app.hablemos.asynctasks.GetPosicionesAsyncTask;
 import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
-import app.hablemos.model.DatosEquipo;
-import app.hablemos.model.Equipo;
-import app.hablemos.model.EquipoPosicionado;
-import app.hablemos.model.Partido;
-import app.hablemos.model.PartidoActual;
+import app.hablemos.model.football.DatosEquipo;
+import app.hablemos.model.football.Equipo;
+import app.hablemos.model.football.EquipoPosicionado;
+import app.hablemos.model.football.Partido;
+import app.hablemos.model.football.PartidoActual;
 
 public class FootballService {
 
@@ -32,9 +32,33 @@ public class FootballService {
         this.mapaEquipos = llenarMapaEquipos();
         try {
             this.equiposDePrimera = new GetEquiposAsyncTask().execute().get();
+            HashMap<String, String> mapaConversion = getMapaConversionVisual();
+            for(Equipo equipo : this.equiposDePrimera) {
+                if (mapaConversion.keySet().contains(equipo.getNombre())){
+                    equipo.setNombre(mapaConversion.get(equipo.getNombre()));
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private HashMap<String,String> getMapaConversionVisual() {
+        HashMap<String, String> mapa = new HashMap<>();
+        mapa.put("Argentinos", "Argentinos Juniors");
+        mapa.put("Atletico Tucuman", "Atlético Tucumán");
+        mapa.put("Belgrano (Cba)", "Belgrano de Córdoba");
+        mapa.put("Colon (SF)", "Colón de Santa Fe");
+        mapa.put("Estudiantes (La Plata)", "Estudiantes de La Plata");
+        mapa.put("Gimnasia (La Plata)", "Gimnasia y Esgrima de La Plata");
+        mapa.put("Godoy Cruz (Mendoza)", "Godoy Cruz");
+        mapa.put("Huracan", "Huracán");
+        mapa.put("Lanus", "Lanús");
+        mapa.put("San Martin (San Juan)", "San Martín de San Juan");
+        mapa.put("San Martin (Tucuman)", "San Martín de Tucumán");
+        mapa.put("Talleres (Cordoba)", "Talleres de Córdoba");
+        mapa.put("Union (Santa Fe)", "Unión de Santa Fe");
+        return mapa;
     }
 
     public List<String> getEquiposDePrimera() {
@@ -96,7 +120,7 @@ public class FootballService {
             respuesta.append(separador).append(getNombreRealFromTabla(ep.getNombre()));
             separador = ", ";
         }
-        return respuesta.toString();
+        return modificarNombresEquiposPrimera(respuesta.toString());
     }
 
     private String getNombreRealFromTabla(String nombre) {
@@ -118,7 +142,7 @@ public class FootballService {
             respuesta.append(separador).append(getNombreRealFromTabla(ep.getNombre()));
             separador = ", ";
         }
-        return respuesta.toString();
+        return modificarNombresEquiposPrimera(respuesta.toString());
     }
 
     private void llenarEquiposPosicionados() {
@@ -165,7 +189,7 @@ public class FootballService {
                 equipo = ep.getNombre();
             }
         }
-        return "El equipo que está en la posición " + posicion + " es " + equipo;
+        return "El equipo que está en la posición " + posicion + " es " + obtenerEquipoVisual(equipo);
     }
 
     public String getDatosEquipo(String equipo) {
@@ -202,7 +226,7 @@ public class FootballService {
                 estadisticas = ep.toString();
             }
         }
-        if (!estadisticas.equals("")) return estadisticas;
+        if (!estadisticas.equals("")) return equipoVisual + estadisticas;
         else return "No pudieron encontrarse estadísticas para " + equipoVisual;
     }
 
@@ -215,7 +239,7 @@ public class FootballService {
         } catch (Exception e) {
             return "Al menos uno de los equipos ingresados no es correcto";
         }
-        if (!comparacion.equals("")) return comparacion;
+        if (!comparacion.equals("")) return modificarNombresEquiposPrimera(comparacion);
         else return "La comparación entre " + equipoVisual1 + " y " + equipoVisual2 + " no pudo ser realizada";
     }
 
@@ -250,7 +274,7 @@ public class FootballService {
                     }
                 }
             }
-            return retorno.toString();
+            return modificarNombresEquiposPrimera(retorno.toString());
         } else
             return "El equipo solicitado no pudo ser encontrado";
     }
@@ -310,7 +334,7 @@ public class FootballService {
                     }
                 }
             }
-            return retorno.toString();
+            return modificarNombresEquiposPrimera(retorno.toString());
         } else
             return "El equipo solicitado no pudo ser encontrado";
     }
@@ -355,4 +379,103 @@ public class FootballService {
             return partido1.getDiaDePartido().compareTo(partido2.getDiaDePartido());
         }
     };
+
+    private Comparator<EquipoPosicionado> comparadorDePromedios = new Comparator<EquipoPosicionado>() {
+        @Override
+        public int compare(EquipoPosicionado eq1, EquipoPosicionado eq2) {
+            return Float.compare(eq1.getPromedio(), eq2.getPromedio());
+        }
+    };
+
+    public String getLibertadores() {
+        llenarEquiposPosicionados();
+        StringBuilder respuesta = new StringBuilder("Los equipos que están en zona de Copa Libertadores son: ");
+        String separador = "";
+        for (EquipoPosicionado ep : this.equiposPosicionados) {
+            if (ep.isLibertadores()) {
+                respuesta.append(separador).append(getNombreRealFromTabla(ep.getNombre()));
+                separador = ", ";
+            }
+        }
+        return respuesta.toString();
+    }
+
+    public String getSudamericana() {
+        llenarEquiposPosicionados();
+        StringBuilder respuesta = new StringBuilder("Los equipos que están en zona de Copa Sudamericana son: ");
+        String separador = "";
+        for (EquipoPosicionado ep : this.equiposPosicionados) {
+            if (ep.isSudamericana()) {
+                respuesta.append(separador).append(getNombreRealFromTabla(ep.getNombre()));
+                separador = ", ";
+            }
+        }
+        return respuesta.toString();
+    }
+
+    public String getDescienden() {
+        llenarEquiposPosicionados();
+        List<EquipoPosicionado> descienden = new ArrayList<>();
+        for (EquipoPosicionado ep : this.equiposPosicionados) {
+            if (ep.isDesciende()) {
+                descienden.add(ep);
+            }
+        }
+        Collections.sort(descienden, comparadorDePromedios);
+        Collections.reverse(descienden);
+        StringBuilder respuesta = new StringBuilder("Los equipos que están en zona de descenso son: ");
+        String separador = "";
+        int contador = 0;
+        for (EquipoPosicionado ep : descienden) {
+            if (contador == descienden.size()) {
+                respuesta.append(" y ").append(getNombreRealFromTabla(ep.getNombre()));
+            } else {
+                respuesta.append(separador).append(getNombreRealFromTabla(ep.getNombre()));
+                separador = ", ";
+            }
+        }
+        return respuesta.toString();
+    }
+
+    public String getEfemerides() {
+        return "";
+        //$("#cajadia div.eldia[style='background: #5ac382']").parent().children("div.cumplejuga").text()
+    }
+
+    public String getGoleador() {
+        return "";
+    }
+
+    private String modificarNombresEquiposPrimera(String input){
+        input = input
+        .replace("Argentinos Juniors", "Argentinos")
+        .replace("Argentinos", "Argentinos Juniors")
+        .replace("Atletico Tucuman", "Atl Tucumán")
+        .replace("Atl Tucuman", "Atlético Tucumán")
+        .replace("Belgrano (Cba)", "Belgrano")
+        .replace("Belgrano", "Belgrano de Córdoba")
+        .replace("Colon (SF)", "Colon")
+        .replace("Colon", "Colón de Santa Fe")
+        .replace("Def y Justicia", "Defensa y Justicia")
+        .replace("Estudiantes (La Plata)", "Estudiantes (LP)")
+        .replace("Estudiantes (LP)", "Estudiantes de La Plata")
+        .replace("Gimnasia (La Plata)", "Gimnasia (LP)")
+        .replace("Gimnasia (LP)", "Gimnasia y Esgrima de La Plata")
+        .replace("Godoy Cruz (Mendoza)", "Godoy Cruz")
+        .replace("Huracan", "Huracán")
+        .replace("Lanus", "Lanús")
+        .replace("Newells Old Boys", "Newells")
+        .replace("Newells", "Newells Old Boys")
+        .replace("San Martin (San Juan)", "San Martin (SJ)")
+        .replace("San Martin (SJ)", "San Martín de San Juan")
+        .replace("San Martin (Tucuman)", "San Martin (T)")
+        .replace("San Martin (T)", "San Martín de Tucumán")
+        .replace("Talleres (Cordoba)", "Talleres (C)")
+        .replace("Talleres (C)", "Talleres de Córdoba")
+        .replace("Union (Santa Fe)", "Union")
+        .replace("Union", "Unión de Santa Fe")
+        .replace("Velez Sarsfield", "Velez")
+        .replace("Velez", "Velez Sarsfield");
+        return input;
+    }
 }

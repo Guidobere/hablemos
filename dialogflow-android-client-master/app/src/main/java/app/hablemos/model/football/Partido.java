@@ -1,4 +1,4 @@
-package app.hablemos.model;
+package app.hablemos.model.football;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
