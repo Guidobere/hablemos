@@ -8,7 +8,7 @@ public class DateUtils {
         return DateUtils.getDiaSemana(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
     }
 
-    public static String getDiaSemana(int i) {
+    private static String getDiaSemana(int i) {
         String dia = "";
         switch (i) {
             case 1:
@@ -34,5 +34,10 @@ public class DateUtils {
                 break;
         }
         return dia;
+    }
+
+    public static String getNowString() {
+        Calendar calendar = Calendar.getInstance();
+        return (calendar.get(Calendar.DATE)) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
     }
 }
