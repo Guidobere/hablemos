@@ -35,6 +35,13 @@ public enum FootballServiceActions {
             return footballService.getBottomNEquipos(j);
         }
     }),
+    TABLA("tablaDePosiciones", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            return footballService.getTablaPosiciones();
+        }
+    }),
     EQUIPOENPOSICION("equipoEnPosicion", new FootballActionExecutor() {
 
         @Override
@@ -157,6 +164,48 @@ public enum FootballServiceActions {
         @Override
         public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
             return footballService.getGoleador();
+        }
+    }),
+    EQUIPOMASGOLEADOR("equipoMasGoleador", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            return footballService.getEquipoMasGoleador();
+        }
+    }),
+    EQUIPOMASGOLEADO("equipoMasGoleado", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            return footballService.getEquipoMasGoleado();
+        }
+    }),
+    EQUIPOMAYORDIFERENCIA("equipoMayorDiferencia", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            return footballService.getEquipoMayorDiferenciaDeGol();
+        }
+    }),
+    EQUIPOMASPARTIDOSGANADOS("equipoMasPartidosGanados", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            return footballService.getEquipoMasPartidosGanados();
+        }
+    }),
+    EQUIPOMASPARTIDOSEMPATADOS("equipoMasPartidosEmpatados", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            return footballService.getEquipoMasPartidosEmpatados();
+        }
+    }),
+    EQUIPOMASPARTIDOSPERDIDOS("equipoMasPartidosPerdidos", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            return footballService.getEquipoMasPartidosPerdidos();
         }
     });
 
