@@ -65,8 +65,6 @@ public class ClimaService {
                     int numeroID = Integer.parseInt(id);
                     Double numero = Double.parseDouble(mensaje);
 
-                    notificationService.enviarNotificacionMuchoCalor(localContext, "mañana");
-                    /*
                     if(numero>33 && numeroID>799){ //
                         notificationService.enviarNotificacionMuchoCalor(localContext, "mañana");
                         return null;
@@ -92,7 +90,7 @@ public class ClimaService {
                         return null;
                     }
 
-*/
+
                 } catch (Exception e) {
 
                     System.out.println("Exception "+ e.getMessage());
