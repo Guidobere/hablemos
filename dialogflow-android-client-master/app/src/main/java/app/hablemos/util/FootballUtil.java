@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import app.hablemos.asynctasks.GetDatosAsyncTask;
 import app.hablemos.asynctasks.GetEfemeridesAsyncTask;
+import app.hablemos.asynctasks.GetGoleadoresAsyncTask;
 import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
 import app.hablemos.asynctasks.GetPartidosAsyncTask;
 import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
@@ -189,5 +191,15 @@ public class FootballUtil {
             e.printStackTrace();
         }
         return cumples;
+    }
+
+    public static TreeMap<Integer,List<String>> getGoleadores() {
+        TreeMap<Integer, List<String>> goleadores = new TreeMap<>();
+        try {
+            goleadores = new GetGoleadoresAsyncTask().execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return goleadores;
     }
 }
