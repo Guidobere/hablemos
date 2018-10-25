@@ -120,11 +120,15 @@ public enum FootballServiceActions {
                 if ((equipo1.equalsIgnoreCase("miEquipo") || equipo2.equalsIgnoreCase("miEquipo")) && equipoAbuelo.equalsIgnoreCase("ninguno")) {
                     return "Su equipo no esta configurado, consulte a su tutor";
                 } else {
-                    if (equipo1.equalsIgnoreCase("miEquipo"))
+                    if (equipo1.equalsIgnoreCase("miEquipo")) {
+                        if (equipo2.equalsIgnoreCase(equipoAbuelo))
+                            return "Ambos equipos son iguales, no se puede comparar";
                         return footballService.getComparacionEquipos(equipoAbuelo, equipo2);
-                    else if (equipo2.equalsIgnoreCase("miEquipo"))
+                    } else if (equipo2.equalsIgnoreCase("miEquipo")) {
+                        if (equipo1.equalsIgnoreCase(equipoAbuelo))
+                            return "Ambos equipos son iguales, no se puede comparar";
                         return footballService.getComparacionEquipos(equipo1, equipoAbuelo);
-                    else
+                    } else
                         return footballService.getComparacionEquipos(equipo1, equipo2);
                 }
             } else
