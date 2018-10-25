@@ -443,7 +443,12 @@ public class RegistroActivity extends AppCompatActivity {
                     medicamentosM.setText(u.remediosManiana);
                     medicamentosT.setText(u.remediosTarde);
                     medicamentosN.setText(u.remediosNoche);
-                    String nombreEquipo = footballService.obtenerEquipoVisual(u.equipo);
+                    String nombreEquipo = "";
+                    if (u.equipo.equalsIgnoreCase("ninguno")){
+                        nombreEquipo = "Ninguno";
+                    } else {
+                        nombreEquipo = footballService.obtenerEquipoVisual(u.equipo).getNombre();
+                    }
                     spinnerEquipo.setSelection(getIndex(spinnerEquipo, nombreEquipo));
 
 

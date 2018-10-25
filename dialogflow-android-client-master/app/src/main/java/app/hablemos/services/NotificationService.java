@@ -32,9 +32,12 @@ public class NotificationService {
 
     public static final int ID_NOTIFICACION_AVISO_MAIL = 1;
     public static final int ID_NOTIFICACION_SALUD = 2;
-    public static final int ID_NOTIFICACION_CLIMA = 3;
+    public static final int ID_NOTIFICACION_CLIMA_LINDO = 3;
     public static final int ID_NOTIFICACION_PRESION = 4;
     public static final int ID_NOTIFICACION_GLUCOSA = 5;
+    public static final int ID_NOTIFICACION_CLIMA_PARAGUAS=6;
+    public static final int ID_NOTIFICACION_CLIMA_HORRIBLE=7;
+    public static final int ID_NOTIFICACION_CLIMA_FUERTE=8;
 
     private String mailQueInicioSesion;
 
@@ -66,11 +69,31 @@ public class NotificationService {
                 "-", context.getString(R.string.interaccionTexto_EnviarNotificacion));
     }
 
-    public void enviarNotificacionClima(Context context, String turno) {
+    public void enviarNotificacionClimaLindo(Context context, String turno) {
         String notificationTitle = context.getString(R.string.notificacionTitulo_Clima);
         String notificationText = context.getString(R.string.notificacionTexto_Clima);
         enviarNotificacion(context, notificationTitle, notificationText,
-            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA, turno);
+            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_LINDO, turno);
+    }
+    public void enviarNotificacionMuchoCalor(Context context, String turno) {
+        String notificationTitle = "Calor extremo!";
+        String notificationText = "Hace click que te digo que cuidados tomar";
+        enviarNotificacion(context, notificationTitle, notificationText,
+                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_FUERTE, turno);
+    }
+
+    public void enviarNotificacionClimaParaguas(Context context, String turno) {
+        String notificationTitle = "Si salis!";
+        String notificationText = "No te olvides el paraguas";
+        enviarNotificacion(context, notificationTitle, notificationText,
+                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_PARAGUAS, turno);
+    }
+
+    public void enviarNotificacionClimaHorrible(Context context, String turno) {
+        String notificationTitle = "¡Esta muy feo hoy!";
+        String notificationText = "Quedate en casa mirando la tele";
+        enviarNotificacion(context, notificationTitle, notificationText,
+                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_HORRIBLE, turno);
     }
 
     public void enviarNotificacionChequeo(Context context, String nombreAbuelo, String turno, String chequeo) {
