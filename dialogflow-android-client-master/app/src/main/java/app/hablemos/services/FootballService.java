@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import app.hablemos.asynctasks.GetComparacionAsyncTask;
 import app.hablemos.asynctasks.GetEquiposAsyncTask;
@@ -48,12 +49,18 @@ public class FootballService {
 
     public String getTopNEquipos(int n) {
         llenarEquiposPosicionados();
+        if (n < 1 || n > this.equiposPosicionados.size()) {
+            return "La cantidad deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente.";
+        }
         List<EquipoPosicionado> topN = equiposPosicionados.subList(0,n);
         return getStringTablaPosiciones(topN, "Los equipos que están entre los mejores " + n + " son: ");
     }
 
     public String getBottomNEquipos(int n) {
         llenarEquiposPosicionados();
+        if (n < 1 || n > this.equiposPosicionados.size()) {
+            return "La cantidad deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente.";
+        }
         List<EquipoPosicionado> bottomN = equiposPosicionados.subList(this.equiposPosicionados.size() - n, this.equiposPosicionados.size());
         return getStringTablaPosiciones(bottomN, "Los últimos " + n + " equipos de la tabla son: ");
     }
@@ -79,7 +86,7 @@ public class FootballService {
                 equipo = ep.getNombre();
             }
         }
-        return "El equipo que está en la posición " + posicion + " es " + obtenerEquipoVisual(equipo) + ".";
+        return "El equipo que está en la posición " + posicion + " es " + obtenerEquipoVisual(equipo).getNombre() + ".";
     }
 
     public String getDatosEquipo(String equipo) {
@@ -248,8 +255,52 @@ public class FootballService {
     }
 
     public String getGoleador() {
-        //TODO
-        return "";
+        TreeMap<Integer, List<String>> goleadores = FootballUtil.getGoleadores();
+        StringBuilder respuesta = new StringBuilder();
+        int contador = 1;
+        for (Integer cantGoles : goleadores.keySet()) {
+            if (contador == 1) {
+                if (goleadores.get(cantGoles).size() > 1) {
+                    respuesta.append("Los goleadores del torneo, con ").append(cantGoles).append(" goles son ");
+                    respuesta.append(getGoleadores(goleadores.get(cantGoles)));
+                } else {
+                    respuesta.append("El goleador del torneo, con ").append(cantGoles).append(" goles es ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
+                }
+            } else if (contador == 2) {
+                if (goleadores.get(cantGoles).size() > 1) {
+                    respuesta.append("\nLe siguen, con ").append(cantGoles).append(" goles ");
+                    respuesta.append(getGoleadores(goleadores.get(cantGoles)));
+                } else {
+                    respuesta.append("\nLe sigue, con ").append(cantGoles).append(" goles es ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
+                }
+            } else if (contador == 3){
+                respuesta.append("\nEn tercer lugar, con ").append(cantGoles);
+                if (goleadores.get(cantGoles).size() > 1) {
+                    respuesta.append(" goles, están ");
+                    respuesta.append(getGoleadores(goleadores.get(cantGoles)));
+                } else {
+                    respuesta.append(" goles está ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
+                }
+            }
+            contador++;
+        }
+        respuesta.append(".");
+        return FootballUtil.modificarNombresEquiposPrimera(respuesta.toString()).replace(")", "").replace(" (", ", de ");
+    }
+
+    private String getGoleadores(List<String> goleadores) {
+        String separador = "";
+        StringBuilder respuesta = new StringBuilder();
+        for (int i = 0; i < goleadores.size(); i++) {
+            if (i == (goleadores.size() - 1)) {
+                respuesta.append(" y ");
+            } else {
+                respuesta.append(separador);
+                separador = ", ";
+            }
+            respuesta.append(goleadores.get(i).replace(". ", " ").replace(".", " "));
+        }
+        return respuesta.toString();
     }
 
     public String getEquipoMasGoleador() {
