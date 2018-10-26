@@ -55,7 +55,7 @@ public class FootballService {
         }
         List<EquipoPosicionado> topN = equiposPosicionados.subList(0,n);
         if(n == 1) {
-            return FootballUtil.modificarNombresEquiposPrimera("El equipo que está primero en la tabla es: " + getNombreRealFromTabla(topN.get(0).getNombre()));
+            return "El equipo que está primero en la tabla es: " + getNombreRealFromTabla(topN.get(0).getNombre());
         }
         return getStringTablaPosiciones(topN, "Los equipos que están entre los mejores " + n + " son: ");
     }
@@ -67,7 +67,7 @@ public class FootballService {
         }
         List<EquipoPosicionado> bottomN = equiposPosicionados.subList(this.equiposPosicionados.size() - n, this.equiposPosicionados.size());
         if(n == 1) {
-            return FootballUtil.modificarNombresEquiposPrimera("El equipo que está último en la tabla es: " + getNombreRealFromTabla(bottomN.get(0).getNombre()));
+            return "El equipo que está último en la tabla es: " + getNombreRealFromTabla(bottomN.get(0).getNombre());
         }
         return getStringTablaPosiciones(bottomN, "Los últimos " + n + " equipos de la tabla son: ");
     }
@@ -154,7 +154,7 @@ public class FootballService {
                     }
                 }
             }
-            return FootballUtil.modificarNombresEquiposPrimera(retorno.toString());
+            return retorno.toString();
         } else
             return "El equipo solicitado no pudo ser encontrado.";
     }
@@ -202,7 +202,7 @@ public class FootballService {
                     }
                 }
             }
-            return FootballUtil.modificarNombresEquiposPrimera(retorno.toString());
+            return retorno.toString();
         } else
             return "El equipo solicitado no pudo ser encontrado";
     }
@@ -463,7 +463,7 @@ public class FootballService {
             respuesta.append(getNombreRealFromTabla(ep.getNombre()));
             contador++;
         }
-        return FootballUtil.modificarNombresEquiposPrimera(respuesta.toString());
+        return respuesta.toString();
     }
 
     private List<EquipoPosicionado> getEquiposFiltrados(Comparator<EquipoPosicionado> comparador) {
@@ -490,7 +490,7 @@ public class FootballService {
                 contador++;
             }
             respuesta.append(" con ").append(varComparacion).append(".");
-            return FootballUtil.modificarNombresEquiposPrimera(respuesta.toString());
+            return respuesta.toString();
         } else {
             EquipoPosicionado equipoPosicionado = equiposFiltrados.get(0);
             String nombre = getNombreRealFromTabla(equipoPosicionado.getNombre());
