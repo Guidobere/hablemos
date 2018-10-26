@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -363,7 +364,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
      * AIRequest should have query OR event
      */
     private void sendRequest()  {
-
         interrumpirBotty();
 
         if (!esAutomatico) {
@@ -427,23 +427,22 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-    public void personalizarMensaje(){
+    public void personalizarMensaje(String loQueDijo){
         if (speech.startsWith("futbol")) {
             String[] pedido = speech.split("_");
             String accion = pedido[1].trim().toUpperCase();
             String result = FootballServiceActions.valueOf(accion).getFootballActionExecutor().ejecutarAccion(pedido, equipoAbuelo, footballService);
             loQueDiceYescribe(result, FootballServiceActions.valueOf(accion).getAccion());
+        }
+
+        else if(speech.startsWith("medicamentos_") && speech.split("_").length>1) {
+            pedirAlaBase(speech.split("_")[1]);
+        }
+
+        else if(speech.startsWith("chequeoSalud _") && speech.split(" _ ").length>1) {
+            personalizarMensajeRevisionSalud(loQueDijo);
         } else {
             switch (speech) {
-                case "tarde":
-                    pedirAlaBase("tarde");
-                    break;
-                case "mañana":
-                    pedirAlaBase("mañana");
-                    break;
-                case "noche":
-                    pedirAlaBase("noche");
-                    break;
                 case "glucosa-mañana":
                     pedirAlaBaseSobreGlucosa("mañana");
                     break;
@@ -466,7 +465,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     interactionsService.guardarInteraccion(mailQueInicioSesion,
                             "Notificacion clima", "No",
                             "El usuario no accedio a salir a caminar");
-                    loQueDiceYescribe("Entonces escribi o deci\nPasteleria\nFutbol\nSalud","default");
+                    loQueDiceYescribe("Entonces escribí o decí: Pastelería, Fútbol o Salud","default");
                     break;
                 case "caminarsi":
                     interactionsService.guardarInteraccion(mailQueInicioSesion,
@@ -479,6 +478,36 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     break;
             }
         }
+    }
+
+    private void personalizarMensajeRevisionSalud(String loQueDijo) {
+        String[] respuesta = speech.split(" _ ");
+        String chequeo = respuesta[1]; // glucosa, presión
+        String resultado = respuesta[2]; // si, no, ni (no se entendió)
+        String observacion = "";
+        if(resultado.equals("si")){
+            observacion = getString(R.string.interaccionTexto_SaludRevisionSi, chequeo); // Dijo que si
+        } else if(resultado.equals("no")){
+            observacion = getString(R.string.interaccionTexto_SaludRevisionNo, chequeo, respuesta[3]); // Dijo que no y un motivo
+        } else  if(resultado.equals("ni")){
+            resultado = "-";
+            observacion = getString(R.string.interaccionTexto_SaludRevisionNi, chequeo, loQueDijo); // No se entendió lo que dijo, se guarda textual
+        }
+        interactionsService.guardarInteraccion(mailQueInicioSesion,
+            getString(R.string.interaccionTitulo_RevisionSalud, chequeo), parsearNombre(resultado), observacion);
+        loQueDiceYescribe(getString(R.string.graciasAvisoRevision),"default");
+        irAlMenu(3);
+    }
+
+    private void irAlMenu(int segundos) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                queryString = "menu_principal";
+                esAutomatico = true;
+                sendRequest();
+            }
+        }, 1000*segundos);
     }
 
     public void pedirAlaBaseSobrePresion(final String turnoPresion){
@@ -552,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         });
     }
 
-    public void pedirAlaBase(final String turno){
+    public void pedirAlaBase(final String pedido){
         usersFb.orderByChild("email").equalTo(mailQueInicioSesion).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot users) {
@@ -564,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 }
 
                 if (u != null && u.username != null) {
-                    switch (turno) {
+                    switch (pedido) {
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
                             loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ","default");
@@ -576,24 +605,24 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
-                                loQueDiceYescribe("Nada que tomar","default");
+                                loQueDiceYescribe("Nada que tomar a la tarde.","default");
                             }
                             else{
-                                loQueDiceYescribe("Tenés que tomar " + u.remediosTarde,"default");}
+                                loQueDiceYescribe("A la tarde tenés que tomar " + u.remediosTarde,"default");}
                              break;
                         case "mañana":
                            if(TextUtils.isEmpty(u.remediosManiana)){
-                                loQueDiceYescribe("Nada que tomar","default");
+                                loQueDiceYescribe("Nada que tomar a la mañana.","default");
                             }
                             else{
-                                loQueDiceYescribe("Tenés que tomar " + u.remediosManiana,"default");}
+                                loQueDiceYescribe("A la mañana tenés que tomar " + u.remediosManiana,"default");}
                           break;
                         case "noche":
                             if(TextUtils.isEmpty(u.remediosNoche)){
-                                loQueDiceYescribe("Nada que tomar","default");
+                                loQueDiceYescribe("Nada que tomar a la noche.","default");
                             }
                             else{
-                                loQueDiceYescribe("Tenés que tomar " + u.remediosNoche,"default");}
+                                loQueDiceYescribe("A la noche tenés que tomar " + u.remediosNoche,"default");}
                             break;
                         default:
                             break;
@@ -611,7 +640,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     public void onResult(final AIResponse response) {
-        //mostrarMensajeAnterior();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -627,7 +655,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     speech = result.getFulfillment().getSpeech();
                 }
 
-                personalizarMensaje();
+                personalizarMensaje(result.getResolvedQuery());
+
                 esAutomatico = false;
                 esHablado = false;
             }
@@ -652,7 +681,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 //Cuando el error es "No speech input" se llama directamente al onError
                 //sin llamar a onListeningFinished. Por eso se habilita el micrófono acá.
                 micButton.setEnabled(true);
-
                 esAutomatico = false;
                 esHablado = false;
                 resultTextView2.setText("");
@@ -671,15 +699,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonSend:
+            case R.id.buttonSend: {
                 sendRequest();
                 break;
+            }
         }
-    }
-
-    private void startActivity(Class<?> cls) {
-        final Intent intent = new Intent(this, cls);
-        startActivity(intent);
     }
 
     public void loQueDiceYescribe(String texto, String id){
@@ -731,7 +755,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             myTTS.stop();
     }
 
-    //enviarNotificacionMedicamentos
     private void manejarRespuestaNotificacion(Bundle extras) {
         int tipoNotificacion = extras.getInt("tipoNotificacion");
 
@@ -743,17 +766,27 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 getString(R.string.interaccionTexto_Notificacion, "abrió", "medicamentos"));
         }
 
-        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA_LINDO){
+        else if (tipoNotificacion == NotificationService.ID_NOTIFICACION_PRESION){
+            esAutomatico=true;
+            queryString="presion_preguntar_si_se_la_tomo";
+            sendRequest();
+        }
 
+        else if (tipoNotificacion == NotificationService.ID_NOTIFICACION_GLUCOSA){
+            esAutomatico=true;
+            queryString="glucosa_preguntar_si_se_la_tomo";
+            sendRequest();
+        }
+
+        else if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA_LINDO){
             esAutomatico=true;
             queryString="op_caminar";
             sendRequest();
         }
 
-        if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA_FUERTE){
+        else if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA_FUERTE){
             loQueDiceYescribe("Tomar mucha agua durante todo el día\nEvitar las bebidas alcohólicas, muy dulces y las infusiones calientes\nUsar ropa suelta, de materiales livianos y de colores claros\nno exponerse al sol","default");
         }
-
 
     }
 
