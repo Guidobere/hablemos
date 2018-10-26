@@ -2,6 +2,7 @@ package app.hablemos.services;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
@@ -53,6 +54,9 @@ public class FootballService {
             return "La cantidad deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente.";
         }
         List<EquipoPosicionado> topN = equiposPosicionados.subList(0,n);
+        if(n == 1) {
+            return FootballUtil.modificarNombresEquiposPrimera("El equipo que está primero en la tabla es: " + getNombreRealFromTabla(topN.get(0).getNombre()));
+        }
         return getStringTablaPosiciones(topN, "Los equipos que están entre los mejores " + n + " son: ");
     }
 
@@ -62,6 +66,9 @@ public class FootballService {
             return "La cantidad deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente.";
         }
         List<EquipoPosicionado> bottomN = equiposPosicionados.subList(this.equiposPosicionados.size() - n, this.equiposPosicionados.size());
+        if(n == 1) {
+            return FootballUtil.modificarNombresEquiposPrimera("El equipo que está último en la tabla es: " + getNombreRealFromTabla(bottomN.get(0).getNombre()));
+        }
         return getStringTablaPosiciones(bottomN, "Los últimos " + n + " equipos de la tabla son: ");
     }
 
@@ -240,15 +247,19 @@ public class FootballService {
         StringBuilder respuesta = new StringBuilder("Estas son las efemérides de hoy: ");
         String separador = "";
         int contador = 1;
-        for (String efemeride : efemerides) {
-            if (contador == efemerides.size()) {
-                respuesta.append(" y ");
-            } else {
-                respuesta.append(separador);
-                separador = "; ";
+        if (efemerides.size() == 1) {
+            respuesta.append(efemerides.get(0));
+        } else {
+            for (String efemeride : efemerides) {
+                if (contador == efemerides.size()) {
+                    respuesta.append(" y ");
+                } else {
+                    respuesta.append(separador);
+                    separador = "; ";
+                }
+                respuesta.append(efemeride);
+                contador++;
             }
-            respuesta.append(efemeride);
-            contador++;
         }
         respuesta.append(".");
         return FootballUtil.modificarNombresEquiposPrimera(respuesta.toString()).replace(")", ",").replace(" (", ", de ");
@@ -262,14 +273,14 @@ public class FootballService {
             if (contador == 1) {
                 if (goleadores.get(cantGoles).size() > 1) {
                     respuesta.append("Los goleadores del torneo, con ").append(cantGoles).append(" goles son ");
-                    respuesta.append(getGoleadores(goleadores.get(cantGoles)));
+                    respuesta.append(FootballUtil.getGoleadores(goleadores.get(cantGoles)));
                 } else {
                     respuesta.append("El goleador del torneo, con ").append(cantGoles).append(" goles es ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
                 }
             } else if (contador == 2) {
                 if (goleadores.get(cantGoles).size() > 1) {
                     respuesta.append("\nLe siguen, con ").append(cantGoles).append(" goles ");
-                    respuesta.append(getGoleadores(goleadores.get(cantGoles)));
+                    respuesta.append(FootballUtil.getGoleadores(goleadores.get(cantGoles)));
                 } else {
                     respuesta.append("\nLe sigue, con ").append(cantGoles).append(" goles es ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
                 }
@@ -277,7 +288,7 @@ public class FootballService {
                 respuesta.append("\nEn tercer lugar, con ").append(cantGoles);
                 if (goleadores.get(cantGoles).size() > 1) {
                     respuesta.append(" goles, están ");
-                    respuesta.append(getGoleadores(goleadores.get(cantGoles)));
+                    respuesta.append(FootballUtil.getGoleadores(goleadores.get(cantGoles)));
                 } else {
                     respuesta.append(" goles está ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
                 }
@@ -288,49 +299,76 @@ public class FootballService {
         return FootballUtil.modificarNombresEquiposPrimera(respuesta.toString()).replace(")", "").replace(" (", ", de ");
     }
 
-    private String getGoleadores(List<String> goleadores) {
-        String separador = "";
-        StringBuilder respuesta = new StringBuilder();
-        for (int i = 0; i < goleadores.size(); i++) {
-            if (i == (goleadores.size() - 1)) {
-                respuesta.append(" y ");
-            } else {
-                respuesta.append(separador);
-                separador = ", ";
-            }
-            respuesta.append(goleadores.get(i).replace(". ", " ").replace(".", " "));
-        }
-        return respuesta.toString();
-    }
-
     public String getEquipoMasGoleador() {
-        //TODO
-        return "";
+        List<EquipoPosicionado> equiposPosicionados = getEquiposFiltrados(FootballUtil.comparadorGolesAFavor);
+        int goles = equiposPosicionados.get(0).getGolesAFavor();
+        List<EquipoPosicionado> equiposFiltrados = new ArrayList<>();
+        for (EquipoPosicionado equipo : equiposPosicionados) {
+            if (equipo.getGolesAFavor() == goles) {
+                equiposFiltrados.add(equipo);
+            }
+        }
+        return generarRespuesta("Los equipos que más goles hicieron son: ", equiposFiltrados, goles, "El equipo más goleador es ");
     }
 
     public String getEquipoMasGoleado() {
-        //TODO
-        return "";
+        List<EquipoPosicionado> equiposPosicionados = getEquiposFiltrados(FootballUtil.comparadorGolesEnContra);
+        int goles = equiposPosicionados.get(0).getGolesEnContra();
+        List<EquipoPosicionado> equiposFiltrados = new ArrayList<>();
+        for (EquipoPosicionado equipo : equiposPosicionados) {
+            if (equipo.getGolesEnContra() == goles) {
+                equiposFiltrados.add(equipo);
+            }
+        }
+        return generarRespuesta("Los equipos a los que más goles les hicieron son: ", equiposFiltrados, goles, "El equipo al que más goles le convirtieron es ");
     }
 
     public String getEquipoMayorDiferenciaDeGol() {
-        //TODO
-        return "";
+        List<EquipoPosicionado> equiposPosicionados = getEquiposFiltrados(FootballUtil.comparadorDiferenciaGol);
+        int goles = equiposPosicionados.get(0).getDiferencia();
+        List<EquipoPosicionado> equiposFiltrados = new ArrayList<>();
+        for (EquipoPosicionado equipo : equiposPosicionados) {
+            if (equipo.getDiferencia() == goles) {
+                equiposFiltrados.add(equipo);
+            }
+        }
+        return generarRespuesta("Los equipos con más diferencia de gol son ", equiposFiltrados, goles, "El equipo con más diferencia de gol es ");
     }
 
     public String getEquipoMasPartidosGanados() {
-        //TODO
-        return "";
+        List<EquipoPosicionado> equiposPosicionados = getEquiposFiltrados(FootballUtil.comparadorPartidosGanados);
+        int partidosGanados = equiposPosicionados.get(0).getPartidosGanados();
+        List<EquipoPosicionado> equiposFiltrados = new ArrayList<>();
+        for (EquipoPosicionado equipo : equiposPosicionados) {
+            if (equipo.getPartidosGanados() == partidosGanados) {
+                equiposFiltrados.add(equipo);
+            }
+        }
+        return generarRespuesta("Los equipos que más partidos ganaron son ", equiposFiltrados, partidosGanados, "El equipo con más partidos ganados es ");
     }
 
     public String getEquipoMasPartidosEmpatados() {
-        //TODO
-        return "";
+        List<EquipoPosicionado> equiposPosicionados = getEquiposFiltrados(FootballUtil.comparadorPartidosEmpatados);
+        int partidosEmpatados = equiposPosicionados.get(0).getPartidosEmpatados();
+        List<EquipoPosicionado> equiposFiltrados = new ArrayList<>();
+        for (EquipoPosicionado equipo : equiposPosicionados) {
+            if (equipo.getPartidosEmpatados() == partidosEmpatados) {
+                equiposFiltrados.add(equipo);
+            }
+        }
+        return generarRespuesta("Los equipos que más partidos empataron son ", equiposFiltrados, partidosEmpatados, "El equipo que empató mayor cantidad de partidos es ");
     }
 
     public String getEquipoMasPartidosPerdidos() {
-        //TODO
-        return "";
+        List<EquipoPosicionado> equiposPosicionados = getEquiposFiltrados(FootballUtil.comparadorPartidosPerdidos);
+        int partidosPerdidos = equiposPosicionados.get(0).getPartidosPerdidos();
+        List<EquipoPosicionado> equiposFiltrados = new ArrayList<>();
+        for (EquipoPosicionado equipo : equiposPosicionados) {
+            if (equipo.getPartidosPerdidos() == partidosPerdidos) {
+                equiposFiltrados.add(equipo);
+            }
+        }
+        return generarRespuesta("Los equipos que más partidos perdieron son ", equiposFiltrados, partidosPerdidos, "El equipo que perdió mayor cantidad de partidos es ");
     }
 
     /* SPINNER EQUIPOS REGISTRO */
@@ -426,5 +464,37 @@ public class FootballService {
             contador++;
         }
         return FootballUtil.modificarNombresEquiposPrimera(respuesta.toString());
+    }
+
+    private List<EquipoPosicionado> getEquiposFiltrados(Comparator<EquipoPosicionado> comparador) {
+        llenarEquiposPosicionados();
+        List<EquipoPosicionado> equipos = new ArrayList<>(this.equiposPosicionados);
+        Collections.sort(equipos, comparador);
+        Collections.reverse(equipos);
+        return equipos;
+    }
+
+    private String generarRespuesta(String mensajeInicial, List<EquipoPosicionado> equiposFiltrados, int varComparacion, String inicioUnico) {
+        if (equiposFiltrados.size() > 1) {
+            StringBuilder respuesta = new StringBuilder(mensajeInicial);
+            String separador = "";
+            int contador = 1;
+            for (EquipoPosicionado eq : equiposFiltrados) {
+                if (contador == equiposFiltrados.size()) {
+                    respuesta.append(" y ");
+                } else {
+                    respuesta.append(separador);
+                    separador = ", ";
+                }
+                respuesta.append(getNombreRealFromTabla(eq.getNombre()));
+                contador++;
+            }
+            respuesta.append(" con ").append(varComparacion).append(".");
+            return FootballUtil.modificarNombresEquiposPrimera(respuesta.toString());
+        } else {
+            EquipoPosicionado equipoPosicionado = equiposFiltrados.get(0);
+            String nombre = getNombreRealFromTabla(equipoPosicionado.getNombre());
+            return inicioUnico + nombre + " con " + varComparacion + ".";
+        }
     }
 }

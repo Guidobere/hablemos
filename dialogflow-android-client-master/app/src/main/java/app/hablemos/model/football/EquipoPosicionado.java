@@ -42,13 +42,28 @@ public class EquipoPosicionado {
         return posicion;
     }
 
-    @Override
-    public String toString() {
-        return " está en la posición " + posicion + " con " + puntos +
-                " puntos.\nJugó " + partidosJugados + " partidos, ganó " + partidosGanados +
-                ", empató " + partidosEmpatados + " y perdió " + partidosPerdidos +
-                ".\nHizo " + golesAFavor + " goles, le convirtieron " + golesEnContra +
-                " y su diferencia de gol es " + diferencia + ".";
+    public int getPartidosGanados() {
+        return partidosGanados;
+    }
+
+    public int getPartidosEmpatados() {
+        return partidosEmpatados;
+    }
+
+    public int getPartidosPerdidos() {
+        return partidosPerdidos;
+    }
+
+    public int getGolesAFavor() {
+        return golesAFavor;
+    }
+
+    public int getGolesEnContra() {
+        return golesEnContra;
+    }
+
+    public int getDiferencia() {
+        return diferencia;
     }
 
     public boolean isLibertadores() {
@@ -81,5 +96,14 @@ public class EquipoPosicionado {
 
     public void setPromedio(float promedio) {
         this.promedio = promedio;
+    }
+
+    @Override
+    public String toString() {
+        return " está en la posición " + posicion + " con " + puntos +
+                " puntos.\nJugó " + partidosJugados + " partidos, ganó " + partidosGanados +
+                ", empató " + partidosEmpatados + " y perdió " + partidosPerdidos +
+                ".\nHizo " + golesAFavor + " goles, le convirtieron " + golesEnContra +
+                " y su diferencia de gol es " + diferencia + ".";
     }
 }
