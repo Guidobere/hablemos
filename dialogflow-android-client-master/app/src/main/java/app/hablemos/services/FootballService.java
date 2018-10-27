@@ -182,8 +182,8 @@ public class FootballService {
                         partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
                     if(partidoActual.getEstado().equalsIgnoreCase("jugandose")) {
                         retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringEnCurso(getNombreRealFromTabla(partidosFiltrados.get(partidosFiltrados.size() - 1).getRival())));
-                        if (partidoActual.getTiempoJuego().equalsIgnoreCase("e.t.")) {
-                            retorno.append(", están en el entretiempo.");
+                        if (partidoActual.getTiempoJuego().equalsIgnoreCase("e.t.") || partidoActual.getTiempoJuego().equalsIgnoreCase("e. t.")) {
+                            retorno.append(". En este momento están en el entretiempo.");
                         } else {
                             retorno.append(" a los ").append(Integer.parseInt(partidoActual.getTiempoJuego().replace("'", ""))).append(" minutos.");
                         }
