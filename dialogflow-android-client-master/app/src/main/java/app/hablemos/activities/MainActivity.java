@@ -2,7 +2,6 @@ package app.hablemos.activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -117,9 +116,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     DatabaseReference interaccionesFb;
 
     private InteractionsService interactionsService;
-    private PendingIntent pendingEmailIntent;
 
-    int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -379,7 +376,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             return;
         }
 
-
         send.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
         final AsyncTask<String, Void, AIResponse> task = new AsyncTask<String, Void, AIResponse>() {
@@ -435,8 +431,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             loQueDiceYescribe(result, FootballServiceActions.valueOf(accion).getAccion());
         }
 
-        else if(speech.startsWith("medicamentos_") && speech.split("_").length>1) {
-            pedirAlaBase(speech.split("_")[1]);
+        else if(speech.startsWith("medicamentos _") && speech.split(" _ ").length>1) {
+            pedirAlaBase(speech.split(" _ ")[1]);
         }
 
         else if(speech.startsWith("chequeoSalud _") && speech.split(" _ ").length>1) {
@@ -472,6 +468,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             "Notificacion clima", "Si",
                             "El usuario accedio a salir a caminar");
                     loQueDiceYescribe("¡Buena suerte!","default");
+                    break;
+                case "" :
+                    speech = "¡No entendí! Escribí o decí: Pastelería, Fútbol o Salud";
+                    loQueDiceYescribe(speech,"default");
                     break;
                 default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
                     loQueDiceYescribe(speech,"default");
@@ -530,12 +530,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     if(elturno.equalsIgnoreCase(turnoPresion) && losdias.contains(diaSemana)){
                         a=1;
                        // speech="Hoy si";
-                        loQueDiceYescribe("Hoy a la "+ turnoPresion +" debes medirte la presion","default");
+                        loQueDiceYescribe("Hoy a la "+ turnoPresion +" debes medirte la presión","default");
                     }
                 }
 
                 if(a == 0) {
-                    loQueDiceYescribe("Hoy a la "+ turnoPresion +" no debes medirte la presion","default");
+                    loQueDiceYescribe("Hoy a la "+ turnoPresion +" no debes medirte la presión","default");
                 }
             }
 
@@ -659,6 +659,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                 esAutomatico = false;
                 esHablado = false;
+                send.onEditorAction(EditorInfo.IME_ACTION_DONE);
             }
         });
     }
@@ -708,6 +709,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     public void loQueDiceYescribe(String texto, String id){
         try {
+            send.onEditorAction(EditorInfo.IME_ACTION_DONE);
             resultTextView.setText(texto);
             myTTS.speak(texto, 0, null, id);
         } catch (Exception e){
@@ -739,8 +741,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     public void onStop(){
         super.onStop();
-        if(myTTS!=null && myTTS.isSpeaking())
-            myTTS.stop();
+        interrumpirBotty();
     }
 
     public void onResume(){
@@ -751,8 +752,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(myTTS!=null && myTTS.isSpeaking())
-            myTTS.stop();
+        interrumpirBotty();
     }
 
     private void manejarRespuestaNotificacion(Bundle extras) {
