@@ -1,8 +1,18 @@
 package app.hablemos.services;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
@@ -11,8 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import java.util.Calendar;
-
 import app.hablemos.R;
 
 
@@ -20,28 +28,26 @@ public class ClimaService {
 
     private String city = "Buenos Aires"; //Asi lo muestra la app cuando pedis en la web
 
-    /* Please Put your API KEY here */
-    private String OPEN_WEATHER_MAP_API = "ea574594b9d36ab688642d5fbeab847e";
-    /* Please Put your API KEY here */
-
-    JSONObject data = null;
-    JSONObject main = null;
-    JSONObject details;
-    String mensaje;
-    String id;
-    int a=0;
+    private JSONObject data = null;
+    private JSONObject main = null;
+    private JSONObject details;
+    private String mensaje;
+    private String id;
 
     double temperatura;
 
-    public void getJSON(final String city, final Context localContext , final NotificationService notificationService) {
+    private void sendNotifications(final Context localContext, final NotificationService notificationService, final Double latitud, final Double longitud, final String city) {
 
-        new AsyncTask<Void, Void, Void>() {
-
+        AsyncTask<Void, Void, Void> execute = new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&APPID=ea574594b9d36ab688642d5fbeab847e");
+                    URL url;
+                    if (latitud != null && longitud != null)
+                        url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + latitud + "&lon=" + longitud + "&units=metric&APPID=" + localContext.getString(R.string.climaApiKey));
+                    else
+                        url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + localContext.getString(R.string.climaApiKey));
 
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -52,7 +58,7 @@ public class ClimaService {
 
                     String tmp = "";
 
-                    while((tmp = reader.readLine()) != null)
+                    while ((tmp = reader.readLine()) != null)
                         json.append(tmp).append("\n");
                     reader.close();
 
@@ -65,27 +71,27 @@ public class ClimaService {
                     int numeroID = Integer.parseInt(id);
                     Double numero = Double.parseDouble(mensaje);
 
-                    if(numero>33 && numeroID>799){ //
+                    if (numero > 33 && numeroID > 799) { //
                         notificationService.enviarNotificacionMuchoCalor(localContext, "mañana");
                         return null;
                     }
 
-                    if(numero>14 && numeroID>799){ //
+                    if (numero > 14 && numeroID > 799) { //
                         notificationService.enviarNotificacionClimaLindo(localContext, "mañana");
                         return null;
                     }
 
-                    if(numeroID>299){
+                    if (numeroID > 299) {
                         notificationService.enviarNotificacionClimaParaguas(localContext, "mañana");
                         return null;
                     }
 
-                    if(numeroID>199){
+                    if (numeroID > 199) {
                         notificationService.enviarNotificacionClimaHorrible(localContext, "mañana");
                         return null;
                     }
 
-                    if(data.getInt("cod") != 200) {
+                    if (data.getInt("cod") != 200) {
                         System.out.println("Cancelled");
                         return null;
                     }
@@ -93,7 +99,7 @@ public class ClimaService {
 
                 } catch (Exception e) {
 
-                    System.out.println("Exception "+ e.getMessage());
+                    System.out.println("Exception " + e.getMessage());
                     return null;
                 }
 
@@ -102,28 +108,44 @@ public class ClimaService {
 
             @Override
             protected void onPostExecute(Void Void) {
-                if(data!=null){
+                if (data != null) {
                     Log.d("my weather received", mensaje);
                     Log.d("holi", id);
                 }
 
             }
-        }.execute();
+        };
+        execute.execute();
 
     }
 
-    public void sendClimaNotifications(Context context, final String nombreAbuelo, String mailQueInicioSesion) {
-        final Context localContext = context;
+    public void sendClimaNotifications(final Context context, final String nombreAbuelo, String mailQueInicioSesion) {
         final NotificationService notificationService = new NotificationService(mailQueInicioSesion);
-        final int horaActual = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
-        final int horarioClima = Integer.parseInt(context.getString(R.string.horarioClima));
+        //Si hay permiso, obtener ubicación y luego el clima para enviar las notificaciones (sino usa Buenos Aires)
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-        if(horaActual == horarioClima) {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
-            getJSON(city,localContext,notificationService);
-
+            mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        sendNotifications(context, notificationService,
+                            location!=null?location.getLatitude():null, location!=null?location.getLongitude():null, city);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        sendNotifications(context, notificationService, null, null, city);
+                    }
+                });
+        } else {
+            sendNotifications(context, notificationService, null, null, city);
         }
+
+
 
     }
 

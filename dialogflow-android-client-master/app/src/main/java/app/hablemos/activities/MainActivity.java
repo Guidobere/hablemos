@@ -33,7 +33,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import ai.api.AIListener;
@@ -64,12 +67,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     private String queryString;
 
     //Subintents
-    private final int TTS_CHECK_CODE = 0;
-    private final int MODIF_CONFIG_CODE = 1;
+    private final int TTS_CHECK_CODE = 0; // Para verificar servicio TextToSpeach
+    private final int MODIF_CONFIG_CODE = 1; // Para modificar configuración
 
     //Permisos
-    private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
-    private static final int REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID = 133;
+    private static final int REQUEST_PERMISSIONS_ID = 33;
+    private static final int REQUEST_AUDIO_PERMISSION_ON_BUTTON_CLICK_ID = 133;
 
     //TTS object
     private TextToSpeech myTTS;
@@ -240,12 +243,27 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     //Resultado de subintents
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
-            //act on result of TTS data check
+
+            // Vuelve de verificar el servicio TextToSpeach
             case (TTS_CHECK_CODE) : {
+                List<String> permisosList = new ArrayList();
+
+                //Permiso de grabar audio para el botón Hablar
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSIONS_ID);
-                } else
-                    recordPermissionGranted = true;
+                    permisosList.add(Manifest.permission.RECORD_AUDIO);
+                } else recordPermissionGranted = true;
+
+                //Permiso de ubicación para el clima
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    permisosList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+                }
+
+                if(permisosList.size()>0) {
+                    String[] permisos = new String[permisosList.size()];
+                    permisos = permisosList.toArray(permisos);
+                    ActivityCompat.requestPermissions(this, permisos, REQUEST_PERMISSIONS_ID);
+                }
+
 
                 if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                     //the user has the necessary data - create the TTS
@@ -259,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                 break;
             }
+            // Vuelve de cambiar la configuración
             case (MODIF_CONFIG_CODE) : {
                 if (resultCode == Activity.RESULT_OK) {
                     equipoAbuelo = data.getStringExtra("equipoAbuelo");
@@ -299,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             escucharAbuelo();
         } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID);
+                new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSION_ON_BUTTON_CLICK_ID);
         } else {
             //Esto es para cuando da falso porque se salió de la app y se volvió a entrar
             recordPermissionGranted = true;
@@ -314,8 +333,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_AUDIO_PERMISSIONS_ID : {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            case REQUEST_PERMISSIONS_ID: {
+                int audioPermissionIndex = Arrays.asList(permissions).indexOf(Manifest.permission.RECORD_AUDIO);
+                //int locationPermissionIndex = Arrays.asList(permissions).indexOf(Manifest.permission.ACCESS_COARSE_LOCATION);
+                if (audioPermissionIndex >= 0 && grantResults[audioPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
                     recordPermissionGranted = true;
                 } else {
                     Toast.makeText(this, getString(R.string.permisoGrabarDenegado), Toast.LENGTH_LONG).show();
@@ -323,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 }
                 break;
             }
-            case REQUEST_AUDIO_PERMISSIONS_ON_BUTTON_CLICK_ID : {
+            case REQUEST_AUDIO_PERMISSION_ON_BUTTON_CLICK_ID: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     recordPermissionGranted = true;
                     escucharAbuelo();
