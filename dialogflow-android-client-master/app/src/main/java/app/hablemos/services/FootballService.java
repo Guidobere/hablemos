@@ -1,5 +1,15 @@
 package app.hablemos.services;
 
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import app.hablemos.R;
 import app.hablemos.asynctasks.GetComparacionAsyncTask;
 import app.hablemos.asynctasks.GetEquiposAsyncTask;
 import app.hablemos.asynctasks.GetPosicionesAsyncTask;
@@ -140,18 +151,21 @@ public class FootballService {
             StringBuilder retorno = new StringBuilder();
             int posEnLista = 0;
             if (partidosFiltrados.get(0).getDia().contains("Post")) {
-                retorno.append(equipoVisual.getNombre()).append(" tiene un partido postergado con ").append(getNombreRealFromTabla(partidosFiltrados.get(0).getRival())).append(" sin fecha asignada, en el siguiente encuentro").append(partidosFiltrados.get(1).toString(getNombreRealFromTabla(partidosFiltrados.get(1).getRival())));
+                retorno.append(equipoVisual.getNombre()).append(" tiene un partido postergado con ").append(getNombreRealFromTabla(partidosFiltrados.get(0).getRival())).append(" sin fecha asignada. En el siguiente encuentro,").append(partidosFiltrados.get(1).toString(getNombreRealFromTabla(partidosFiltrados.get(1).getRival())));
                 posEnLista = 1;
             } else {
                 retorno.append(equipoVisual.getNombre()).append(partidosFiltrados.get(0).toString(getNombreRealFromTabla(partidosFiltrados.get(0).getRival())));
             }
+            List<PartidoActual> partidosActuales;
             if (partidosFiltrados.get(posEnLista).getDia().equals(DateUtils.getNowString())) {
-                List<PartidoActual> partidosActuales = FootballUtil.getPartidosActuales();
-                for(PartidoActual partidoActual : partidosActuales) {
-                    if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
-                            partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
-                        retorno.append(" a las ").append(partidoActual.getHoraJuego());
-                    }
+                partidosActuales = FootballUtil.getPartidosActuales();
+            } else {
+                partidosActuales = FootballUtil.getPartidosProximaFecha(partidosFiltrados.get(posEnLista).getFecha());
+            }
+            for(PartidoActual partidoActual : partidosActuales) {
+                if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
+                        partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
+                    retorno.append(" a las ").append(partidoActual.getHoraJuego());
                 }
             }
             return retorno.toString();
