@@ -448,36 +448,24 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         if (speech.startsWith("futbol")) {
             String[] pedido = speech.split("_");
             String accion = pedido[1].trim().toUpperCase();
-            String result = FootballServiceActions.valueOf(accion).getFootballActionExecutor().ejecutarAccion(pedido, equipoAbuelo, footballService);
-            loQueDiceYescribe(result, FootballServiceActions.valueOf(accion).getAccion());
-        }
-
-        else if(speech.startsWith("medicamentos _") && speech.split(" _ ").length>1) {
+            try {
+                FootballServiceActions action = FootballServiceActions.valueOf(accion);
+                String result = action.getFootballActionExecutor().ejecutarAccion(pedido, equipoAbuelo, footballService);
+                loQueDiceYescribe(result, action.getAccion());
+            } catch (Exception e) {
+                loQueDiceYescribe("eso todavía no aprendí a contestarlo, preguntame otra cosa", "errorFutbol");
+                irAlMenu("menu_futbol", 3);
+            }
+        } else if(speech.startsWith("medicamentos _") && speech.split(" _ ").length>1) {
             pedirAlaBase(speech.split(" _ ")[1]);
-        }
-
-        else if(speech.startsWith("chequeoSalud _") && speech.split(" _ ").length>1) {
+        } else if(speech.startsWith("chequeoSalud _") && speech.split(" _ ").length>1) {
             personalizarMensajeRevisionSalud(loQueDijo);
+        } else if(speech.startsWith("glucosa-") && speech.split("-").length>1) {
+            pedirAlaBaseSobreGlucosa(speech.split("-")[1]);
+        } else if(speech.startsWith("presión-") && speech.split("-").length>1) {
+            pedirAlaBaseSobrePresion(speech.split("-")[1]);
         } else {
             switch (speech) {
-                case "glucosa-mañana":
-                    pedirAlaBaseSobreGlucosa("mañana");
-                    break;
-                case "glucosa-noche":
-                    pedirAlaBaseSobreGlucosa("noche");
-                    break;
-                case "glucosa-tarde":
-                    pedirAlaBaseSobreGlucosa("tarde");
-                    break;
-                case "presión-mañana":
-                    pedirAlaBaseSobrePresion("mañana");
-                    break;
-                case "presión-noche":
-                    pedirAlaBaseSobrePresion("noche");
-                    break;
-                case "presión-tarde":
-                    pedirAlaBaseSobrePresion("tarde");
-                    break;
                 case "caminarno":
                     interactionsService.guardarInteraccion(mailQueInicioSesion,
                             "Notificacion clima", "No",
@@ -517,14 +505,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         interactionsService.guardarInteraccion(mailQueInicioSesion,
             getString(R.string.interaccionTitulo_RevisionSalud, chequeo), parsearNombre(resultado), observacion);
         loQueDiceYescribe(getString(R.string.graciasAvisoRevision),"default");
-        irAlMenu(3);
+        irAlMenu("menu_principal", 3);
     }
 
-    private void irAlMenu(int segundos) {
+    private void irAlMenu(final String menu, int segundos) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                queryString = "menu_principal";
+                queryString = menu;
                 esAutomatico = true;
                 sendRequest();
             }

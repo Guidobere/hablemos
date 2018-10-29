@@ -11,6 +11,7 @@ import app.hablemos.asynctasks.GetEfemeridesAsyncTask;
 import app.hablemos.asynctasks.GetGoleadoresAsyncTask;
 import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
 import app.hablemos.asynctasks.GetPartidosAsyncTask;
+import app.hablemos.asynctasks.GetPartidosProximaFechaAsyncTask;
 import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
 import app.hablemos.model.football.DatosEquipo;
 import app.hablemos.model.football.EquipoPosicionado;
@@ -58,7 +59,7 @@ public class FootballUtil {
         for (String str : marcadoresArray) {
             String[] submarcadoresArray = str.split("'");
             String tiempo = submarcadoresArray[0].trim();
-            String marcador = submarcadoresArray[1].trim().replace("e.c.", "en contra").replace(".", "");
+            String marcador = submarcadoresArray[1].trim().replace("e.c.", "en contra").replace("(pen)", "(de penal)").replace(".", "");
             if (contador == marcadoresArray.length) {
                 marcadores.append(" y ");
             } else {
@@ -143,6 +144,41 @@ public class FootballUtil {
         return respuesta.toString();
     }
 
+    public static String convertirSafReferencia(String abreviacion) {
+        return getMapaEquipos().get(getReferenciaEquipo(abreviacion));
+    }
+
+    public static String getReferenciaEquipo(String nombreEquipo) {
+        HashMap<String, String> mapa = new HashMap<>();
+        mapa.put("ALD", "aldosivi");
+        mapa.put("ARG", "argentinos");
+        mapa.put("ATU", "atltucuman");
+        mapa.put("BAN", "banfield");
+        mapa.put("BEL", "belgrano");
+        mapa.put("BOC", "bocajuniors");
+        mapa.put("COL", "colon");
+        mapa.put("DYJ", "defyjusticia");
+        mapa.put("EST", "estudianteslp");
+        mapa.put("GIM", "gimnasialp");
+        mapa.put("GOD", "godoycruz");
+        mapa.put("HUR", "huracan");
+        mapa.put("IND", "independiente");
+        mapa.put("LAN", "lanus");
+        mapa.put("NOB", "newells");
+        mapa.put("PAT", "patronato");
+        mapa.put("RAC", "racingclub");
+        mapa.put("RIV", "riverplate");
+        mapa.put("CEN", "rosariocentral");
+        mapa.put("SLO", "sanlorenzo");
+        mapa.put("SMA", "sanmartinsj");
+        mapa.put("SMT", "sanmartint");
+        mapa.put("TAL", "talleresc");
+        mapa.put("TIG", "tigre");
+        mapa.put("UNI", "union");
+        mapa.put("VEL", "velez");
+        return mapa.get(nombreEquipo);
+    }
+
     /* SERVICIOS SCRAPPING */
     public static DatosEquipo getDatosAsync(String pagina) {
         DatosEquipo datos = new DatosEquipo();
@@ -178,6 +214,16 @@ public class FootballUtil {
         List<PartidoActual> partidosActuales = new ArrayList<>();
         try {
             partidosActuales = new GetResultadoUltimoPartidoAsyncTask(fecha).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return partidosActuales;
+    }
+
+    public static List<PartidoActual> getPartidosProximaFecha(String fecha) {
+        List<PartidoActual> partidosActuales = new ArrayList<>();
+        try {
+            partidosActuales = new GetPartidosProximaFechaAsyncTask(fecha).execute().get();
         } catch (Exception e) {
             e.printStackTrace();
         }
