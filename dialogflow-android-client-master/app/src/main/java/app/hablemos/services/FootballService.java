@@ -451,34 +451,16 @@ public class FootballService {
 
     private String armarStringConLista(String mensajeInicial, List<EquipoPosicionado> lista) {
         StringBuilder respuesta = new StringBuilder(mensajeInicial);
-        String separador = "";
-        int contador = 1;
         for (EquipoPosicionado ep : lista) {
-            if (contador == lista.size()) {
-                respuesta.append(" y ");
-            } else {
-                respuesta.append(separador);
-                separador = ", ";
-            }
-            respuesta.append(getNombreRealFromTabla(ep.getNombre()));
-            contador++;
+            respuesta.append("\n").append(bullet).append(" ").append(getNombreRealFromTabla(ep.getNombre()));
         }
-        return respuesta.append(".").toString();
+        return respuesta.toString();
     }
 
     private String getStringTablaPosiciones(List<EquipoPosicionado> lista, String mensajeInicial) {
         StringBuilder respuesta = new StringBuilder(mensajeInicial);
-        String separador = "";
-        int contador = 1;
         for (EquipoPosicionado ep : lista) {
-            if (contador == lista.size()) {
-                respuesta.append(" y ");
-            } else {
-                respuesta.append(separador);
-                separador = ", ";
-            }
-            respuesta.append(getNombreRealFromTabla(ep.getNombre()));
-            contador++;
+            respuesta.append("\n").append(ep.getPosicion()).append("º ").append(getNombreRealFromTabla(ep.getNombre()));
         }
         return respuesta.toString();
     }
