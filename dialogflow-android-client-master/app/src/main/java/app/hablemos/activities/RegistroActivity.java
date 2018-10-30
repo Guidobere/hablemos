@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,6 +42,9 @@ import app.hablemos.services.FootballService;
 
 public class RegistroActivity extends AppCompatActivity {
 
+    //Lonuevo
+    private TextInputLayout nombreAbuelo , mailTutor, contra,  repetirPwd, medicamentosM, medicamentosT,medicamentosN;
+    private TextInputEditText mN,mM,mT,n;
 
     //ID's
     private String UserID;
@@ -50,22 +55,21 @@ public class RegistroActivity extends AppCompatActivity {
     private String PresionTardeID;
     private String PresionNocheID;
 
-
     private  boolean ActualizarRecordatorioPresion = true;
     private  boolean ActualizarRecordatorioGlucosa = false;
 
-
     //DATOS PERSONALES
-    private EditText nombreAbuelo;
-    private EditText mailTutor;
+    //private EditText nombreAbuelo;
+    //private EditText mailTutor;
     private String equipoFavorito;
-    private EditText contra;
-    private EditText repetirPwd;
+   // private EditText contra;
+    //private EditText repetirPwd;
     private Spinner spinnerEquipo;
+
     //MEDICAMENTOS
-    private EditText medicamentosM;
-    private EditText medicamentosT;
-    private EditText medicamentosN;
+   // private EditText medicamentosM;
+   // private EditText medicamentosT;
+   // private EditText medicamentosN;
 
     private FootballService footballService;
     private String mailQueInicioSesion;
@@ -90,16 +94,30 @@ public class RegistroActivity extends AppCompatActivity {
         myRecordatoriosGlucosaFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosGlucosa));
         myRecordatoriosPresionFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbRecordatoriosPresion));
 
-        setContentView(R.layout.cinicial);
+        setContentView(R.layout.nuevaconfig);
 
-        nombreAbuelo = findViewById(R.id.txtAbuelo);
+        //Lonuevo
+        nombreAbuelo = findViewById(R.id.txtAbuelo_id);
+        mailTutor= findViewById(R.id.txtEmail_id);
+        contra= findViewById(R.id.txtContra_id);
+        repetirPwd= findViewById(R.id.txtContra2_id);
+        medicamentosM= findViewById(R.id.txtmañana_id);
+        medicamentosT= findViewById(R.id.txttarde_id);
+        medicamentosN= findViewById(R.id.txtnoche_id);
+
+        mN= findViewById(R.id.txtnoche);
+        mT= findViewById(R.id.txttarde);
+        mM= findViewById(R.id.txtmañana);
+        n=findViewById(R.id.txtAbuelo);
+
+        /*  nombreAbuelo = findViewById(R.id.txtAbuelo);
         mailTutor = findViewById(R.id.txtEmail);
         //equipoFavorito = findViewById(R.id.txtEquipo);
         contra = findViewById(R.id.txtContra);
         repetirPwd = findViewById(R.id.txtContra2);
         medicamentosM = findViewById(R.id.txtmañana);
         medicamentosT = findViewById(R.id.txttarde);
-        medicamentosN = findViewById(R.id.txtnoche);
+        medicamentosN = findViewById(R.id.txtnoche); */
         Button botonRegistro = findViewById(R.id.btnRegister);
         Button botonGuardar = findViewById(R.id.btnGuardar);
         Button botonCancel = findViewById(R.id.btnCancel);
@@ -114,6 +132,7 @@ public class RegistroActivity extends AppCompatActivity {
             botonRegistro.setVisibility(View.GONE);
             botonGuardar.setVisibility(View.VISIBLE);
             a=1;
+
         }
         else{
             botonRegistro.setVisibility(View.VISIBLE);
@@ -121,7 +140,7 @@ public class RegistroActivity extends AppCompatActivity {
             a=0;
         }
 
-        //LOGICA PARA QUE AL HACER CLICK EN EL BOTON ENVIE LOS DATOS A LA FUNCION writeNewUser
+          //LOGICA PARA QUE AL HACER CLICK EN EL BOTON ENVIE LOS DATOS A LA FUNCION writeNewUser
         botonRegistro.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 //Aca lo guarda para que lo podamos autenticar
@@ -176,6 +195,7 @@ public class RegistroActivity extends AppCompatActivity {
         };
     }
 
+
     private void cargarEquiposEnSpinner() {
         List<String> equiposPrimera = footballService.getEquiposDePrimera();
         List<String> spinnerArray = new ArrayList<>();
@@ -211,7 +231,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioGlucTarde = RecordatoriosGlucosaTarde();
         String diasRecordatorioGlucNoche = RecordatoriosGlucosaNoche();
 
-        String email = mailTutor.getText().toString().toLowerCase();
+        String email = mailTutor.getEditText().getText().toString().toLowerCase();
         String recordatorioManianaID = myRecordatoriosGlucosaFb.push().getKey();
         myRecordatoriosGlucosaFb.child(recordatorioManianaID).setValue(new Recordatorio(recordatorioManianaID,email, diasRecordatorioGlucManiana, "mañana"));
 
@@ -263,7 +283,7 @@ public class RegistroActivity extends AppCompatActivity {
         String diasRecordatorioPresionTarde = RecordatoriosPresionTarde();
         String diasRecordatorioPresionNoche = RecordatoriosPresionNoche();
 
-        String email = mailTutor.getText().toString().toLowerCase();
+        String email = mailTutor.getEditText().getText().toString().toLowerCase();
         String recordatorioManianaID = myRecordatoriosPresionFb.push().getKey();
         myRecordatoriosPresionFb.child(recordatorioManianaID).setValue(new Recordatorio(recordatorioManianaID,email, diasRecordatorioPresionManiana, "mañana"));
         String recordatorioTardeID = myRecordatoriosPresionFb.push().getKey();
@@ -309,8 +329,8 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void crearNuevoUsuario() {
-        String email = mailTutor.getText().toString().toLowerCase();
-        String password = contra.getText().toString();
+        String email = mailTutor.getEditText().getText().toString().toLowerCase();
+        String password = contra.getEditText().getText().toString();
 
         if(!CamposCompletadosCorrectamente())
             return;
@@ -322,7 +342,7 @@ public class RegistroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //Si no se repite o algo, lo guarda en la base
-                            String userID=writeNewUser( nombreAbuelo.getText().toString().toLowerCase(),mailTutor.getText().toString().toLowerCase(),footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),medicamentosM.getText().toString().toLowerCase(), medicamentosT.getText().toString().toLowerCase(),medicamentosN.getText().toString().toLowerCase());
+                            String userID=writeNewUser( nombreAbuelo.getEditText().getText().toString().toLowerCase(),mailTutor.getEditText().getText().toString().toLowerCase(),footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),medicamentosM.getEditText().getText().toString().toLowerCase(), medicamentosT.getEditText().getText().toString().toLowerCase(),medicamentosN.getEditText().getText().toString().toLowerCase());
                             if(userID != "" && userID != null) {
                                 CrearNuevoRecordatoriosGlucosa();
                                 CrearNuevoRecordatoriosPresion();
@@ -355,10 +375,10 @@ public class RegistroActivity extends AppCompatActivity {
 
     private boolean CamposCompletadosCorrectamente() {
         boolean camposEstanOk = true;
-        String email = mailTutor.getText().toString().toLowerCase();
-        String password = contra.getText().toString();
+        String email = mailTutor.getEditText().getText().toString().toLowerCase();
+        String password = contra.getEditText().getText().toString();
 
-        if (TextUtils.isEmpty(nombreAbuelo.getText().toString())) {
+        if (TextUtils.isEmpty(nombreAbuelo.getEditText().getText().toString())) {
             Toast.makeText(getApplicationContext(), getString(R.string.nombreAbueloVacio), Toast.LENGTH_SHORT).show();
             camposEstanOk = false ;
             return camposEstanOk;
@@ -380,7 +400,7 @@ public class RegistroActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.contraseniaVacia), Toast.LENGTH_SHORT).show();
             camposEstanOk = false;
         }
-        if (!password.equals(repetirPwd.getText().toString())) {
+        if (!password.equals(repetirPwd.getEditText().getText().toString())) {
             Toast.makeText(getApplicationContext(), getString(R.string.contraseñasNoCoinciden), Toast.LENGTH_SHORT).show();
             camposEstanOk = false;
             return camposEstanOk;
@@ -427,22 +447,32 @@ public class RegistroActivity extends AppCompatActivity {
 
                     //LLENAR CAMPOS
                     UserID=u.userID;
-                    nombreAbuelo.setText(u.username);
+
+
+                 //   nombreAbuelo.setText(u.username);
                     //nombreAbuelo.setEnabled(false);
                     //nombreAbuelo.setFocusable(false);
                     mailTutor.setEnabled(false);
-                    mailTutor.setText(u.email);
+                    mailTutor.setHint(u.email);
                     mailTutor.setFocusable(false);
-                    contra.setText("123456");
+                    contra.setHint("123456");
                     contra.setFocusable(false);
                     contra.setEnabled(false);
-                    repetirPwd.setText("123456");
+                    repetirPwd.setHint("123456");
                     repetirPwd.setFocusable(false);
                     repetirPwd.setEnabled(false);
                     //equipoFavorito.setText(u.equipo);
-                    medicamentosM.setText(u.remediosManiana);
-                    medicamentosT.setText(u.remediosTarde);
-                    medicamentosN.setText(u.remediosNoche);
+                    if (a==1){
+                        mM.setText(u.remediosManiana);
+                        mT.setText(u.remediosTarde);
+                        mN.setText(u.remediosNoche);
+                        nombreAbuelo.setHint("Nombre usuario");
+                        n.setText(u.username);
+
+                    }else{
+                        mM.setText(u.remediosManiana);
+                        mT.setText(u.remediosTarde);
+                        mN.setText(u.remediosNoche);}
                     String nombreEquipo = "";
                     if (u.equipo.equalsIgnoreCase("ninguno")){
                         nombreEquipo = "Ninguno";
@@ -630,9 +660,9 @@ public class RegistroActivity extends AppCompatActivity {
         if(!userID.equals("")) {
             equipoFavorito = footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString());
             myUsersFb.child(userID).setValue(
-                    new User(userID, nombreAbuelo.getText().toString().toLowerCase(), mailTutor.getText().toString().toLowerCase(),
-                            equipoFavorito, medicamentosM.getText().toString().toLowerCase(),
-                            medicamentosT.getText().toString().toLowerCase(), medicamentosN.getText().toString().toLowerCase()));
+                    new User(userID, nombreAbuelo.getEditText().getText().toString().toLowerCase(), mailTutor.getEditText().getText().toString().toLowerCase(),
+                            equipoFavorito, medicamentosM.getEditText().getText().toString().toLowerCase(),
+                            medicamentosT.getEditText().getText().toString().toLowerCase(), medicamentosN.getEditText().getText().toString().toLowerCase()));
         }
         else{
             Toast.makeText(RegistroActivity.this, "no se pudo actualizar al usuario", Toast.LENGTH_SHORT).show();
@@ -643,13 +673,13 @@ public class RegistroActivity extends AppCompatActivity {
         // uso la variable global presionTurnoID obtenida previamente en funcion "pedirAlaBaseSobrePresion(email)"
         // luego Asigno en la tabla recordatoriosPresion en el child "presionTurnoID" (con el valor de ese presionTurnoID) los nuevos valores del recordatoriosPresion
         if(PresionManianaID != "" && PresionManianaID != null){
-            myRecordatoriosPresionFb.child(PresionManianaID).setValue(new Recordatorio(PresionManianaID,mailTutor.getText().toString(),RecordatoriosPresionManiana(),"mañana"));
+            myRecordatoriosPresionFb.child(PresionManianaID).setValue(new Recordatorio(PresionManianaID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionManiana(),"mañana"));
         }
         if(PresionTardeID != "" && PresionTardeID != null){
-            myRecordatoriosPresionFb.child(PresionTardeID).setValue(new Recordatorio(PresionTardeID,mailTutor.getText().toString(),RecordatoriosPresionTarde(),"tarde"));
+            myRecordatoriosPresionFb.child(PresionTardeID).setValue(new Recordatorio(PresionTardeID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionTarde(),"tarde"));
         }
         if(PresionNocheID != "" && PresionNocheID != null){
-            myRecordatoriosPresionFb.child(PresionNocheID).setValue(new Recordatorio(PresionNocheID,mailTutor.getText().toString(),RecordatoriosPresionNoche(),"noche"));
+            myRecordatoriosPresionFb.child(PresionNocheID).setValue(new Recordatorio(PresionNocheID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionNoche(),"noche"));
         }
     }
 
@@ -658,13 +688,13 @@ public class RegistroActivity extends AppCompatActivity {
         //// uso la variable global glucosaTurnoID obtenida previamente en funcion "pedirAlaBaseSobreGlucosa(email)"
         //Asigno en la tabla recordatoriosGlucosa en el child "glucosaTurnoID" (con el valor de ese glucosaTurnoID) los nuevos valores del recordatoriosGlucosa
         if(GlucosaManianaID != "" && GlucosaManianaID != null){
-            myRecordatoriosGlucosaFb.child(GlucosaManianaID).setValue(new Recordatorio(GlucosaManianaID,mailTutor.getText().toString(),RecordatoriosGlucosaManiana(),"mañana"));
+            myRecordatoriosGlucosaFb.child(GlucosaManianaID).setValue(new Recordatorio(GlucosaManianaID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaManiana(),"mañana"));
         }
         if(GlucosaTardeID != "" && GlucosaTardeID != null){
-            myRecordatoriosGlucosaFb.child(GlucosaTardeID).setValue(new Recordatorio(GlucosaTardeID,mailTutor.getText().toString(),RecordatoriosGlucosaTarde(),"tarde"));
+            myRecordatoriosGlucosaFb.child(GlucosaTardeID).setValue(new Recordatorio(GlucosaTardeID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaTarde(),"tarde"));
         }
         if(GlucosaNocheID != "" && GlucosaNocheID != null){
-            myRecordatoriosGlucosaFb.child(GlucosaNocheID).setValue(new Recordatorio(GlucosaNocheID,mailTutor.getText().toString(),RecordatoriosGlucosaNoche(),"noche"));
+            myRecordatoriosGlucosaFb.child(GlucosaNocheID).setValue(new Recordatorio(GlucosaNocheID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaNoche(),"noche"));
         }
     }
 

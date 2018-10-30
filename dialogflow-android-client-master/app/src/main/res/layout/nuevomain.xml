@@ -90,7 +90,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/el_mensaje_va_aca"
             android:layout_weight="1"
-            android:textStyle="bold"
             android:textSize="30sp"/>
     </LinearLayout>
 
