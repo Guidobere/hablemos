@@ -1,4 +1,4 @@
-package app.hablemos.activities;
+﻿package app.hablemos.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         aiService.setListener(this);
         aiDataService = new AIDataService(this, config);
 
-        footballService = new FootballService();
+        footballService = new FootballService(this);
 
 
 /*        timer = new MiContador(3000,1000);
@@ -453,8 +453,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 String result = action.getFootballActionExecutor().ejecutarAccion(pedido, equipoAbuelo, footballService);
                 loQueDiceYescribe(result, action.getAccion());
             } catch (Exception e) {
-                loQueDiceYescribe("eso todavía no aprendí a contestarlo, preguntame otra cosa", "errorFutbol");
-                irAlMenu("menu_futbol", 3);
+                loQueDiceYescribe("Eso todavía no aprendí a contestarlo, preguntame otra cosa", "errorFutbol");
+                irAlMenu("menu_futbol", 6);
             }
         } else if(speech.startsWith("medicamentos _") && speech.split(" _ ").length>1) {
             pedirAlaBase(speech.split(" _ ")[1]);
@@ -760,8 +760,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         interrumpirBotty();
+        super.onDestroy();
     }
 
     private void manejarRespuestaNotificacion(Bundle extras) {

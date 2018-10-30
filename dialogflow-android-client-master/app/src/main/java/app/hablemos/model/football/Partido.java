@@ -1,8 +1,12 @@
 package app.hablemos.model.football;
 
+import android.text.TextUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import app.hablemos.util.DateUtils;
 
 public class Partido {
 
@@ -12,6 +16,7 @@ public class Partido {
     private String resultado;
     private String dia;
     private Date diaDePartido;
+    private String diaSemana;
 
     public Partido(String fecha, String rival, String localia, String resultado, String dia) {
         this.fecha = fecha;
@@ -23,6 +28,7 @@ public class Partido {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         try {
             this.diaDePartido = formatter.parse(this.dia);
+            this.diaSemana = DateUtils.getDiaSemanaFromDate(diaDePartido);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -52,14 +58,18 @@ public class Partido {
     }
 
     public String toString(String rival) {
-        return " jugará de " + localia + " contra " + rival + " el día " + dia + " por la fecha " + fecha;
+        return " jugará de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia  + " por la fecha " + fecha;
     }
 
     public String toStringUltimo(String rival) {
-        return " jugó de " + localia + " contra " + rival + " el día " + dia + " por la fecha " + fecha + " y terminó " + resultado;
+        return " jugó de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia + " por la fecha " + fecha + " y terminó " + resultado;
     }
 
     public String toStringEnCurso(String rival) {
         return " está jugando de " + localia + " contra " + rival + " por la fecha " + fecha + " y va " + resultado;
+    }
+
+    private String getDiaSemana(){
+        return TextUtils.isEmpty(diaSemana)?"":diaSemana + " ";
     }
 }
