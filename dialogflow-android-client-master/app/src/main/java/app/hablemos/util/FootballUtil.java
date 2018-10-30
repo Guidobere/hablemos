@@ -59,14 +59,30 @@ public class FootballUtil {
         for (String str : marcadoresArray) {
             String[] submarcadoresArray = str.split("'");
             String tiempo = submarcadoresArray[0].trim();
-            String marcador = submarcadoresArray[1].trim().replace("e.c.", "en contra").replace("(pen)", "(de penal)").replace(".", "");
+            String marcador = submarcadoresArray[1].trim().replace("e.c.", "en contra").replace("(pen.)", "(de penal)").replace(".", "");
             if (contador == marcadoresArray.length) {
                 marcadores.append(" y ");
             } else {
                 marcadores.append(separador);
                 separador = ", ";
             }
-            marcadores.append(marcador).append(" a los ").append(tiempo).append(" minutos");
+            if (tiempo.startsWith("45(+")) {
+                String minutosAdicionales = tiempo.split("\\+")[1].replace(")", "").trim();
+                if (minutosAdicionales.equalsIgnoreCase("1")) {
+                    marcadores.append(marcador).append(" al minuto de adicional del primer tiempo");
+                } else {
+                    marcadores.append(marcador).append(" a los ").append(tiempo.split("\\+")[1].replace(")", "").trim()).append(" minutos de adicional del primer tiempo");
+                }
+            } else if (tiempo.startsWith("90(+")) {
+                String minutosAdicionales = tiempo.split("\\+")[1].replace(")", "").trim();
+                if (minutosAdicionales.equalsIgnoreCase("1")) {
+                    marcadores.append(marcador).append(" al minuto de adicional del segundo tiempo");
+                } else {
+                    marcadores.append(marcador).append(" a los ").append(minutosAdicionales).append(" minutos de adicional del segundo tiempo");
+                }
+            } else {
+                marcadores.append(marcador).append(" a los ").append(tiempo).append(" minutos");
+            }
             contador++;
         }
         return marcadores.append(".").toString();
