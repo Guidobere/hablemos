@@ -1,14 +1,21 @@
 package app.hablemos.util;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateUtils {
 
     public static String getDiaSemanaActual() {
-        return DateUtils.getDiaSemana(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+        return DateUtils.getDiaSemana(Calendar.getInstance().get(Calendar.DAY_OF_WEEK), false);
     }
 
-    private static String getDiaSemana(int i) {
+    public static String getDiaSemanaFromDate(Date dia){
+        Calendar cDia = Calendar.getInstance();
+        cDia.setTime(dia);
+        return DateUtils.getDiaSemana(cDia.get(Calendar.DAY_OF_WEEK), true);
+    }
+
+    private static String getDiaSemana(int i, boolean conTilde) {
         String dia = "";
         switch (i) {
             case 1:
@@ -21,7 +28,7 @@ public class DateUtils {
                 dia = "martes";
                 break;
             case 4:
-                dia = "miercoles";
+                dia = conTilde?"miércoles":"miercoles";
                 break;
             case 5:
                 dia = "jueves";
@@ -30,7 +37,7 @@ public class DateUtils {
                 dia = "viernes";
                 break;
             case 7:
-                dia = "sabado";
+                dia = conTilde?"sábado":"sabado";
                 break;
         }
         return dia;

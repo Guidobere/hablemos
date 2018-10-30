@@ -104,7 +104,7 @@ public class RegistroActivity extends AppCompatActivity {
         Button botonGuardar = findViewById(R.id.btnGuardar);
         Button botonCancel = findViewById(R.id.btnCancel);
 
-        footballService = new FootballService();
+        footballService = new FootballService(this);
 
         spinnerEquipo = (Spinner) findViewById(R.id.spinnerEquipo);
 

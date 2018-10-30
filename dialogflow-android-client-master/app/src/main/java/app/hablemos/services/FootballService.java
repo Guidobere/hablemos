@@ -1,15 +1,7 @@
 package app.hablemos.services;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,8 +26,10 @@ public class FootballService {
     private List<Equipo> equiposDePrimera;
     private List<EquipoPosicionado> equiposPosicionados;
     private HashMap<String, String> mapaEquipos;
+    private String bullet;
 
-    public FootballService() {
+    public FootballService(Context context) {
+        this.bullet = context.getString(R.string.bullet);
         this.equiposPosicionados = new ArrayList<>();
         this.equiposDePrimera = new ArrayList<>();
         this.mapaEquipos = FootballUtil.getMapaEquipos();
@@ -148,7 +142,7 @@ public class FootballService {
                 }
             }
             Collections.sort(partidosFiltrados, FootballUtil.comparadorDeFecha);
-            StringBuilder retorno = new StringBuilder();
+            StringBuilder retorno = new StringBuilder(bullet); //TODO viñeta para Guido, la dejo acá de ejemplo.
             int posEnLista = 0;
             if (partidosFiltrados.get(0).getDia().contains("Post")) {
                 retorno.append(equipoVisual.getNombre()).append(" tiene un partido postergado con ").append(getNombreRealFromTabla(partidosFiltrados.get(0).getRival())).append(" sin fecha asignada. En el siguiente encuentro,").append(partidosFiltrados.get(1).toString(getNombreRealFromTabla(partidosFiltrados.get(1).getRival())));
@@ -191,8 +185,9 @@ public class FootballService {
             } else {
                 partidosActuales = FootballUtil.getPartidosPasados(partidosFiltrados.get(partidosFiltrados.size()-1).getFecha());
             }
+            String nombreEquipo = mapaEquipos.get(equipo).replace("(","").replace(")","");
             for(PartidoActual partidoActual : partidosActuales) {
-                if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
+                if (partidoActual.getEquipoLocal().replace("(","").replace(")","").equalsIgnoreCase(nombreEquipo) ||
                         partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
                     if(partidoActual.getEstado().equalsIgnoreCase("jugandose")) {
                         retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringEnCurso(getNombreRealFromTabla(partidosFiltrados.get(partidosFiltrados.size() - 1).getRival())));
