@@ -1,4 +1,4 @@
-﻿package app.hablemos.activities;
+package app.hablemos.activities;
 
 import android.Manifest;
 import android.app.Activity;
