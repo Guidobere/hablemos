@@ -71,7 +71,7 @@
     <string name="mensaje_actual">LOS MENSAJES VAN ACA</string>
     <string name="imagenregistro">imagenRegistro</string>
     <string name="registrar">Registrar</string>
-    <string name="nombre_abuelo">Nombre Abuelo</string>
+    <string name="nombre_abuelo">Nombre Usuario</string>
     <string name="email_del_tutor">Email del tutor</string>
     <string name="contrase_a_tutor">Contraseña tutor</string>
     <string name="repetir_pwd">Repetir Contraseña</string>
