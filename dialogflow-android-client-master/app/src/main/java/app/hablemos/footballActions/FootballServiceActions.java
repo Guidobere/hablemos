@@ -211,6 +211,41 @@ public enum FootballServiceActions {
         public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
             return footballService.getEquipoMasPartidosPerdidos();
         }
+    }),
+    CLASICO("clasicoEquipo", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            String equipo = pedido[2].trim();
+            if (equipo.equalsIgnoreCase("miEquipo") && equipoAbuelo.equalsIgnoreCase("ninguno")) {
+                return "Su equipo no esta configurado, consulte a su tutor";
+            } else {
+                if (equipo.equalsIgnoreCase("miEquipo"))
+                    return footballService.getClasicoEquipo(equipoAbuelo);
+                else
+                    return footballService.getClasicoEquipo(equipo);
+            }
+        }
+    }),
+    CLASICOHISTORIAL("clasicoHistorialEquipo", new FootballActionExecutor() {
+
+        @Override
+        public String ejecutarAccion(String[] pedido, String equipoAbuelo, FootballService footballService) {
+            String respuesta = pedido[2].trim();
+            if (respuesta.equalsIgnoreCase("si")) {
+                String equipo = pedido[3].trim();
+                if (equipo.equalsIgnoreCase("miEquipo") && equipoAbuelo.equalsIgnoreCase("ninguno")) {
+                    return "Su equipo no esta configurado, consulte a su tutor";
+                } else {
+                    if (equipo.equalsIgnoreCase("miEquipo"))
+                        return footballService.getHistorialClasico(equipoAbuelo);
+                    else
+                        return footballService.getHistorialClasico(equipo);
+                }
+            } else {
+                return "irAlMenu";
+            }
+        }
     });
 
     private FootballActionExecutor footballActionExecutor;
