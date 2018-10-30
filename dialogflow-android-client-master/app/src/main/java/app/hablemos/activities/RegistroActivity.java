@@ -428,8 +428,8 @@ public class RegistroActivity extends AppCompatActivity {
                     //LLENAR CAMPOS
                     UserID=u.userID;
                     nombreAbuelo.setText(u.username);
-                    nombreAbuelo.setEnabled(false);
-                    nombreAbuelo.setFocusable(false);
+                    //nombreAbuelo.setEnabled(false);
+                    //nombreAbuelo.setFocusable(false);
                     mailTutor.setEnabled(false);
                     mailTutor.setText(u.email);
                     mailTutor.setFocusable(false);
