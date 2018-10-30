@@ -451,7 +451,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             try {
                 FootballServiceActions action = FootballServiceActions.valueOf(accion);
                 String result = action.getFootballActionExecutor().ejecutarAccion(pedido, equipoAbuelo, footballService);
-                loQueDiceYescribe(result, action.getAccion());
+                if (result.equalsIgnoreCase("irAlMenu")) {
+                    irAlMenu("menu_futbol", 6);
+                } else {
+                    loQueDiceYescribe(result, action.getAccion());
+                }
             } catch (Exception e) {
                 loQueDiceYescribe("Eso todavía no aprendí a contestarlo, preguntame otra cosa", "errorFutbol");
                 irAlMenu("menu_futbol", 6);

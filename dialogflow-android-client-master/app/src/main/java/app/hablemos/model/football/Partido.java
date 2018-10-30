@@ -62,7 +62,19 @@ public class Partido {
     }
 
     public String toStringUltimo(String rival) {
-        return " jugó de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia + " por la fecha " + fecha + " y terminó " + resultado;
+        String retorno = " jugó de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia + " por la fecha " + fecha;
+        int aFavor = Integer.parseInt(resultado.split("-")[0].trim());
+        int enContra = Integer.parseInt(resultado.split("-")[1].trim());
+        if (aFavor > enContra) {
+            retorno += " y ganó ";
+        } else if (aFavor < enContra) {
+            retorno += " y perdió ";
+        } else if (aFavor == enContra) {
+            retorno += " y empató ";
+        } else {
+            retorno += " y terminó ";
+        }
+        return retorno + resultado;
     }
 
     public String toStringEnCurso(String rival) {

@@ -142,7 +142,7 @@ public class FootballService {
                 }
             }
             Collections.sort(partidosFiltrados, FootballUtil.comparadorDeFecha);
-            StringBuilder retorno = new StringBuilder(bullet); //TODO viñeta para Guido, la dejo acá de ejemplo.
+            StringBuilder retorno = new StringBuilder();
             int posEnLista = 0;
             if (partidosFiltrados.get(0).getDia().contains("Post")) {
                 retorno.append(equipoVisual.getNombre()).append(" tiene un partido postergado con ").append(getNombreRealFromTabla(partidosFiltrados.get(0).getRival())).append(" sin fecha asignada. En el siguiente encuentro,").append(partidosFiltrados.get(1).toString(getNombreRealFromTabla(partidosFiltrados.get(1).getRival())));
@@ -378,6 +378,14 @@ public class FootballService {
             }
         }
         return generarRespuesta("Los equipos que más partidos perdieron son ", equiposFiltrados, partidosPerdidos, "El equipo que perdió mayor cantidad de partidos es ");
+    }
+
+    public String getClasicoEquipo(String equipo) {
+        return FootballUtil.getClasicos().get(equipo) + "\n¿Querés saber el historial entre ellos?";
+    }
+
+    public String getHistorialClasico(String equipo) {
+        return this.getComparacionEquipos(equipo, FootballUtil.getDerby().get(equipo));
     }
 
     /* SPINNER EQUIPOS REGISTRO */

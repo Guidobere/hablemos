@@ -148,7 +148,7 @@ public class FootballUtil {
         return getMapaEquipos().get(getReferenciaEquipo(abreviacion));
     }
 
-    public static String getReferenciaEquipo(String nombreEquipo) {
+    private static String getReferenciaEquipo(String nombreEquipo) {
         HashMap<String, String> mapa = new HashMap<>();
         mapa.put("ALD", "aldosivi");
         mapa.put("ARG", "argentinos");
@@ -177,6 +177,68 @@ public class FootballUtil {
         mapa.put("UNI", "union");
         mapa.put("VEL", "velez");
         return mapa.get(nombreEquipo);
+    }
+
+    public static HashMap<String,String> getClasicos() {
+        HashMap<String, String> mapa = new HashMap<>();
+        mapa.put("aldosivi", "El clásico rival es Talleres Fúbol Club de Mar del Plata, pero por la diferencia de categorías durante tanto tiempo, ahora se lo rivaliza con el Club Atlético Alvarado en lo que se conoce como el \"Clásico Marplatense\". En primera división su rival es Tigre.");
+        mapa.put("argentinos", "El clásico rival es el Club Atlético Platense y se conoce como el \"Clásico del Noroeste\", aunque tambien se lo rivaliza con el Club Atlético All Boys por la ubicación geográfica. En primera división su rival es Velez Sarsfield.");
+        mapa.put("atltucuman", "El \"Clásico Tucumano\" une a Atlético Tucumán y a San Martín de Tucumán. Como sus nombres lo indican, ambos provenientes de la provincia más chica de Argentina.");
+        mapa.put("banfield", "Su clásico rival de toda la vida es el Club Atlético Lanús en lo que se llama el \"Clásico del Sur\".");
+        mapa.put("belgrano", "Su clásico rival es el Club Atlético Talleres de Córdoba en el \"Superclásico Cordobés\", ya que ambos se ubican en la misma provincia. También tiene rivalidad con Instituto de Córdoba por la misma razón.");
+        mapa.put("bocajuniors", "Su clásico rival es River Plate, al ser los dos equipos mas populares del país se lo considera el \"Superclásico del fútbol argentino\".");
+        mapa.put("colon", "Su rival de toda la vida es el Club Unión de Santa Fe, por la ubicación de ambos. A esta rivalidad se la llama el \"Clásico Santafesino\".");
+        mapa.put("defyjusticia", "Defensa y Justicia tiene rivalidad con Quilmes y Arsenal de Sarandí, entre otras. Su rival en primera división es Patronato de Paraná.");
+        mapa.put("estudianteslp", "Su rival del \"Clásico Platense\" es Gimnasia y Esgrima de La Plata ya que ambos se ubican en la misma ciudad. Al clásico también se lo conoce como \"Clásico de la ciudad de las diagonales\" o \"Clásico de La Plata\".");
+        mapa.put("gimnasialp", "Su rival del \"Clásico Platense\" es Estudiantes de La Plata ya que ambos se ubican en la misma ciudad. Al clásico también se lo conoce como \"Clásico de la ciudad de las diagonales\" o \"Clásico de La Plata\".");
+        mapa.put("godoycruz", "Su clásico rival es Andes Talleres Sport Club, con quien disputa el \"Clásico Godoycruceño\". Hoy en día tiene una rivalidad con San Martín de San Juan en el \"Clásico de Cuyo\".");
+        mapa.put("huracan", "Su clásico de toda la vida es San Lorenzo de Almagro, por la cercanía en la que se encuentran.");
+        mapa.put("independiente", "El clásico rival es Racing Club y al mismo se lo llama \"Clásico de Avellaneda\". La ubicación de sus estadios es la más cercana de todas, sólo los separan 300 metros.");
+        mapa.put("lanus", "Su rival de toda la vida es el Club Atlético Banfield en el \"Clásico del Sur\".");
+        mapa.put("newells", "El \"Clásico Rosarino\" es el clásico más importante de la ciudad de Rosario en la provincia de Santa Fe. Junta a Newells Old Boys con su rival eterno Rosario Central.");
+        mapa.put("patronato", "Patronato tiene una clásica rivalidad deportiva con el Club Atlético Paraná, de la misma ciudad, con el que conforma el \"Clásico Paranaense\". En primera división lo disputa contra Defensa y Justicia.");
+        mapa.put("racingclub", "Se lo rivaliza con el Club Atlético Independiente en el \"Clásico de Avellaneda\". La rivalidad aumenta al estar sus estadios tan cerca, sólo los separan 300 metros.");
+        mapa.put("riverplate", "Su clásico rival es Boca Juniors, al ser los dos equipos mas populares del país se lo considera el \"Superclásico del fútbol argentino\".");
+        mapa.put("rosariocentral", "El \"Clásico Rosarino\" es el clásico más importante de Rosario. Enfrenta a Rosario Central con su rival de toda la vida Newells Old Boys.");
+        mapa.put("sanlorenzo", "Su clásico rival es el Club Atlético Huracán, por la cercanía, se podría decir que es un clásico de barrio.");
+        mapa.put("sanmartinsj", "El clásico más importante de la provincia es con el Club Sportivo Desamparados debido a que son los dos clubes más relevantes de la ciudad. Hoy en día se lo rivaliza en el \"Clásico de Cuyo\" con Godoy Cruz de Mendoza.");
+        mapa.put("sanmartint", "El \"Clásico Tucumano\" une a San Martín de Tucumán y a Atlético Tucumán como rivales de toda la vida. Como sus nombres lo indican, ambos provenientes de la provincia más chica de Argentina.");
+        mapa.put("talleresc", "Su clásico rival es el Club Atlético Belgrano de Córdoba en el \"Superclásico Cordobés\", ya que ambos se ubican en la misma provincia. También tiene rivalidad con Instituto de Córdoba, aunque éste actualmente presenta rivalidad con Racing de Córdoba.");
+        mapa.put("tigre", "Su rival histórico es el Club Atlético Platense con quien disputa el \"Clasico de Zona Norte\". En primera división disputa su clásico con Argentinos Juniors.");
+        mapa.put("union", "Su rival de toda la vida es Colón de Santa Fe, por la ubicación de ambos. A esta rivalidad se la llama el \"Clásico Santafesino\".");
+        mapa.put("velez", "Su clásico rival es Ferro Carril Oeste, en el llamado \"Clásico del Oeste\". Su rival en primera división es Aldosivi de Mar del Plata.");
+        return mapa;
+    }
+
+    public static HashMap<String,String> getDerby() {
+        HashMap<String, String> mapa = new HashMap<>();
+        mapa.put("aldosivi", "tigre");
+        mapa.put("argentinos", "velez");
+        mapa.put("atltucuman", "sanmartint");
+        mapa.put("banfield", "lanus");
+        mapa.put("belgrano", "talleresc");
+        mapa.put("bocajuniors", "riverplate");
+        mapa.put("colon", "union");
+        mapa.put("defyjusticia", "patronato");
+        mapa.put("estudianteslp", "gimnasialp");
+        mapa.put("gimnasialp", "estudianteslp");
+        mapa.put("godoycruz", "sanmartinsj");
+        mapa.put("huracan", "sanlorenzo");
+        mapa.put("independiente", "racingclub");
+        mapa.put("lanus", "banfield");
+        mapa.put("newells", "rosariocentral");
+        mapa.put("patronato", "defyjusticia");
+        mapa.put("racingclub", "independiente");
+        mapa.put("riverplate", "bocajuniors");
+        mapa.put("rosariocentral", "newells");
+        mapa.put("sanlorenzo", "huracan");
+        mapa.put("sanmartinsj", "godoycruz");
+        mapa.put("sanmartint", "atltucuman");
+        mapa.put("talleresc", "belgrano");
+        mapa.put("tigre", "aldosivi");
+        mapa.put("union", "colon");
+        mapa.put("velez", "argentinos");
+        return mapa;
     }
 
     /* SERVICIOS SCRAPPING */
