@@ -103,50 +103,72 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="@string/medicamentos"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:layout_marginBottom="15dp"
+                            />
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/txtmañana_id"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:errorEnabled="true">
+                            android:layout_height="wrap_content">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/txtmañana"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="@string/medicamentos_turno_ma_ana"
-                                />
+                                android:hint="@string/medicamentos_turno_ma_ana"/>
                         </android.support.design.widget.TextInputLayout>
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            android:layout_marginBottom="10dp"/>
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/txttarde_id"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:errorEnabled="true">
+                            android:layout_height="wrap_content">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/txttarde"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/medicamentos_turno_tarde"
+
                                 />
                         </android.support.design.widget.TextInputLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            android:layout_marginBottom="10dp"/>
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/txtnoche_id"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorEnabled="true">
+                            >
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/txtnoche"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="@string/medicamentos_turno_noche"
-                                />
-
+                                android:hint="@string/medicamentos_turno_noche" />
                         </android.support.design.widget.TextInputLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            android:layout_marginBottom="10dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -155,6 +177,7 @@
                             android:textStyle="bold"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
+                            android:textSize="15sp"
                             />
 
                         <!-- MAÑANA -->
@@ -334,8 +357,9 @@
         android:layout_height="match_parent"
         android:text="@string/presion_vista"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="15sp"
         />
 
     <!-- MAÑANA -->

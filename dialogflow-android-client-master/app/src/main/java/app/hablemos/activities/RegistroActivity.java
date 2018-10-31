@@ -44,7 +44,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     //Lonuevo
     private TextInputLayout nombreAbuelo , mailTutor, contra,  repetirPwd, medicamentosM, medicamentosT,medicamentosN;
-    private TextInputEditText mN,mM,mT,n;
+    private TextInputEditText mN,mM,mT,n,emailTutor,erepetirPwd, econtra;
 
     //ID's
     private String UserID;
@@ -109,6 +109,9 @@ public class RegistroActivity extends AppCompatActivity {
         mT= findViewById(R.id.txttarde);
         mM= findViewById(R.id.txtmañana);
         n=findViewById(R.id.txtAbuelo);
+        emailTutor=findViewById(R.id.txtEmail);
+        erepetirPwd=findViewById(R.id.txtContra2);
+        econtra=findViewById(R.id.txtContra);
 
         /*  nombreAbuelo = findViewById(R.id.txtAbuelo);
         mailTutor = findViewById(R.id.txtEmail);
@@ -411,11 +414,6 @@ public class RegistroActivity extends AppCompatActivity {
             camposEstanOk = false;
         }
 
-/*        if (TextUtils.isEmpty(spinnerEquipo.getSelectedItem().toString())) {
-            Toast.makeText(getApplicationContext(), getString(R.string.equipoVacio), Toast.LENGTH_SHORT).show();
-            camposEstanOk = false;
-            return camposEstanOk;
-        }*/
         return  camposEstanOk;
     }
 
@@ -448,17 +446,14 @@ public class RegistroActivity extends AppCompatActivity {
                     //LLENAR CAMPOS
                     UserID=u.userID;
 
-
-                 //   nombreAbuelo.setText(u.username);
-                    //nombreAbuelo.setEnabled(false);
-                    //nombreAbuelo.setFocusable(false);
+                    nombreAbuelo.setHint("Nombre usuario");
                     mailTutor.setEnabled(false);
-                    mailTutor.setHint(u.email);
+                    mailTutor.setHint("Email tutor");
                     mailTutor.setFocusable(false);
-                    contra.setHint("123456");
+                    contra.setHint("Contraseña");
                     contra.setFocusable(false);
                     contra.setEnabled(false);
-                    repetirPwd.setHint("123456");
+                    repetirPwd.setHint("Repetir contraseña");
                     repetirPwd.setFocusable(false);
                     repetirPwd.setEnabled(false);
                     //equipoFavorito.setText(u.equipo);
@@ -466,7 +461,9 @@ public class RegistroActivity extends AppCompatActivity {
                         mM.setText(u.remediosManiana);
                         mT.setText(u.remediosTarde);
                         mN.setText(u.remediosNoche);
-                        nombreAbuelo.setHint("Nombre usuario");
+                        emailTutor.setText(u.email);
+                        econtra.setText("123456");
+                        erepetirPwd.setText("123456");
                         n.setText(u.username);
 
                     }else{
