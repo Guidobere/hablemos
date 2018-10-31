@@ -104,7 +104,7 @@
                             android:layout_height="match_parent"
                             android:text="@string/medicamentos"
                             android:textStyle="bold"
-                            android:textSize="15sp"
+                            android:textSize="18sp"
                             android:layout_marginBottom="15dp"
                             />
 
@@ -126,7 +126,7 @@
                             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
                             android:textSize="12sp"
                             android:textStyle="italic"
-                            android:layout_marginBottom="10dp"/>
+                            android:layout_marginBottom="20dp"/>
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/txttarde_id"
                             android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
                             android:textSize="12sp"
                             android:textStyle="italic"
-                            android:layout_marginBottom="10dp"/>
+                            android:layout_marginBottom="20dp"/>
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/txtnoche_id"
@@ -168,7 +168,7 @@
                             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
                             android:textSize="12sp"
                             android:textStyle="italic"
-                            android:layout_marginBottom="10dp"/>
+                            android:layout_marginBottom="20dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -176,8 +176,8 @@
                             android:text="@string/glucosa"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:textSize="15sp"
+                            android:layout_marginBottom="15dp"
+                            android:textSize="18sp"
                             />
 
                         <!-- MAÑANA -->
@@ -186,13 +186,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
-                            android:text="@string/ma_ana" />
+                            android:text="@string/ma_ana"
+                            android:textSize="15sp"/>
 
                         <LinearLayout
                             android:id="@+id/checkboxGlucosaDias"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="5dp">
 
                             <CheckBox
                                 android:id="@+id/chBxGlucManianaL"
@@ -243,13 +245,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="@string/tarde" />
+            android:text="@string/tarde"
+            android:textSize="15sp"/>
 
         <LinearLayout
             android:id="@+id/checkboxGlucosaTarde"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <CheckBox
                 android:id="@+id/chBxGlucTardeLu"
@@ -301,13 +305,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/noche" />
+        android:text="@string/noche"
+        android:textSize="15sp"/>
 
     <LinearLayout
         android:id="@+id/checkboxGlucosaNoche"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
 
         <CheckBox
             android:id="@+id/chBxGlucNocheLu"
@@ -357,9 +363,9 @@
         android:layout_height="match_parent"
         android:text="@string/presion_vista"
         android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="15sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="18sp"
         />
 
     <!-- MAÑANA -->
@@ -368,14 +374,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/tarde"
+        android:text="@string/ma_ana"
+        android:textSize="15sp"
          />
 
     <LinearLayout
         android:id="@+id/checkboxPresionMañana"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
 
         <CheckBox
             android:id="@+id/chBxPresionManianaL"
@@ -426,13 +434,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/ma_ana" />
+        android:text="@string/tarde"
+        android:textSize="15sp"/>
 
     <LinearLayout
         android:id="@+id/checkboxPresionTarde"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
 
         <CheckBox
             android:id="@+id/chBxPresionTardeLu"
@@ -483,13 +493,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/noche" />
+        android:text="@string/noche"
+        android:textSize="15sp"/>
 
     <LinearLayout
         android:id="@+id/checkboxPresionNoche"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
 
         <CheckBox
             android:id="@+id/chBxPresionNocheL"
@@ -538,7 +550,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp">
+        android:layout_marginBottom="15dp">
                         <Button
                             android:id="@+id/btnCancel"
                             android:layout_width="wrap_content"
