@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
-import app.hablemos.asynctasks.GetDatosAsyncTask;
-import app.hablemos.asynctasks.GetEfemeridesAsyncTask;
-import app.hablemos.asynctasks.GetGoleadoresAsyncTask;
-import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
-import app.hablemos.asynctasks.GetPartidosAsyncTask;
-import app.hablemos.asynctasks.GetPartidosProximaFechaAsyncTask;
-import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
+import app.hablemos.asyncTasks.GetDatosAsyncTask;
+import app.hablemos.asyncTasks.GetEfemeridesAsyncTask;
+import app.hablemos.asyncTasks.GetGoleadoresAsyncTask;
+import app.hablemos.asyncTasks.GetPartidosActualesAsyncTask;
+import app.hablemos.asyncTasks.GetPartidosAsyncTask;
+import app.hablemos.asyncTasks.GetPartidosProximaFechaAsyncTask;
+import app.hablemos.asyncTasks.GetResultadoUltimoPartidoAsyncTask;
 import app.hablemos.model.football.DatosEquipo;
 import app.hablemos.model.football.EquipoPosicionado;
 import app.hablemos.model.football.Partido;
@@ -197,12 +197,12 @@ public class FootballUtil {
 
     public static HashMap<String,String> getClasicos() {
         HashMap<String, String> mapa = new HashMap<>();
-        mapa.put("aldosivi", "El clásico rival es Talleres Fúbol Club de Mar del Plata, pero por la diferencia de categorías durante tanto tiempo, ahora se lo rivaliza con el Club Atlético Alvarado en lo que se conoce como el \"Clásico Marplatense\". En primera división su rival es Tigre.");
-        mapa.put("argentinos", "El clásico rival es el Club Atlético Platense y se conoce como el \"Clásico del Noroeste\", aunque tambien se lo rivaliza con el Club Atlético All Boys por la ubicación geográfica. En primera división su rival es Velez Sarsfield.");
+        mapa.put("aldosivi", "El clásico rival es Talleres Fútbol Club de Mar del Plata, pero por la diferencia de categorías durante tanto tiempo, ahora se lo rivaliza con el Club Atlético Alvarado en lo que se conoce como el \"Clásico Marplatense\". En primera división su rival es Tigre.");
+        mapa.put("argentinos", "El clásico rival es el Club Atlético Platense y se conoce como el \"Clásico del Noroeste\", aunque también se lo rivaliza con el Club Atlético All Boys por la ubicación geográfica. En primera división su rival es Velez Sarsfield.");
         mapa.put("atltucuman", "El \"Clásico Tucumano\" une a Atlético Tucumán y a San Martín de Tucumán. Como sus nombres lo indican, ambos provenientes de la provincia más chica de Argentina.");
         mapa.put("banfield", "Su clásico rival de toda la vida es el Club Atlético Lanús en lo que se llama el \"Clásico del Sur\".");
         mapa.put("belgrano", "Su clásico rival es el Club Atlético Talleres de Córdoba en el \"Superclásico Cordobés\", ya que ambos se ubican en la misma provincia. También tiene rivalidad con Instituto de Córdoba por la misma razón.");
-        mapa.put("bocajuniors", "Su clásico rival es River Plate, al ser los dos equipos mas populares del país se lo considera el \"Superclásico del fútbol argentino\".");
+        mapa.put("bocajuniors", "Su clásico rival es River Plate. Al ser los dos equipos más populares del país se lo considera el \"Superclásico del fútbol argentino\".");
         mapa.put("colon", "Su rival de toda la vida es el Club Unión de Santa Fe, por la ubicación de ambos. A esta rivalidad se la llama el \"Clásico Santafesino\".");
         mapa.put("defyjusticia", "Defensa y Justicia tiene rivalidad con Quilmes y Arsenal de Sarandí, entre otras. Su rival en primera división es Patronato de Paraná.");
         mapa.put("estudianteslp", "Su rival del \"Clásico Platense\" es Gimnasia y Esgrima de La Plata ya que ambos se ubican en la misma ciudad. Al clásico también se lo conoce como \"Clásico de la ciudad de las diagonales\" o \"Clásico de La Plata\".");
@@ -214,15 +214,15 @@ public class FootballUtil {
         mapa.put("newells", "El \"Clásico Rosarino\" es el clásico más importante de la ciudad de Rosario en la provincia de Santa Fe. Junta a Newells Old Boys con su rival eterno Rosario Central.");
         mapa.put("patronato", "Patronato tiene una clásica rivalidad deportiva con el Club Atlético Paraná, de la misma ciudad, con el que conforma el \"Clásico Paranaense\". En primera división lo disputa contra Defensa y Justicia.");
         mapa.put("racingclub", "Se lo rivaliza con el Club Atlético Independiente en el \"Clásico de Avellaneda\". La rivalidad aumenta al estar sus estadios tan cerca, sólo los separan 300 metros.");
-        mapa.put("riverplate", "Su clásico rival es Boca Juniors, al ser los dos equipos mas populares del país se lo considera el \"Superclásico del fútbol argentino\".");
+        mapa.put("riverplate", "Su clásico rival es Boca Juniors. Al ser los dos equipos más populares del país se lo considera el \"Superclásico del fútbol argentino\".");
         mapa.put("rosariocentral", "El \"Clásico Rosarino\" es el clásico más importante de Rosario. Enfrenta a Rosario Central con su rival de toda la vida Newells Old Boys.");
-        mapa.put("sanlorenzo", "Su clásico rival es el Club Atlético Huracán, por la cercanía, se podría decir que es un clásico de barrio.");
+        mapa.put("sanlorenzo", "Su clásico rival es el Club Atlético Huracán. Por la cercanía, se podría decir que es un clásico de barrio.");
         mapa.put("sanmartinsj", "El clásico más importante de la provincia es con el Club Sportivo Desamparados debido a que son los dos clubes más relevantes de la ciudad. Hoy en día se lo rivaliza en el \"Clásico de Cuyo\" con Godoy Cruz de Mendoza.");
-        mapa.put("sanmartint", "El \"Clásico Tucumano\" une a San Martín de Tucumán y a Atlético Tucumán como rivales de toda la vida. Como sus nombres lo indican, ambos provenientes de la provincia más chica de Argentina.");
-        mapa.put("talleresc", "Su clásico rival es el Club Atlético Belgrano de Córdoba en el \"Superclásico Cordobés\", ya que ambos se ubican en la misma provincia. También tiene rivalidad con Instituto de Córdoba, aunque éste actualmente presenta rivalidad con Racing de Córdoba.");
+        mapa.put("sanmartint", "El \"Clásico Tucumano\" une a San Martín de Tucumán y a Atlético Tucumán como rivales de toda la vida. Como sus nombres lo indican, ambos son provenientes de la provincia más chica de Argentina.");
+        mapa.put("talleresc", "Uno de sus rivales clásicos es Instituto de Córdoba, aunque éste actualmente presenta rivalidad con Racing de Córdoba. Su principal rival es el Club Atlético Belgrano de Córdoba en el \"Superclásico Cordobés\", ya que ambos se ubican en la misma provincia. ");
         mapa.put("tigre", "Su rival histórico es el Club Atlético Platense con quien disputa el \"Clasico de Zona Norte\". En primera división disputa su clásico con Argentinos Juniors.");
         mapa.put("union", "Su rival de toda la vida es Colón de Santa Fe, por la ubicación de ambos. A esta rivalidad se la llama el \"Clásico Santafesino\".");
-        mapa.put("velez", "Su clásico rival es Ferro Carril Oeste, en el llamado \"Clásico del Oeste\". Su rival en primera división es Aldosivi de Mar del Plata.");
+        mapa.put("velez", "Su clásico rival es Ferro Carril Oeste, en el llamado \"Clásico del Oeste\". Su rival en primera división es Argentinos Juniors.");
         return mapa;
     }
 

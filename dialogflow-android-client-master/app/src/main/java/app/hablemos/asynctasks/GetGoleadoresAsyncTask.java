@@ -1,18 +1,15 @@
-package app.hablemos.asynctasks;
+package app.hablemos.asyncTasks;
 
 import android.os.AsyncTask;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 public class GetGoleadoresAsyncTask extends AsyncTask<Void, Void, TreeMap<Integer,List<String>>> {

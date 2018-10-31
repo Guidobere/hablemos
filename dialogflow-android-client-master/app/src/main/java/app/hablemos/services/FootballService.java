@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.TreeMap;
 
 import app.hablemos.R;
-import app.hablemos.asynctasks.GetComparacionAsyncTask;
-import app.hablemos.asynctasks.GetEquiposAsyncTask;
-import app.hablemos.asynctasks.GetPosicionesAsyncTask;
+import app.hablemos.asyncTasks.GetComparacionAsyncTask;
+import app.hablemos.asyncTasks.GetEquiposAsyncTask;
+import app.hablemos.asyncTasks.GetPosicionesAsyncTask;
 import app.hablemos.model.football.DatosEquipo;
 import app.hablemos.model.football.Equipo;
 import app.hablemos.model.football.EquipoPosicionado;
