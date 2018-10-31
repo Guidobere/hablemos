@@ -26,7 +26,7 @@
             android:hint="@string/escribi_aca"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
-            android:textSize="52sp"
+            android:textSize="50sp"
             android:singleLine="true"
             android:imeOptions="actionSend"
                        />
