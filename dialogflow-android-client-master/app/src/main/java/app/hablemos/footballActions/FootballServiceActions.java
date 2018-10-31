@@ -243,7 +243,7 @@ public enum FootballServiceActions {
                         return footballService.getHistorialClasico(equipo);
                 }
             } else {
-                return "irAlMenu";
+                return "irAlMenuYa";
             }
         }
     });

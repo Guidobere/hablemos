@@ -1,4 +1,4 @@
-package app.hablemos.asynctasks;
+package app.hablemos.asyncTasks;
 
 import android.os.AsyncTask;
 
@@ -9,10 +9,7 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import app.hablemos.model.football.DatosEquipo;
 
 public class GetEfemeridesAsyncTask extends AsyncTask<Void, Void, List<String>> {
 

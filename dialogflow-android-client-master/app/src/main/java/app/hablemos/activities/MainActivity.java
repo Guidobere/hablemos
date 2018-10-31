@@ -453,11 +453,13 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 String result = action.getFootballActionExecutor().ejecutarAccion(pedido, equipoAbuelo, footballService);
                 if (result.equalsIgnoreCase("irAlMenu")) {
                     irAlMenu("menu_futbol", 6);
+                } else if (result.equalsIgnoreCase("irAlMenuYa")) {
+                    irAlMenu("menu_futbol", 0);
                 } else {
-                    loQueDiceYescribe(result, action.getAccion());
+                    loQueDiceYescribe(result, action.getAccion(), true);
                 }
             } catch (Exception e) {
-                loQueDiceYescribe("Eso todavía no aprendí a contestarlo, preguntame otra cosa", "errorFutbol");
+                loQueDiceYescribe("Eso todavía no aprendí a contestarlo, preguntame otra cosa", "errorFutbol", false);
                 irAlMenu("menu_futbol", 6);
             }
         } else if(speech.startsWith("medicamentos _") && speech.split(" _ ").length>1) {
@@ -474,20 +476,20 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     interactionsService.guardarInteraccion(mailQueInicioSesion,
                             "Notificacion clima", "No",
                             "El usuario no accedio a salir a caminar");
-                    loQueDiceYescribe("Entonces escribí o decí: Pastelería, Fútbol o Salud","default");
+                    loQueDiceYescribe("Entonces escribí o decí: Pastelería, Fútbol o Salud","default", false);
                     break;
                 case "caminarsi":
                     interactionsService.guardarInteraccion(mailQueInicioSesion,
                             "Notificacion clima", "Si",
                             "El usuario accedio a salir a caminar");
-                    loQueDiceYescribe("¡Buena suerte!","default");
+                    loQueDiceYescribe("¡Buena suerte!","default", false);
                     break;
                 case "" :
                     speech = "¡No entendí! Escribí o decí: Pastelería, Fútbol o Salud";
-                    loQueDiceYescribe(speech,"default");
+                    loQueDiceYescribe(speech,"default", false);
                     break;
                 default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
-                    loQueDiceYescribe(speech,"default");
+                    loQueDiceYescribe(speech,"default", false);
                     break;
             }
         }
@@ -508,7 +510,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
         interactionsService.guardarInteraccion(mailQueInicioSesion,
             getString(R.string.interaccionTitulo_RevisionSalud, chequeo), parsearNombre(resultado), observacion);
-        loQueDiceYescribe(getString(R.string.graciasAvisoRevision),"default");
+        loQueDiceYescribe(getString(R.string.graciasAvisoRevision),"default", false);
         irAlMenu("menu_principal", 3);
     }
 
@@ -543,12 +545,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     if(elturno.equalsIgnoreCase(turnoPresion) && losdias.contains(diaSemana)){
                         a=1;
                        // speech="Hoy si";
-                        loQueDiceYescribe("Hoy a la "+ turnoPresion +" debes medirte la presión","default");
+                        loQueDiceYescribe("Hoy a la "+ turnoPresion +" debes medirte la presión","default", false);
                     }
                 }
 
                 if(a == 0) {
-                    loQueDiceYescribe("Hoy a la "+ turnoPresion +" no debes medirte la presión","default");
+                    loQueDiceYescribe("Hoy a la "+ turnoPresion +" no debes medirte la presión","default", false);
                 }
             }
 
@@ -578,12 +580,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
                         a=1;
-                       loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" debes medirte la glucosa","default");
+                       loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" debes medirte la glucosa","default", false);
                     }
                 }
 
                 if(a == 0) {
-                     loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" no debes medirte la glucosa","default");
+                     loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" no debes medirte la glucosa","default", false);
                 }
             }
 
@@ -609,7 +611,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     switch (pedido) {
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
-                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ","default");
+                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ","default", false);
                             equipoAbuelo = u.equipo;
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
@@ -618,24 +620,24 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
-                                loQueDiceYescribe("Nada que tomar a la tarde.","default");
+                                loQueDiceYescribe("Nada que tomar a la tarde.","default", false);
                             }
                             else{
-                                loQueDiceYescribe("A la tarde tenés que tomar " + u.remediosTarde,"default");}
+                                loQueDiceYescribe("A la tarde tenés que tomar " + u.remediosTarde,"default", false);}
                              break;
                         case "mañana":
                            if(TextUtils.isEmpty(u.remediosManiana)){
-                                loQueDiceYescribe("Nada que tomar a la mañana.","default");
+                                loQueDiceYescribe("Nada que tomar a la mañana.","default", false);
                             }
                             else{
-                                loQueDiceYescribe("A la mañana tenés que tomar " + u.remediosManiana,"default");}
+                                loQueDiceYescribe("A la mañana tenés que tomar " + u.remediosManiana,"default", false);}
                           break;
                         case "noche":
                             if(TextUtils.isEmpty(u.remediosNoche)){
-                                loQueDiceYescribe("Nada que tomar a la noche.","default");
+                                loQueDiceYescribe("Nada que tomar a la noche.","default", false);
                             }
                             else{
-                                loQueDiceYescribe("A la noche tenés que tomar " + u.remediosNoche,"default");}
+                                loQueDiceYescribe("A la noche tenés que tomar " + u.remediosNoche,"default", false);}
                             break;
                         default:
                             break;
@@ -720,14 +722,23 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-    public void loQueDiceYescribe(String texto, String id){
+    public void loQueDiceYescribe(String texto, String id, boolean revisarPronunciacion){
         try {
             send.onEditorAction(EditorInfo.IME_ACTION_DONE);
             resultTextView.setText(texto);
+            if(revisarPronunciacion)
+                texto = this.getTextoPronunciacionCorrecta(texto);
             myTTS.speak(texto, 0, null, id);
         } catch (Exception e){
             Log.e(this.getClass().getName(), "Error al emitir respuesta.", e);
         }
+    }
+
+    private String getTextoPronunciacionCorrecta(String texto) {
+        return texto.replace("Racing Club", "Rácing Club")
+            .replace("Velez Sarsfield", "Velez Sársfield")
+            .replace("Heinze", "Géinze")
+            .replace("River Plate", "Ríver Plate");
     }
 
     private void interrumpirBotty(){
@@ -798,7 +809,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
 
         else if(tipoNotificacion == NotificationService.ID_NOTIFICACION_CLIMA_FUERTE){
-            loQueDiceYescribe("Tomar mucha agua durante todo el día\nEvitar las bebidas alcohólicas, muy dulces y las infusiones calientes\nUsar ropa suelta, de materiales livianos y de colores claros\nno exponerse al sol","default");
+            loQueDiceYescribe("Tomar mucha agua durante todo el día\nEvitar las bebidas alcohólicas, muy dulces y las infusiones calientes\nUsar ropa suelta, de materiales livianos y de colores claros\nno exponerse al sol","default", false);
         }
 
     }
