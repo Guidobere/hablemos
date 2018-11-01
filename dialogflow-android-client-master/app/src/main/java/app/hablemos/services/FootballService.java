@@ -27,7 +27,6 @@ public class FootballService {
     private List<Equipo> equiposDePrimera;
     private List<EquipoPosicionado> equiposPosicionados;
     private HashMap<String, String> mapaEquipos;
-    private HashMap<String, List<String>> jugadoresPrimera;
     private String bullet;
 
     public FootballService(Context context) {
@@ -43,7 +42,6 @@ public class FootballService {
                     equipo.setNombre(mapaConversion.get(equipo.getNombre()));
                 }
             }
-            this.jugadoresPrimera = FootballUtil.getJugadoresPrimera(this.equiposDePrimera);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,14 +201,14 @@ public class FootballService {
                         retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringUltimo(FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(partidosFiltrados.size() - 1).getRival(), false)));
                     }
                     if (partidoActual.getGolesEquipoLocal()==1){
-                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, this.jugadoresPrimera, partidoActual.getEquipoLocal(),"del local", partidoActual.getGolesLocal()));
+                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, partidoActual.getEquipoLocal(),"del local", partidoActual.getGolesLocal()));
                     } else if (partidoActual.getGolesEquipoLocal()>1){
-                        retorno.append("\nLos goles del equipo local fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, this.jugadoresPrimera, partidoActual.getEquipoLocal(), partidoActual.getGolesLocal()));
+                        retorno.append("\nLos goles del equipo local fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, partidoActual.getEquipoLocal(), partidoActual.getGolesLocal()));
                     }
                     if (partidoActual.getGolesEquipoVisitante()==1){
-                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, this.jugadoresPrimera, partidoActual.getEquipoVisitante(),"de la visita", partidoActual.getGolesVisitante()));
+                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, partidoActual.getEquipoVisitante(),"de la visita", partidoActual.getGolesVisitante()));
                     } else if (partidoActual.getGolesEquipoVisitante()>1){
-                        retorno.append("\nLos goles de la visita fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, this.jugadoresPrimera, partidoActual.getEquipoVisitante(),partidoActual.getGolesVisitante()));
+                        retorno.append("\nLos goles de la visita fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, partidoActual.getEquipoVisitante(),partidoActual.getGolesVisitante()));
                     }
                 }
             }
@@ -285,29 +283,40 @@ public class FootballService {
             if (contador == 1) {
                 if (goleadores.get(cantGoles).size() > 1) {
                     respuesta.append("Los goleadores del torneo, con ").append(cantGoles).append(" goles son ");
-                    respuesta.append(FootballUtil.getGoleadoresString(goleadores.get(cantGoles)));
+                    respuesta.append(FootballUtil.getGoleadoresString(this.equiposDePrimera, goleadores.get(cantGoles)));
                 } else {
-                    respuesta.append("El goleador del torneo, con ").append(cantGoles).append(" goles es ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
+                    String nombreJugador = goleadores.get(cantGoles).get(0).split("\\(")[0].trim();
+                    String nombreEquipo = goleadores.get(cantGoles).get(0).split(nombreJugador)[1].trim();
+                    nombreJugador = FootballUtil.getNombreRealJugador(this.equiposDePrimera, nombreEquipo.replace("(", "").replace(")", ""), nombreJugador);
+                    String marcador = nombreJugador + " " + nombreEquipo;
+                    respuesta.append("El goleador del torneo, con ").append(cantGoles).append(" goles es ").append(marcador).append(".");
                 }
             } else if (contador == 2) {
                 if (goleadores.get(cantGoles).size() > 1) {
                     respuesta.append("\nLe siguen, con ").append(cantGoles).append(" goles ");
-                    respuesta.append(FootballUtil.getGoleadoresString(goleadores.get(cantGoles)));
+                    respuesta.append(FootballUtil.getGoleadoresString(this.equiposDePrimera, goleadores.get(cantGoles)));
                 } else {
-                    respuesta.append("\nLe sigue, con ").append(cantGoles).append(" goles es ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
+                    String nombreJugador = goleadores.get(cantGoles).get(0).split("\\(")[0].trim();
+                    String nombreEquipo = goleadores.get(cantGoles).get(0).split(nombreJugador)[1].trim();
+                    nombreJugador = FootballUtil.getNombreRealJugador(this.equiposDePrimera, nombreEquipo.replace("(", "").replace(")", ""), nombreJugador);
+                    String marcador = nombreJugador + " " + nombreEquipo;
+                    respuesta.append("\nLe sigue, con ").append(cantGoles).append(" goles ").append(marcador).append(".");
                 }
-            } else if (contador == 3){
+            } else if (contador == 3) {
                 respuesta.append("\nEn tercer lugar, con ").append(cantGoles);
                 if (goleadores.get(cantGoles).size() > 1) {
                     respuesta.append(" goles, están ");
-                    respuesta.append(FootballUtil.getGoleadoresString(goleadores.get(cantGoles)));
+                    respuesta.append(FootballUtil.getGoleadoresString(this.equiposDePrimera, goleadores.get(cantGoles)));
                 } else {
-                    respuesta.append(" goles está ").append(goleadores.get(cantGoles).get(0).replace(". ", " ").replace(".", " "));
+                    String nombreJugador = goleadores.get(cantGoles).get(0).split("\\(")[0].trim();
+                    String nombreEquipo = goleadores.get(cantGoles).get(0).split(nombreJugador)[1].trim();
+                    nombreJugador = FootballUtil.getNombreRealJugador(this.equiposDePrimera, nombreEquipo.replace("(", "").replace(")", ""), nombreJugador);
+                    String marcador = nombreJugador + " " + nombreEquipo;
+                    respuesta.append(" goles está ").append(marcador).append(".");
                 }
             }
             contador++;
         }
-        respuesta.append(".");
         return ConversionMaps.modificarNombresEquiposPrimera(respuesta.toString()).replace(")", "").replace(" (", ", de ");
     }
 
