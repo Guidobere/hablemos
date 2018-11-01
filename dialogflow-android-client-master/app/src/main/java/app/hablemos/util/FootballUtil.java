@@ -5,23 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
-import app.hablemos.asynctasks.GetDatosAsyncTask;
-import app.hablemos.asynctasks.GetEfemeridesAsyncTask;
-import app.hablemos.asynctasks.GetGoleadoresAsyncTask;
-import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
-import app.hablemos.asynctasks.GetPartidosAsyncTask;
-import app.hablemos.asynctasks.GetPartidosProximaFechaAsyncTask;
-import app.hablemos.asynctasks.GetPlantelAsyncTask;
-import app.hablemos.asynctasks.GetPosicionesAsyncTask;
-import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
 import app.hablemos.model.football.ConversionMaps;
-import app.hablemos.model.football.DatosEquipo;
 import app.hablemos.model.football.Equipo;
 import app.hablemos.model.football.EquipoPosicionado;
-import app.hablemos.model.football.Partido;
-import app.hablemos.model.football.PartidoActual;
 
 public class FootballUtil {
 
@@ -102,17 +89,20 @@ public class FootballUtil {
         }
     }
 
-    public static HashMap<String, List<String>> getJugadoresPrimera(List<Equipo> equiposDePrimera) {
-        HashMap<String, List<String>> jugadoresPorEquipo = new HashMap<>();
+    private static List<String> getJugadoresPrimera(List<Equipo> equiposDePrimera, String equipo) {
+        List<String> jugadores = new ArrayList<>();
         if (equiposDePrimera != null && equiposDePrimera.size() != 0) {
-            for (Equipo equipo : equiposDePrimera) {
-                jugadoresPorEquipo.put(equipo.getNombre(), AsyncUtil.getPlantel(equipo.getPagina()));
+            String nombreEquipo = getNombreRealFromTabla(equiposDePrimera, equipo, true);
+            for (Equipo eq : equiposDePrimera) {
+                if (eq.getNombre().equalsIgnoreCase(nombreEquipo)) {
+                    jugadores.addAll(AsyncUtil.getPlantel(eq.getPagina()));
+                }
             }
         }
-        return jugadoresPorEquipo;
+        return jugadores;
     }
 
-    public static String getGoleadoresString(List<String> goleadores) {
+    public static String getGoleadoresString(List<Equipo> equiposDePrimera, List<String> goleadores) {
         String separador = "";
         StringBuilder respuesta = new StringBuilder();
         for (int i = 0; i < goleadores.size(); i++) {
@@ -122,44 +112,49 @@ public class FootballUtil {
                 respuesta.append(separador);
                 separador = ", ";
             }
-            respuesta.append(goleadores.get(i).replace(". ", " ").replace(".", " "));
+            String nombreJugador = goleadores.get(i).split("\\(")[0].trim();
+            String nombreEquipo = goleadores.get(i).split(nombreJugador)[1].trim();
+            String nombreEquipoReplaced = nombreEquipo.replace("(", "").replace(")", "");
+            nombreJugador = FootballUtil.getNombreRealJugador(equiposDePrimera, nombreEquipoReplaced, nombreJugador);
+            String marcador = nombreJugador + " " + nombreEquipo;
+            respuesta.append(marcador);
         }
-        return respuesta.toString();
+        return respuesta.append(".").toString();
     }
 
-    private static String getNombreRealJugador(List<Equipo> equiposDePrimera, HashMap<String, List<String>> jugadoresPrimera, String equipo, String nombre1) {
-        String nombreRealEquipo = getNombreRealFromTabla(equiposDePrimera, equipo, true);
+    public static String getNombreRealJugador(List<Equipo> equiposDePrimera, String equipo, String nombre) {
+        List<String> jugadores = getJugadoresPrimera(equiposDePrimera, equipo);
         List<String> jugadoresFiltrados = new ArrayList<>();
-        for (int i = 0; i < jugadoresPrimera.get(nombreRealEquipo).size()-1; i++){
-            String[] splitted = nombre1.split(" ");
+        for (int i = 0; i < jugadores.size(); i++){
+            String[] splitted = nombre.split(" ");
             StringBuilder nombrefinal = new StringBuilder();
             String separador = "";
             for (int j = 1; j < splitted.length; j++){
                 nombrefinal.append(separador).append(splitted[j]);
                 separador = " ";
             }
-            String nom = StringUtils.replaceSpecialChar(jugadoresPrimera.get(nombreRealEquipo).get(i));
+            String nom = StringUtils.replaceSpecialChar(jugadores.get(i));
             if (nom.contains(StringUtils.replaceSpecialChar(nombrefinal.toString()))){
                 String nomComparar = splitted[0].substring(0, 1);
                 if (nom.startsWith(nomComparar)){
-                    jugadoresFiltrados.add(jugadoresPrimera.get(nombreRealEquipo).get(i));
+                    jugadoresFiltrados.add(jugadores.get(i));
                 }
             }
         }
         if (jugadoresFiltrados.size() == 1) {
             return jugadoresFiltrados.get(0);
         } else {
-            return nombre1;
+            return nombre;
         }
     }
 
-    public static String obtenerStringGolUnico(List<Equipo> equiposDePrimera, HashMap<String, List<String>> jugadoresPrimera, String equipo, String marcador, String goles) {
+    public static String obtenerStringGolUnico(List<Equipo> equiposDePrimera, String equipo, String marcador, String goles) {
         return "\nEl gol " + marcador + " lo marcó " +
-                getNombreRealJugador(equiposDePrimera, jugadoresPrimera, equipo, goles.split("'")[1].replace(";", "").replace(".", "").trim()) +
+                getNombreRealJugador(equiposDePrimera, equipo, goles.split("'")[1].replace(";", "").replace(".", "").trim()) +
                 " a los " + goles.split("'")[0] + " minutos.";
     }
 
-    public static String obtenerMarcadores(List<Equipo> equiposDePrimera, HashMap<String, List<String>> jugadoresPrimera, String equipo, String goles) {
+    public static String obtenerMarcadores(List<Equipo> equiposDePrimera, String equipo, String goles) {
         String separador = "";
         StringBuilder marcadores = new StringBuilder();
         String[] marcadoresArray = goles.split(";");
@@ -167,15 +162,15 @@ public class FootballUtil {
         for (String str : marcadoresArray) {
             String[] submarcadoresArray = str.split("'");
             String tiempo = submarcadoresArray[0].trim();
-            String marcador = "";
-            String nombreJugador = "";
+            String marcador;
+            String nombreJugador;
             if (submarcadoresArray[1].trim().contains("(")) {
                 nombreJugador = submarcadoresArray[1].trim().split("\\(")[0].trim();
-                String nombreRealJugador = getNombreRealJugador(equiposDePrimera, jugadoresPrimera, equipo, nombreJugador.replace(".", ""));
+                String nombreRealJugador = getNombreRealJugador(equiposDePrimera, equipo, nombreJugador.replace(".", ""));
                 String[] splitted = submarcadoresArray[1].trim().split(nombreJugador);
                 marcador = nombreRealJugador + " " + splitted[1].trim().replace("e.c.", "en contra").replace("(pen.)", "(de penal)").replace(".", "");
             } else {
-                nombreJugador = getNombreRealJugador(equiposDePrimera, jugadoresPrimera, equipo, submarcadoresArray[1].trim().replace(".", ""));
+                nombreJugador = getNombreRealJugador(equiposDePrimera, equipo, submarcadoresArray[1].trim().replace(".", ""));
                 marcador = nombreJugador;
             }
             if (contador == marcadoresArray.length) {
