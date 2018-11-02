@@ -62,23 +62,31 @@ public class Partido {
     }
 
     public String toStringUltimo(String rival) {
-        String retorno = " jugó de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia + " por la fecha " + fecha;
+        String retorno = " jugó de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia + " por la fecha " + fecha + " y ";
         int aFavor = Integer.parseInt(resultado.split("-")[0].trim());
         int enContra = Integer.parseInt(resultado.split("-")[1].trim());
         if (aFavor > enContra) {
-            retorno += " y ganó ";
+            retorno += "ganó " + aFavor + " a " + enContra;
         } else if (aFavor < enContra) {
-            retorno += " y perdió ";
+            retorno += "perdió " + enContra + " a " + aFavor;
         } else if (aFavor == enContra) {
-            retorno += " y empató ";
-        } else {
-            retorno += " y terminó ";
+            retorno += "empató " + aFavor + " a " + enContra;
         }
-        return retorno + resultado;
+        return retorno;
     }
 
     public String toStringEnCurso(String rival) {
-        return " está jugando de " + localia + " contra " + rival + " por la fecha " + fecha + " y va " + resultado;
+        String retorno = " está jugando de " + localia + " contra " + rival + " por la fecha " + fecha + " y está ";
+        int aFavor = Integer.parseInt(resultado.split("-")[0].trim());
+        int enContra = Integer.parseInt(resultado.split("-")[1].trim());
+        if (aFavor > enContra) {
+            retorno += "ganando " + aFavor + " a " + enContra;
+        } else if (aFavor < enContra) {
+            retorno += "perdiendo " + enContra + " a " + aFavor;
+        } else if (aFavor == enContra) {
+            retorno += "empatando " + aFavor + " a " + enContra;
+        }
+        return retorno;
     }
 
     private String getDiaSemana(){

@@ -42,6 +42,10 @@ public class EquipoPosicionado {
         return posicion;
     }
 
+    public int getPartidosJugados() {
+        return partidosJugados;
+    }
+
     public int getPartidosGanados() {
         return partidosGanados;
     }
