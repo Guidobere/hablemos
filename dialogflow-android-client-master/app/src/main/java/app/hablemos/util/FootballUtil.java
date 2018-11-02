@@ -78,15 +78,19 @@ public class FootballUtil {
                     separador = ", ";
                 }
                 respuesta.append(getNombreRealFromTabla(equiposDePrimera, eq.getNombre(), false));
+                if (deTantos) {
+                    respuesta.append(" con ").append(varComparacion).append(" sobre ").append(eq.getPartidosJugados()).append(" jugados");
+                } else {
+                    respuesta.append(" con ").append(varComparacion);
+                }
                 contador++;
             }
-            respuesta.append(" con ").append(varComparacion).append(".");
-            return respuesta.toString();
+            return respuesta.append(".").toString();
         } else {
             EquipoPosicionado equipoPosicionado = equiposFiltrados.get(0);
             String nombre = getNombreRealFromTabla(equiposDePrimera, equipoPosicionado.getNombre(), false);
             if (deTantos) {
-                return inicioUnico + nombre + " con " + varComparacion + " de " + equipoPosicionado.getPartidosJugados();
+                return inicioUnico + nombre + " con " + varComparacion + " sobre " + equipoPosicionado.getPartidosJugados() + " jugados.";
             } else {
                 return inicioUnico + nombre + " con " + varComparacion + ".";
             }
