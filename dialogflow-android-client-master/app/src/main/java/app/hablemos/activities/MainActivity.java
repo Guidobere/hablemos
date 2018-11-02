@@ -484,8 +484,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                             "El usuario accedio a salir a caminar");
                     loQueDiceYescribe("¡Buena suerte!","default", false);
                     break;
+                case "despedida":
+                    this.moveTaskToBack(true);
+                    break;
                 case "" :
-                    speech = "¡No entendí! Escribí o decí: Pastelería, Fútbol o Salud";
+                    speech = "¡No entendí!\nEscriba o diga:\nPastelería,\nFútbol\nSalud";
                     loQueDiceYescribe(speech,"default", false);
                     break;
                 default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
