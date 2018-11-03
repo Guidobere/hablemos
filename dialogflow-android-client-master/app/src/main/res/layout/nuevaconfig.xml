@@ -93,9 +93,19 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/lblEquipo"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <Spinner
             android:padding="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:textSize="15sp"
@@ -106,11 +116,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/medicamentos"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:layout_marginBottom="15dp"
-            />
+            android:text="@string/medicamentos"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txtmañana_id"
