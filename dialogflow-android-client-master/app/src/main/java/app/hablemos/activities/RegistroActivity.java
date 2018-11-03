@@ -65,6 +65,13 @@ public class RegistroActivity extends AppCompatActivity {
    // private EditText contra;
     //private EditText repetirPwd;
     private Spinner spinnerEquipo;
+    private Spinner spinnerHoraMedMañana;
+    private Spinner spinnerHoraMedTarde;
+    private Spinner spinnerHoraMedNoche;
+    private Spinner spinnerMinutosMedMañana;
+    private Spinner spinnerMinutosMedTarde;
+    private Spinner spinnerMinutosMedNoche;
+
 
     //MEDICAMENTOS
    // private EditText medicamentosM;
@@ -128,8 +135,16 @@ public class RegistroActivity extends AppCompatActivity {
         footballService = new FootballService(this);
 
         spinnerEquipo = (Spinner) findViewById(R.id.spinnerEquipo);
+        spinnerHoraMedMañana = (Spinner) findViewById(R.id.spinnerHoraMedMañana);
+        spinnerHoraMedTarde = (Spinner) findViewById(R.id.spinnerHoraMedTarde);
+        spinnerHoraMedNoche = (Spinner) findViewById(R.id.spinnerHoraMedNoche);
+        spinnerMinutosMedMañana = (Spinner) findViewById(R.id.spinnerMinutosMedMañana);
+        spinnerMinutosMedTarde = (Spinner) findViewById(R.id.spinnerMinutosMedTarde);
+        spinnerMinutosMedNoche = (Spinner) findViewById(R.id.spinnerMinutosMedNoche);
 
         cargarEquiposEnSpinner();
+
+        cargarHorasEnSpinners();
 
         if(mAuth.getCurrentUser() != null) {
             botonRegistro.setVisibility(View.GONE);
@@ -196,6 +211,53 @@ public class RegistroActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    private void cargarHorasEnSpinners() {
+        //List<String> equiposPrimera = footballService.getEquiposDePrimera();
+        List<String> spinnerArrayHorasMañana = new ArrayList<>();
+        spinnerArrayHorasMañana.add(0,"6");
+        spinnerArrayHorasMañana.add(1,"7");
+        spinnerArrayHorasMañana.add(2,"9");
+        spinnerArrayHorasMañana.add(3,"10");
+        spinnerArrayHorasMañana.add(4,"11");
+        spinnerArrayHorasMañana.add(5,"12");
+
+        List<String> spinnerArrayHorasTarde = new ArrayList<>();
+        spinnerArrayHorasTarde.add(0,"13");
+        spinnerArrayHorasTarde.add(1,"14");
+        spinnerArrayHorasTarde.add(2,"15");
+        spinnerArrayHorasTarde.add(3,"16");
+        spinnerArrayHorasTarde.add(4,"17");
+        spinnerArrayHorasTarde.add(5,"18");
+
+        List<String> spinnerArrayHorasNoche = new ArrayList<>();
+        spinnerArrayHorasNoche.add(0,"19");
+        spinnerArrayHorasNoche.add(1,"20");
+        spinnerArrayHorasNoche.add(2,"21");
+        spinnerArrayHorasNoche.add(3,"22");
+        spinnerArrayHorasNoche.add(4,"23");
+
+        List<String> spinnerArrayMinutos = new ArrayList<>();
+        spinnerArrayMinutos.add(0,"00");
+        spinnerArrayMinutos.add(1,"15");
+        spinnerArrayMinutos.add(2,"30");
+        spinnerArrayMinutos.add(3,"45");
+        //spinnerArrayHoras.add(4,"11");
+        //spinnerArrayHoras.add(5,"12");
+        //spinnerArray.addAll(equiposPrimera);
+
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayHorasMañana);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayHorasTarde);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayHorasNoche);
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayMinutos);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerHoraMedMañana.setAdapter(adapter1);
+        spinnerMinutosMedMañana.setAdapter(adapter4);
+        spinnerHoraMedTarde.setAdapter(adapter2);
+        spinnerMinutosMedTarde.setAdapter(adapter4);
+        spinnerHoraMedNoche.setAdapter(adapter3);
+        spinnerMinutosMedNoche.setAdapter(adapter4);
     }
 
 
