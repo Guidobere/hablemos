@@ -38,22 +38,6 @@ public class Login extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-
-        TAG = getString(R.string.tagLogin);
-
-        btnLogin = findViewById(R.id.Ingresar);
-        mailTxtBox = findViewById(R.id.txtUser);
-        passTxtBox = findViewById(R.id.txtPass);
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            // Code here executes on main thread after user presses btnLogin
-            singIn();
-            }
-        });
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -70,6 +54,24 @@ public class Login extends AppCompatActivity {
                 }
             }
         };
+
+        setTheme(R.style.AppTheme_NoActionBar);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+
+        TAG = getString(R.string.tagLogin);
+
+        btnLogin = findViewById(R.id.Ingresar);
+
+        mailTxtBox = findViewById(R.id.txtUser);
+        passTxtBox = findViewById(R.id.txtPass);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            // Code here executes on main thread after user presses btnLogin
+            singIn();
+            }
+        });
 
         //REGISTRARSE
         txtRegistrar = findViewById(R.id.textRegistro);
@@ -129,6 +131,7 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(mAuthListener);
     }
+
 /*
     @Override
     public void onResume() {
@@ -136,7 +139,7 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(mAuthListener);
     }
-  
+
      @Override
     public void onPause() {
          super.onPause();
