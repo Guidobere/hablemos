@@ -65,7 +65,7 @@ public class FootballUtil {
         return equipos;
     }
 
-    public static String generarRespuesta(List<Equipo> equiposDePrimera, String mensajeInicial, List<EquipoPosicionado> equiposFiltrados, int varComparacion, String inicioUnico) {
+    public static String generarRespuesta(List<Equipo> equiposDePrimera, String mensajeInicial, List<EquipoPosicionado> equiposFiltrados, int varComparacion, String inicioUnico, boolean deTantos) {
         if (equiposFiltrados.size() > 1) {
             StringBuilder respuesta = new StringBuilder(mensajeInicial);
             String separador = "";
@@ -78,14 +78,22 @@ public class FootballUtil {
                     separador = ", ";
                 }
                 respuesta.append(getNombreRealFromTabla(equiposDePrimera, eq.getNombre(), false));
+                if (deTantos) {
+                    respuesta.append(" con ").append(varComparacion).append(" sobre ").append(eq.getPartidosJugados()).append(" jugados");
+                } else {
+                    respuesta.append(" con ").append(varComparacion);
+                }
                 contador++;
             }
-            respuesta.append(" con ").append(varComparacion).append(".");
-            return respuesta.toString();
+            return respuesta.append(".").toString();
         } else {
             EquipoPosicionado equipoPosicionado = equiposFiltrados.get(0);
             String nombre = getNombreRealFromTabla(equiposDePrimera, equipoPosicionado.getNombre(), false);
-            return inicioUnico + nombre + " con " + varComparacion + ".";
+            if (deTantos) {
+                return inicioUnico + nombre + " con " + varComparacion + " sobre " + equipoPosicionado.getPartidosJugados() + " jugados.";
+            } else {
+                return inicioUnico + nombre + " con " + varComparacion + ".";
+            }
         }
     }
 
@@ -148,13 +156,26 @@ public class FootballUtil {
         }
     }
 
-    public static String obtenerStringGolUnico(List<Equipo> equiposDePrimera, String equipo, String marcador, String goles) {
-        return "\nEl gol " + marcador + " lo marcó " +
-                getNombreRealJugador(equiposDePrimera, equipo, goles.split("'")[1].replace(";", "").replace(".", "").trim()) +
-                " a los " + goles.split("'")[0] + " minutos.";
+    public static String obtenerStringGolUnico(List<Equipo> equiposDePrimera, String equipo, String marcador, String goles, String rival) {
+        String nombre = goles.split("'")[1].replace(";", "").replace(".", "").trim();
+        String nombreJugador;
+        if (nombre.contains("(")) {
+            nombreJugador = nombre.split("\\(")[0].trim();
+            String nombreRealJugador;
+            if (goles.contains("(e.c.)") || goles.contains("(ec)")) {
+                nombreRealJugador = getNombreRealJugador(equiposDePrimera, rival, nombreJugador.replace(".", ""));
+            } else {
+                nombreRealJugador = getNombreRealJugador(equiposDePrimera, equipo, nombreJugador.replace(".", ""));
+            }
+            String[] splitted = nombre.split(nombreJugador);
+            nombreJugador = nombreRealJugador + " " + splitted[1].trim().replace("e.c.", "en contra").replace("(ec)", "(en contra)").replace("(pen.)", "(de penal)").replace("(pen)", "(de penal)").replace(".", "");
+        } else {
+            nombreJugador = getNombreRealJugador(equiposDePrimera, equipo, nombre.replace(".", ""));
+        }
+        return "\nEl gol " + marcador + " lo marcó " + getNombreRealJugador(equiposDePrimera, equipo, nombreJugador) + " a los " + goles.split("'")[0] + " minutos.";
     }
 
-    public static String obtenerMarcadores(List<Equipo> equiposDePrimera, String equipo, String goles) {
+    public static String obtenerMarcadores(List<Equipo> equiposDePrimera, String equipo, String goles, String rival) {
         String separador = "";
         StringBuilder marcadores = new StringBuilder();
         String[] marcadoresArray = goles.split(";");
@@ -166,9 +187,14 @@ public class FootballUtil {
             String nombreJugador;
             if (submarcadoresArray[1].trim().contains("(")) {
                 nombreJugador = submarcadoresArray[1].trim().split("\\(")[0].trim();
-                String nombreRealJugador = getNombreRealJugador(equiposDePrimera, equipo, nombreJugador.replace(".", ""));
+                String nombreRealJugador;
+                if (submarcadoresArray[1].trim().contains("(e.c.)") || submarcadoresArray[1].trim().contains("(ec)")) {
+                    nombreRealJugador = getNombreRealJugador(equiposDePrimera, rival, nombreJugador.replace(".", ""));
+                } else {
+                    nombreRealJugador = getNombreRealJugador(equiposDePrimera, equipo, nombreJugador.replace(".", ""));
+                }
                 String[] splitted = submarcadoresArray[1].trim().split(nombreJugador);
-                marcador = nombreRealJugador + " " + splitted[1].trim().replace("e.c.", "en contra").replace("(pen.)", "(de penal)").replace(".", "");
+                marcador = nombreRealJugador + " " + splitted[1].trim().replace("e.c.", "en contra").replace("(ec)", "(en contra)").replace("(pen.)", "(de penal)").replace("(pen)", "(de penal)").replace(".", "");
             } else {
                 nombreJugador = getNombreRealJugador(equiposDePrimera, equipo, submarcadoresArray[1].trim().replace(".", ""));
                 marcador = nombreJugador;

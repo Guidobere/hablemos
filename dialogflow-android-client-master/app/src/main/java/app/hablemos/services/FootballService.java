@@ -201,14 +201,14 @@ public class FootballService {
                         retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringUltimo(FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(partidosFiltrados.size() - 1).getRival(), false)));
                     }
                     if (partidoActual.getGolesEquipoLocal()==1){
-                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, partidoActual.getEquipoLocal(),"del local", partidoActual.getGolesLocal()));
+                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, partidoActual.getEquipoLocal(),"del local", partidoActual.getGolesLocal(), partidoActual.getEquipoVisitante()));
                     } else if (partidoActual.getGolesEquipoLocal()>1){
-                        retorno.append("\nLos goles del equipo local fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, partidoActual.getEquipoLocal(), partidoActual.getGolesLocal()));
+                        retorno.append("\nLos goles del equipo local fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, partidoActual.getEquipoLocal(), partidoActual.getGolesLocal(), partidoActual.getEquipoVisitante()));
                     }
                     if (partidoActual.getGolesEquipoVisitante()==1){
-                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, partidoActual.getEquipoVisitante(),"de la visita", partidoActual.getGolesVisitante()));
+                        retorno.append(FootballUtil.obtenerStringGolUnico(this.equiposDePrimera, partidoActual.getEquipoVisitante(),"de la visita", partidoActual.getGolesVisitante(), partidoActual.getEquipoLocal()));
                     } else if (partidoActual.getGolesEquipoVisitante()>1){
-                        retorno.append("\nLos goles de la visita fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, partidoActual.getEquipoVisitante(),partidoActual.getGolesVisitante()));
+                        retorno.append("\nLos goles de la visita fueron marcados por ").append(FootballUtil.obtenerMarcadores(this.equiposDePrimera, partidoActual.getEquipoVisitante(),partidoActual.getGolesVisitante(), partidoActual.getEquipoLocal()));
                     }
                 }
             }
@@ -329,7 +329,7 @@ public class FootballService {
                 equiposFiltrados.add(equipo);
             }
         }
-        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más goles hicieron son: ", equiposFiltrados, goles, "El equipo más goleador es ");
+        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más goles hicieron son: ", equiposFiltrados, goles, "El equipo más goleador es ", false);
     }
 
     public String getEquipoMasGoleado() {
@@ -341,7 +341,7 @@ public class FootballService {
                 equiposFiltrados.add(equipo);
             }
         }
-        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos a los que más goles les hicieron son: ", equiposFiltrados, goles, "El equipo al que más goles le convirtieron es ");
+        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos a los que más goles les hicieron son: ", equiposFiltrados, goles, "El equipo al que más goles le convirtieron es ", false);
     }
 
     public String getEquipoMayorDiferenciaDeGol() {
@@ -353,7 +353,7 @@ public class FootballService {
                 equiposFiltrados.add(equipo);
             }
         }
-        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos con más diferencia de gol son ", equiposFiltrados, goles, "El equipo con más diferencia de gol es ");
+        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos con más diferencia de gol son ", equiposFiltrados, goles, "El equipo con más diferencia de gol es ", false);
     }
 
     public String getEquipoMasPartidosGanados() {
@@ -365,7 +365,7 @@ public class FootballService {
                 equiposFiltrados.add(equipo);
             }
         }
-        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más partidos ganaron son ", equiposFiltrados, partidosGanados, "El equipo con más partidos ganados es ");
+        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más partidos ganaron son ", equiposFiltrados, partidosGanados, "El equipo con más partidos ganados es ", true);
     }
 
     public String getEquipoMasPartidosEmpatados() {
@@ -377,7 +377,7 @@ public class FootballService {
                 equiposFiltrados.add(equipo);
             }
         }
-        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más partidos empataron son ", equiposFiltrados, partidosEmpatados, "El equipo que empató mayor cantidad de partidos es ");
+        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más partidos empataron son ", equiposFiltrados, partidosEmpatados, "El equipo que empató mayor cantidad de partidos es ", true);
     }
 
     public String getEquipoMasPartidosPerdidos() {
@@ -389,7 +389,7 @@ public class FootballService {
                 equiposFiltrados.add(equipo);
             }
         }
-        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más partidos perdieron son ", equiposFiltrados, partidosPerdidos, "El equipo que perdió mayor cantidad de partidos es ");
+        return FootballUtil.generarRespuesta(this.equiposDePrimera, "Los equipos que más partidos perdieron son ", equiposFiltrados, partidosPerdidos, "El equipo que perdió mayor cantidad de partidos es ", true);
     }
 
     public String getClasicoEquipo(String equipo) {

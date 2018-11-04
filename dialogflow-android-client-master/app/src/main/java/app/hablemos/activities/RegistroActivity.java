@@ -95,6 +95,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
         myUsersFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbUsuarios));

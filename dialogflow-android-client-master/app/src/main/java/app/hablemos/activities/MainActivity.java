@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
         this.usersFb = FirebaseDatabase.getInstance().getReference().child(getString(R.string.fbUsuarios));
@@ -154,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         micButton = (Button) findViewById(R.id.micButton);
         send = (Button) findViewById(R.id.buttonSend);
 
-        //  findViewById(R.id.buttonSend).setOnClickListener(this);
         send.setOnClickListener(this);
 
         final AIConfiguration config = new AIConfiguration(getString(R.string.accessToken), AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
@@ -163,11 +163,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         aiDataService = new AIDataService(this, config);
 
         footballService = new FootballService(this);
-
-
-/*        timer = new MiContador(3000,1000);
-        timer.start();
-        timer.onFinish(contadorClicksEditarRegistro);*/
 
         //check for TTS data
         checkForTTSData();
@@ -297,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 if(!rtaNotificacionManejada) {
                     manejarRespuestaNotificacion(getIntent().getExtras());
                     rtaNotificacionManejada = true;
+                    vieneDeNotificacion = false;
                 }
             } else if(!yaSaludo) {
                 pedirAlaBase("saludo");
@@ -774,6 +770,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public void onResume(){
         contadorClicksEditarRegistro = 0;
         super.onResume();
+        send.onEditorAction(EditorInfo.IME_ACTION_DONE);
     }
 
     @Override
