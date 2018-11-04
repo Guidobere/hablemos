@@ -108,7 +108,7 @@
     <string name="emailVacio">El email no puede estar vacío</string>
     <string name="emailMalFormado">El email ingresado no es correcto</string>
     <string name="contraseniaVacia">La contraseña no puede estar vacía</string>
-    <string name="contraseñasNoCoinciden">Las contraseñas no coinciden</string>
+    <string name="contraseniasNoCoinciden">Las contraseñas no coinciden</string>
     <string name="contraseniaMalFormada">La contraseña ingresada no esta correctamente formada</string>
     <string name="equipoVacio">El equipo de fútbol no puede estar vacío</string>
 

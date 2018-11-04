@@ -20,21 +20,26 @@ import app.hablemos.util.DateUtils;
 
 public class HealthService {
 
-    public void sendHealthNotifications(Context context, final String nombreAbuelo, String mailQueInicioSesion, final String turno) {
+    public void sendHealthNotifications(Context context, final String nombreAbuelo, String mailQueInicioSesion, final String tipo, final String turno) {
         Context localContext = context;
         final NotificationService notificationService = new NotificationService(mailQueInicioSesion);
 
-        enviarNotificacionMedicamentos(nombreAbuelo, mailQueInicioSesion, turno, localContext, notificationService);
+        if(tipo.equalsIgnoreCase("medicamentos"))
+            enviarNotificacionMedicamentos(nombreAbuelo, mailQueInicioSesion, turno, localContext, notificationService);
 
-        DatabaseReference presionFbReference = FirebaseDatabase.getInstance().getReference().child(
-            localContext.getString(R.string.fbRecordatoriosPresion));
-        enviarNotificacionChequeo(nombreAbuelo, mailQueInicioSesion, turno, "presion",
-            presionFbReference, localContext, notificationService);
+        if(tipo.equalsIgnoreCase("presion")) {
+            DatabaseReference presionFbReference = FirebaseDatabase.getInstance().getReference().child(
+                localContext.getString(R.string.fbRecordatoriosPresion));
+            enviarNotificacionChequeo(nombreAbuelo, mailQueInicioSesion, turno, tipo,
+                presionFbReference, localContext, notificationService);
+        }
 
-        DatabaseReference glucosaFbReference = FirebaseDatabase.getInstance().getReference().child(
-            localContext.getString(R.string.fbRecordatoriosGlucosa));
-        enviarNotificacionChequeo(nombreAbuelo, mailQueInicioSesion, turno, "glucosa",
-            glucosaFbReference, localContext, notificationService);
+        if(tipo.equalsIgnoreCase("glucosa")) {
+            DatabaseReference glucosaFbReference = FirebaseDatabase.getInstance().getReference().child(
+                    localContext.getString(R.string.fbRecordatoriosGlucosa));
+            enviarNotificacionChequeo(nombreAbuelo, mailQueInicioSesion, turno, "glucosa",
+                    glucosaFbReference, localContext, notificationService);
+        }
     }
 
     private void enviarNotificacionMedicamentos(final String nombreAbuelo, String mailQueInicioSesion, final String turno,

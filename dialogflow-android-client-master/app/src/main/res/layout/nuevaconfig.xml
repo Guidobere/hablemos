@@ -96,11 +96,12 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Spinner
+        <Spinner style="@style/Widget.AppCompat.Spinner.Underlined"
             android:id="@+id/spinnerEquipo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
+            android:layout_marginBottom="15dp"
             android:padding="20dp"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
@@ -115,12 +116,12 @@
             android:textStyle="bold" />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/txtmañana_id"
+            android:id="@+id/txtmaniana_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/txtmañana"
+                android:id="@+id/txtmaniana"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/medicamentos_turno_ma_ana"
@@ -131,43 +132,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="5dp"
             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
             android:textSize="12sp"
             android:textStyle="italic" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/horaMañana"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="20dp">
 
-            <Spinner
-                android:id="@+id/spinnerHoraMedMañana"
-                android:layout_width="145dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="0dp"
-                android:baselineAligned="false"
-                android:padding="20dp"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:textSize="15sp"
-                android:layout_gravity="left"
-                />
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraMedManiana"/>
 
-            <Spinner
-                android:id="@+id/spinnerMinutosMedMañana"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:baselineAligned="false"
-                android:padding="20dp"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:textSize="15sp"
-                android:layout_gravity="right"
-                />
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosMedManiana"
+                android:layout_toRightOf="@+id/spinnerHoraMedManiana"
+                android:layout_alignTop="@+id/spinnerHoraMedManiana" />
+        </RelativeLayout>
 
-        </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txttarde_id"
             android:layout_width="match_parent"
@@ -178,47 +161,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/medicamentos_turno_tarde"
-                android:singleLine="true"
-                />
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="5dp"
             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
             android:textSize="12sp"
             android:textStyle="italic" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/horaTarde"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
 
-            <Spinner
-                android:id="@+id/spinnerHoraMedTarde"
-                android:layout_width="145dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="0dp"
-                android:baselineAligned="false"
-                android:padding="20dp"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:textSize="15sp" />
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraMedTarde"/>
 
-            <Spinner
+            <Spinner style="@style/Spinner"
                 android:id="@+id/spinnerMinutosMedTarde"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:baselineAligned="false"
-                android:padding="20dp"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:textSize="15sp" />
+                android:layout_toRightOf="@+id/spinnerHoraMedTarde"
+                android:layout_alignTop="@+id/spinnerHoraMedTarde"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </RelativeLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txtnoche_id"
@@ -237,39 +205,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="5dp"
             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
             android:textSize="12sp"
             android:textStyle="italic" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/horaNoche"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
 
-            <Spinner
-                android:id="@+id/spinnerHoraMedNoche"
-                android:layout_width="145dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="0dp"
-                android:baselineAligned="false"
-                android:padding="20dp"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:textSize="15sp" />
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraMedNoche" />
 
-            <Spinner
+            <Spinner style="@style/Spinner"
                 android:id="@+id/spinnerMinutosMedNoche"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:baselineAligned="false"
-                android:padding="20dp"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:textSize="15sp" />
+                android:layout_toRightOf="@+id/spinnerHoraMedNoche"
+                android:layout_alignTop="@+id/spinnerHoraMedNoche"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"

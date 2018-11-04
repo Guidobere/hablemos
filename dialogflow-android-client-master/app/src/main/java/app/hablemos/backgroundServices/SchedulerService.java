@@ -12,11 +12,16 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
 import app.hablemos.R;
+import app.hablemos.model.HorariosRecordatorios;
+import app.hablemos.model.User;
 import app.hablemos.receivers.ClimaReceiver;
 import app.hablemos.receivers.EmailReceiver;
 import app.hablemos.receivers.HealthReceiver;
@@ -24,27 +29,26 @@ import app.hablemos.receivers.HealthReceiver;
 public class SchedulerService extends Service{
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
-    private PendingIntent intentSaludManiana;
-    private PendingIntent intentSaludTarde;
-    private PendingIntent intentSaludNoche;
+    private PendingIntent intentRemediosManiana;
+    private PendingIntent intentRemediosTarde;
+    private PendingIntent intentRemediosNoche;
     private PendingIntent intentReporte;
     private PendingIntent intentClima;
 
     private boolean alarmasSeteadas = false;
 
-    private int horarioSaludManiana;
-    private int horarioSaludTarde;
-    private int horarioSaludNoche;
+    private int horarioRemediosManianaDefault;
+    private int horarioRemediosTardeDefault;
+    private int horarioRemediosNocheDefault;
     private int horarioClima;
     private int horarioReporte;
 
     @Override
     public void onCreate() {
-        horarioSaludManiana = Integer.parseInt(getString(R.string.horarioSaludManiana));
-        horarioSaludTarde = Integer.parseInt(getString(R.string.horarioSaludTarde));
-        horarioSaludNoche = Integer.parseInt(getString(R.string.horarioSaludNoche));
+        horarioRemediosManianaDefault = Integer.parseInt(getString(R.string.horarioSaludManiana));
+        horarioRemediosTardeDefault = Integer.parseInt(getString(R.string.horarioSaludTarde));
+        horarioRemediosNocheDefault = Integer.parseInt(getString(R.string.horarioSaludNoche));
         horarioClima = Integer.parseInt(getString(R.string.horarioClima));
-
         horarioReporte = Integer.parseInt(getString(R.string.horarioReporte));
 
         // Se crea un thread para el scheduler, sino usaría el thread principal
@@ -86,11 +90,14 @@ public class SchedulerService extends Service{
         public void handleMessage(Message msg) {
 
             try {
-                String mailQueInicioSesion = msg.getData().getString("1");
-                String nombreAbuelo = msg.getData().getString("2");
+                User user = (User) msg.getData().getSerializable("user");
+                boolean reset = msg.getData().getBoolean("reset");
+
+                if(reset)
+                    eliminarAlarmas();
 
                 if(!alarmasSeteadas)
-                    setAlarmas(mailQueInicioSesion, nombreAbuelo);
+                    setAlarmas(user);
 
             } catch (Exception e) {
                 Log.e(this.getClass().getName(), "Error en el servicio Scheduler", e);
@@ -100,30 +107,59 @@ public class SchedulerService extends Service{
         }
     }
 
-    private void setAlarmas(String mailQueInicioSesion, String nombreAbuelo) {
+    private void setAlarmas(User user) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Bundle bundle = new Bundle();
+        if(user==null) return;
 
-        // Notificación de los remedios de la mañana
-        bundle.putString("turno", "mañana");
-        intentSaludManiana = setAlarma(mailQueInicioSesion, nombreAbuelo, bundle, horarioSaludManiana, 0,
-            intentSaludManiana, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+        bundle.putString("tipo", "medicamentos");
+        //Formato viejo de User sin horarios configurados, toma los default
+        if(user.horariosRecordatoriosRemedios == null){
+            // Notificación de los remedios de la mañana
 
-        // Notificación de los remedios de la tarde
-        bundle.putString("turno", "tarde");
-        intentSaludTarde = setAlarma(mailQueInicioSesion, nombreAbuelo, bundle, horarioSaludTarde, 0,
-            intentSaludTarde, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+            bundle.putString("turno", "mañana");
+            intentRemediosManiana = setAlarma(user.email, user.username, bundle, horarioRemediosManianaDefault, 0,
+                intentRemediosManiana, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
 
-        // Notificación de los remedios de la noche
-        bundle.putString("turno", "noche");
-        intentSaludNoche = setAlarma(mailQueInicioSesion, nombreAbuelo, bundle, horarioSaludNoche, 0,
-            intentSaludNoche, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+            // Notificación de los remedios de la tarde
+            bundle.putString("turno", "tarde");
+            intentRemediosTarde = setAlarma(user.email, user.username, bundle, horarioRemediosTardeDefault, 0,
+                intentRemediosTarde, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+
+            bundle.putString("turno", "noche");
+            intentRemediosNoche = setAlarma(user.email, user.username, bundle, horarioRemediosNocheDefault, 0,
+                intentRemediosNoche, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+
+        //Formato nuevo de User con horarios configurados. Setea la alma si el horario no es vacío
+        } else {
+            if(!TextUtils.isEmpty(user.horariosRecordatoriosRemedios.manianaHora) && !TextUtils.isEmpty(user.horariosRecordatoriosRemedios.manianaMinutos)){
+                bundle.putString("turno", "mañana");
+                intentRemediosManiana = setAlarma(user.email, user.username, bundle,
+                    Integer.valueOf(user.horariosRecordatoriosRemedios.manianaHora),
+                    Integer.valueOf(user.horariosRecordatoriosRemedios.manianaMinutos),
+                    intentRemediosManiana, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+            }
+            if(!TextUtils.isEmpty(user.horariosRecordatoriosRemedios.tardeHora) && !TextUtils.isEmpty(user.horariosRecordatoriosRemedios.tardeMinutos)){
+                bundle.putString("turno", "tarde");
+                intentRemediosTarde = setAlarma(user.email, user.username, bundle,
+                        Integer.valueOf(user.horariosRecordatoriosRemedios.tardeHora),
+                        Integer.valueOf(user.horariosRecordatoriosRemedios.tardeMinutos),
+                        intentRemediosTarde, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+            }
+            if(!TextUtils.isEmpty(user.horariosRecordatoriosRemedios.nocheHora) && !TextUtils.isEmpty(user.horariosRecordatoriosRemedios.nocheMinutos)){
+                bundle.putString("turno", "noche");
+                intentRemediosNoche = setAlarma(user.email, user.username, bundle,
+                        Integer.valueOf(user.horariosRecordatoriosRemedios.nocheHora),
+                        Integer.valueOf(user.horariosRecordatoriosRemedios.nocheMinutos),
+                        intentRemediosNoche, alarmManager, HealthReceiver.class, AlarmManager.INTERVAL_DAY);
+            }
+        }
 
         // Mail de reporte al tutor
-        intentReporte = setAlarma(mailQueInicioSesion, nombreAbuelo, null, horarioReporte, 0,
+        intentReporte = setAlarma(user.email, user.username, null, horarioReporte, 0,
             intentReporte, alarmManager, EmailReceiver.class, AlarmManager.INTERVAL_DAY);
 
-        intentClima = setAlarma(mailQueInicioSesion, nombreAbuelo, null, horarioClima, 0,
+        intentClima = setAlarma(user.email, user.username, null, horarioClima, 0,
             intentClima, alarmManager, ClimaReceiver.class, AlarmManager.INTERVAL_DAY);
 
         alarmasSeteadas = true;
@@ -152,7 +188,7 @@ public class SchedulerService extends Service{
 
         // Fecha y hora de la primera ejecución. Si ya pasó la hora se programa para el día siguiente.
         Calendar calendar = Calendar.getInstance();
-        if(calendar.get(Calendar.HOUR_OF_DAY)>=horaAlarma)
+        if(calendar.get(Calendar.HOUR_OF_DAY)>horaAlarma || (calendar.get(Calendar.HOUR_OF_DAY)==horaAlarma && calendar.get(Calendar.MINUTE)>minutosAlarma))
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, horaAlarma);
         calendar.set(Calendar.MINUTE, minutosAlarma);
@@ -167,16 +203,36 @@ public class SchedulerService extends Service{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try {
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.cancel(intentSaludManiana);
-            alarmManager.cancel(intentSaludTarde);
-            alarmManager.cancel(intentSaludNoche);
-            alarmManager.cancel(intentReporte);
-            alarmManager.cancel(intentClima);
-        } catch (Exception e){
-            Log.e(this.getClass().getName(), "Error al cancelar las alarmas.");
-        }
+        eliminarAlarmas();
+    }
 
+    private void eliminarAlarmas() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        try {
+            if(intentRemediosManiana!=null) alarmManager.cancel(intentRemediosManiana);
+        } catch (Exception e){
+            Log.e(this.getClass().getName(), "Error al cancelar alarma.");
+        }
+        try {
+            if(intentRemediosTarde!=null) alarmManager.cancel(intentRemediosTarde);
+        } catch (Exception e){
+            Log.e(this.getClass().getName(), "Error al cancelar alarma.");
+        }
+        try {
+            if(intentRemediosNoche!=null) alarmManager.cancel(intentRemediosNoche);
+        } catch (Exception e){
+            Log.e(this.getClass().getName(), "Error al cancelar alarma.");
+        }
+        try {
+            if(intentReporte!=null) alarmManager.cancel(intentReporte);
+        } catch (Exception e){
+            Log.e(this.getClass().getName(), "Error al cancelar alarma.");
+        }
+        try {
+            if(intentClima!=null) alarmManager.cancel(intentClima);
+        } catch (Exception e){
+            Log.e(this.getClass().getName(), "Error al cancelar alarma.");
+        }
+        alarmasSeteadas = false;
     }
 }

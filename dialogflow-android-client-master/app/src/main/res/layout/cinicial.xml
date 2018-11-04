@@ -261,7 +261,7 @@
                         android:contentDescription="@string/imgturnomaniana" />
 
                     <EditText
-                        android:id="@+id/txtmañana"
+                        android:id="@+id/txtmaniana"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/imageView_passIcon4"
