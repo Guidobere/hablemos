@@ -738,7 +738,7 @@ public class RegistroActivity extends AppCompatActivity {
                                 checkAndSetCheckBoxById(losdias,"jueves",R.id.chBxPresionManianaJ);
                                 checkAndSetCheckBoxById(losdias,"viernes",R.id.chBxPresionManianaV);
                                 checkAndSetCheckBoxById(losdias,"sabado",R.id.chBxPresionManianaS);
-                                checkAndSetCheckBoxById(losdias,"lunes",R.id.chBxPresionManianaD);
+                                checkAndSetCheckBoxById(losdias,"domingo",R.id.chBxPresionManianaD);
                             }
                             else if (elturno.toLowerCase().equalsIgnoreCase("tarde")){
                                 PresionTardeID = r.recordatorioID;
