@@ -143,13 +143,23 @@ public class FootballService {
                 }
             }
             Collections.sort(partidosFiltrados, Comparators.comparadorDeFecha);
-            StringBuilder retorno = new StringBuilder();
+            StringBuilder retorno = new StringBuilder(equipoVisual.getNombre());
             int posEnLista = 0;
             if (partidosFiltrados.get(0).getDia().contains("Post")) {
-                retorno.append(equipoVisual.getNombre()).append(" tiene un partido postergado con ").append(FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(0).getRival(), false)).append(" sin fecha asignada. En el siguiente encuentro,").append(partidosFiltrados.get(1).toString(FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(1).getRival(), false)));
+                retorno.append(" tiene un partido postergado con ").append(FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(0).getRival(), false)).append(" sin fecha asignada. En el siguiente encuentro,");
                 posEnLista = 1;
-            } else {
-                retorno.append(equipoVisual.getNombre()).append(partidosFiltrados.get(0).toString(FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(0).getRival(), false)));
+            }
+            String rival = FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(posEnLista).getRival(), false);
+            int fecha1 = Integer.parseInt(partidosFiltrados.get(0).getFecha());
+            String dia1 = partidosFiltrados.get(0).getDia();
+            int fecha2 = Integer.parseInt(partidosFiltrados.get(1).getFecha());
+            String dia2 = partidosFiltrados.get(1).getDia();
+            boolean postergado;
+            if(!dia1.contains("Post")) {
+                postergado = fecha1 < fecha2 && fecha1 != (fecha2 - 1);
+                retorno.append(partidosFiltrados.get(posEnLista).toString(rival, postergado));
+            } else if(dia2.contains("Post")) {
+                retorno.append(partidosFiltrados.get(posEnLista).toStringErrorPostergado(rival));
             }
             List<PartidoActual> partidosActuales;
             if (partidosFiltrados.get(posEnLista).getDia().equals(DateUtils.getNowString())) {

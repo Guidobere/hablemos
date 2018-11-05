@@ -57,8 +57,18 @@ public class Partido {
         return diaDePartido;
     }
 
-    public String toString(String rival) {
-        return " jugará de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia  + " por la fecha " + fecha;
+    public String toString(String rival, boolean postergado) {
+        String retorno = " jugará de " + localia + " contra " + rival + " el día " + this.getDiaSemana() + dia;
+        if (postergado) {
+            retorno +=   " por el postergado de la fecha " + fecha;
+        } else {
+            retorno +=   " por la fecha " + fecha;
+        }
+        return retorno;
+    }
+
+    public String toStringErrorPostergado(String rival) {
+        return " jugará de " + localia + " contra " + rival + " por la fecha " + fecha + " con día y hora a confirmar.";
     }
 
     public String toStringUltimo(String rival) {
