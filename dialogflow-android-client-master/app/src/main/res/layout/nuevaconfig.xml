@@ -294,6 +294,21 @@
                 android:text="@string/domingo_vista" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraGlucosaManiana"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosGlucosaManiana"
+                android:layout_toRightOf="@+id/spinnerHoraGlucosaManiana"
+                android:layout_alignTop="@+id/spinnerHoraGlucosaManiana"/>
+        </RelativeLayout>
+
         <!-- TARDE -->
         <TextView
             android:id="@+id/lblGlucosaTarde"
@@ -354,6 +369,20 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraGlucosaTarde"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosGlucosaTarde"
+                android:layout_toRightOf="@+id/spinnerHoraGlucosaTarde"
+                android:layout_alignTop="@+id/spinnerHoraGlucosaTarde"/>
+        </RelativeLayout>
+
         <!-- NOCHE -->
         <TextView
             android:id="@+id/lblGlucosaNoche"
@@ -413,6 +442,20 @@
                 android:text="@string/domingo_vista" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraGlucosaNoche"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosGlucosaNoche"
+                android:layout_toRightOf="@+id/spinnerHoraGlucosaNoche"
+                android:layout_alignTop="@+id/spinnerHoraGlucosaNoche"/>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -483,6 +526,20 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraPresionManiana"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosPresionManiana"
+                android:layout_toRightOf="@+id/spinnerHoraPresionManiana"
+                android:layout_alignTop="@+id/spinnerHoraPresionManiana"/>
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/lblPresionTarde"
             android:layout_width="wrap_content"
@@ -541,6 +598,21 @@
                 android:text="@string/domingo_vista" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraPresionTarde"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosPresionTarde"
+                android:layout_toRightOf="@+id/spinnerHoraPresionTarde"
+                android:layout_alignTop="@+id/spinnerHoraPresionTarde"/>
+        </RelativeLayout>
+
         <!-- NOCHE -->
         <TextView
             android:id="@+id/lblPresionNoche"
@@ -600,6 +672,20 @@
                 android:text="@string/domingo_vista" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraPresionNoche"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosPresionNoche"
+                android:layout_toRightOf="@+id/spinnerHoraPresionNoche"
+                android:layout_alignTop="@+id/spinnerHoraPresionNoche"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

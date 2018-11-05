@@ -230,10 +230,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
     private String parsearNombre(String nombre) {
         String ret = "";
-        String [] nombres = nombre.split(" ");
-        for (int i=0; i<nombres.length; i++) {
-            String s1 = nombres[i].substring(0, 1).toUpperCase();
-            ret += " " + s1 + nombres[i].substring(1).toLowerCase();
+        try{
+            String [] nombres = nombre.trim().split(" ");
+            for (int i=0; i<nombres.length; i++) {
+                String s1 = nombres[i].substring(0, 1).toUpperCase();
+                ret += " " + s1 + nombres[i].substring(1).toLowerCase();
+            }
+        } catch (Exception e) {
+            ret = nombre;
         }
         return ret.trim();
     }
