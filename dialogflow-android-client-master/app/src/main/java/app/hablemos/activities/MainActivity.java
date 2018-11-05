@@ -509,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         String resultado = respuesta[2]; // si, no, ni (no se entendió)
         String observacion = "";
         if(resultado.equals("si")){
-            observacion = getString(R.string.interaccionTexto_SaludRevisionSi, chequeo); // Dijo que si
+            observacion = getString(R.string.interaccionTexto_SaludRevisionSi, chequeo, loQueDijo); // Dijo que si y cuando le dió
         } else if(resultado.equals("no")){
             observacion = getString(R.string.interaccionTexto_SaludRevisionNo, chequeo, respuesta[3]); // Dijo que no y un motivo
         } else  if(resultado.equals("ni")){
