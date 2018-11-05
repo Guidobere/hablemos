@@ -137,7 +137,10 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         setContentView(R.layout.nuevomain);
 
         mailQueInicioSesion = getIntent().getExtras().getString("1");
+
         vieneDeNotificacion = getIntent().getExtras().getBoolean("vieneDeNotificacion");
+        if(vieneDeNotificacion && TextUtils.isEmpty(nombreAbuelo) && !TextUtils.isEmpty(getIntent().getExtras().getString("nombreAbuelo")))
+            nombreAbuelo = parsearNombre(getIntent().getExtras().getString("nombreAbuelo"));
         rtaNotificacionManejada = false;
         contadorClicksEditarRegistro = 0;
 
@@ -553,11 +556,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                loQueDiceYescribe("¡" + getSaludo() + ", " + nombreAbuelo + "! ","default", false);
+                loQueDiceYescribe("¡" + getSaludo() + ", " + nombreAbuelo + "! ", "default", false);
                 yaSaludo = true;
             }
-        }, 1000*segundos);
+        }, 1000 * segundos);
     }
+
 
     public void pedirAlaBaseSobrePresion(final String turnoPresion){
         a = 0;
@@ -805,7 +809,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public void onResume(){
         contadorClicksEditarRegistro = 0;
         super.onResume();
-        if(!yaSaludo && !TextUtils.isEmpty(nombreAbuelo)){
+        if(!vieneDeNotificacion && !yaSaludo && !TextUtils.isEmpty(nombreAbuelo)){
             saludar(1);
         }
     }

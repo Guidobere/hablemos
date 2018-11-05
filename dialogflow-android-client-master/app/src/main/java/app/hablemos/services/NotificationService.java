@@ -53,7 +53,7 @@ public class NotificationService {
         String notificationTitle = "Hola " + nombreAbuelo + "!!";
         String notificationText = context.getString(R.string.notificacionAvisoMail);
         enviarNotificacion(context, notificationTitle, notificationText,
-            null, ID_NOTIFICACION_AVISO_MAIL, "");
+            null, ID_NOTIFICACION_AVISO_MAIL, "", nombreAbuelo);
     }
 
     public void enviarNotificacionMedicamentos(Context context, String nombreAbuelo, String turno) {
@@ -62,7 +62,7 @@ public class NotificationService {
         String notificationText = context.getString(R.string.notificacionTexto_Salud);
 
         enviarNotificacion(context, notificationTitle, notificationText,
-            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_SALUD, turno);
+            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_SALUD, turno, nombreAbuelo);
 
         interactionsService.guardarInteraccion(
             mailQueInicioSesion, context.getString(R.string.interaccionTitulo_Notificacion, "medicamentos"),
@@ -73,27 +73,27 @@ public class NotificationService {
         String notificationTitle = context.getString(R.string.notificacionTitulo_Clima);
         String notificationText = context.getString(R.string.notificacionTexto_Clima);
         enviarNotificacion(context, notificationTitle, notificationText,
-            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_LINDO, turno);
+            RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_LINDO, turno, "");
     }
     public void enviarNotificacionMuchoCalor(Context context, String turno) {
         String notificationTitle = "Calor extremo!";
         String notificationText = "Hace click que te digo que cuidados tomar";
         enviarNotificacion(context, notificationTitle, notificationText,
-                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_FUERTE, turno);
+                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_FUERTE, turno, "");
     }
 
     public void enviarNotificacionClimaParaguas(Context context, String turno) {
         String notificationTitle = "Si salis!";
         String notificationText = "No te olvides el paraguas";
         enviarNotificacion(context, notificationTitle, notificationText,
-                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_PARAGUAS, turno);
+                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_PARAGUAS, turno, "");
     }
 
     public void enviarNotificacionClimaHorrible(Context context, String turno) {
         String notificationTitle = "¡Esta muy feo hoy!";
         String notificationText = "Quedate en casa mirando la tele";
         enviarNotificacion(context, notificationTitle, notificationText,
-                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_HORRIBLE, turno);
+                RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_HORRIBLE, turno, "");
     }
 
     public void enviarNotificacionChequeo(Context context, String nombreAbuelo, String turno, String chequeo) {
@@ -108,7 +108,7 @@ public class NotificationService {
 
         if(tipoNotificacion!=0) {
             enviarNotificacion(context, notificationTitle, notificationText, RingtoneManager.TYPE_ALARM,
-                tipoNotificacion, turno);
+                tipoNotificacion, turno, nombreAbuelo);
 
             interactionsService.guardarInteraccion(
                 mailQueInicioSesion, context.getString(R.string.interaccionTitulo_Notificacion, "chequeo de " + chequeo),
@@ -117,7 +117,7 @@ public class NotificationService {
     }
 
     private void enviarNotificacion(Context context, String notificationTitle, String notificationText,
-                                    Integer tipoSonido, Integer tipoNotificacion, String extraInfo) {
+                                    Integer tipoSonido, Integer tipoNotificacion, String extraInfo, String nombreAbuelo) {
 
         // Se verifica si la notificación anterior del mismo tipo sigue visible.
         // En ese caso se cancela y se registra en BD
@@ -154,6 +154,7 @@ public class NotificationService {
         //intentAbrir.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); Con esto se resumia el estado anterior
         Bundle mBundle = new Bundle();
         mBundle.putString("1", mailQueInicioSesion);
+        mBundle.putString("nombreAbuelo", nombreAbuelo);
         mBundle.putBoolean("vieneDeNotificacion", true);
         mBundle.putInt("tipoNotificacion", tipoNotificacion);
         mBundle.putString("extraInfo", extraInfo);
