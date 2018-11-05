@@ -33,6 +33,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -490,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     loQueDiceYescribe("¡Buena suerte!","default", false);
                     break;
                 case "despedida":
-                    this.moveTaskToBack(true);
+                    salir(2, this);
                     break;
                 case "" :
                     speech = "¡No entendí!\nEscriba o diga:\nPastelería,\nFútbol\nSalud";
@@ -529,6 +531,30 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 queryString = menu;
                 esAutomatico = true;
                 sendRequest();
+            }
+        }, 1000*segundos);
+    }
+
+    private void salir(int segundos, final Activity activity) {
+        loQueDiceYescribe("¡Hasta pronto!", "default",false);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                queryString = "";
+                resultTextView.setText("");
+                resultTextView2.setText("");
+                yaSaludo = false;
+                activity.moveTaskToBack(true);
+            }
+        }, 1000*segundos);
+    }
+
+    private void saludar(int segundos) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                loQueDiceYescribe("¡" + getSaludo() + ", " + nombreAbuelo + "! ","default", false);
+                yaSaludo = true;
             }
         }, 1000*segundos);
     }
@@ -779,7 +805,9 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     public void onResume(){
         contadorClicksEditarRegistro = 0;
         super.onResume();
-        send.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        if(!yaSaludo && !TextUtils.isEmpty(nombreAbuelo)){
+            saludar(1);
+        }
     }
 
     @Override
