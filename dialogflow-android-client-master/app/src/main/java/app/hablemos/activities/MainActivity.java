@@ -228,11 +228,18 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         return super.onOptionsItemSelected(item);
     }
 
-
-
     private String parsearNombre(String nombre) {
-        String s1 = nombre.substring(0, 1).toUpperCase();
-        return s1 + nombre.substring(1).toLowerCase();
+        String ret = "";
+        try{
+            String [] nombres = nombre.trim().split(" ");
+            for (int i=0; i<nombres.length; i++) {
+                String s1 = nombres[i].substring(0, 1).toUpperCase();
+                ret += " " + s1 + nombres[i].substring(1).toLowerCase();
+            }
+        } catch (Exception e) {
+            ret = nombre;
+        }
+        return ret.trim();
     }
 
     //Resultado de subintents
@@ -275,7 +282,9 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             // Vuelve de cambiar la configuración
             case (MODIF_CONFIG_CODE) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    equipoAbuelo = data.getStringExtra("equipoAbuelo");
+                    User u = (User) data.getSerializableExtra("user");
+                    equipoAbuelo = u.equipo;
+                    iniciarServicioScheduler(u, true);
                 }
                 break;
             }
@@ -610,12 +619,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     switch (pedido) {
                         case "saludo":
                             nombreAbuelo = parsearNombre(u.username);
-                            loQueDiceYescribe(getSaludo() + ", " + nombreAbuelo + "! ","default", false);
+                            loQueDiceYescribe("¡" + getSaludo() + ", " + nombreAbuelo + "! ","default", false);
                             equipoAbuelo = u.equipo;
                             interactionsService.guardarInteraccion(
                                 mailQueInicioSesion, getString(R.string.interaccionTitulo_AbrirApp), "-", "-");
                             if(!vieneDeNotificacion)
-                                iniciarServicioScheduler();
+                                iniciarServicioScheduler(u, false);
                             break;
                         case "tarde":
                             if(TextUtils.isEmpty(u.remediosTarde)){
@@ -753,11 +762,11 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         }
     }
 
-    public void iniciarServicioScheduler(){
+    public void iniciarServicioScheduler(User user, boolean reset){
         Intent intent = new Intent(this, SchedulerService.class);
         Bundle mBundle = new Bundle();
-        mBundle.putString("1", mailQueInicioSesion);
-        mBundle.putString("2", nombreAbuelo);
+        mBundle.putBoolean("reset", reset);
+        mBundle.putSerializable("user", user);
         intent.putExtras(mBundle);
         startService(intent);
     }

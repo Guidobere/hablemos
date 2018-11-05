@@ -11,10 +11,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -35,13 +35,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import app.hablemos.R;
+import app.hablemos.model.HorariosRecordatorios;
 import app.hablemos.model.Recordatorio;
 import app.hablemos.model.User;
 import app.hablemos.services.FootballService;
 
 
 public class RegistroActivity extends AppCompatActivity {
-
     //Lonuevo
     private TextInputLayout nombreAbuelo , mailTutor, contra,  repetirPwd, medicamentosM, medicamentosT,medicamentosN;
     private TextInputEditText mN,mM,mT,n,emailTutor,erepetirPwd, econtra;
@@ -59,23 +59,35 @@ public class RegistroActivity extends AppCompatActivity {
     private  boolean ActualizarRecordatorioGlucosa = false;
 
     //DATOS PERSONALES
-    //private EditText nombreAbuelo;
-    //private EditText mailTutor;
-    private String equipoFavorito;
-   // private EditText contra;
-    //private EditText repetirPwd;
     private Spinner spinnerEquipo;
 
-    //MEDICAMENTOS
-   // private EditText medicamentosM;
-   // private EditText medicamentosT;
-   // private EditText medicamentosN;
+    //Remedios
+    private Spinner spinnerHoraMedManiana;
+    private Spinner spinnerHoraMedTarde;
+    private Spinner spinnerHoraMedNoche;
+    private Spinner spinnerMinutosMedManiana;
+    private Spinner spinnerMinutosMedTarde;
+    private Spinner spinnerMinutosMedNoche;
+
+    //Presion
+    private Spinner spinnerHoraPresionManiana;
+    private Spinner spinnerHoraPresionTarde;
+    private Spinner spinnerHoraPresionNoche;
+    private Spinner spinnerMinutosPresionManiana;
+    private Spinner spinnerMinutosPresionTarde;
+    private Spinner spinnerMinutosPresionNoche;
+
+    //Glucosa
+    private Spinner spinnerHoraGlucosaManiana;
+    private Spinner spinnerHoraGlucosaTarde;
+    private Spinner spinnerHoraGlucosaNoche;
+    private Spinner spinnerMinutosGlucosaManiana;
+    private Spinner spinnerMinutosGlucosaTarde;
+    private Spinner spinnerMinutosGlucosaNoche;
 
     private FootballService footballService;
-    private String mailQueInicioSesion;
     private int a=0;
 
-    //private static HashMap<String, User> users = new HashMap<>();
     //ACCEDO A LOS USUARIOS DE FIREBASE y uso esta instancia como global
     private String TAG = "RegistroLog";
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -102,26 +114,18 @@ public class RegistroActivity extends AppCompatActivity {
         mailTutor= findViewById(R.id.txtEmail_id);
         contra= findViewById(R.id.txtContra_id);
         repetirPwd= findViewById(R.id.txtContra2_id);
-        medicamentosM= findViewById(R.id.txtmañana_id);
+        medicamentosM= findViewById(R.id.txtmaniana_id);
         medicamentosT= findViewById(R.id.txttarde_id);
         medicamentosN= findViewById(R.id.txtnoche_id);
 
         mN= findViewById(R.id.txtnoche);
         mT= findViewById(R.id.txttarde);
-        mM= findViewById(R.id.txtmañana);
+        mM= findViewById(R.id.txtmaniana);
         n=findViewById(R.id.txtAbuelo);
         emailTutor=findViewById(R.id.txtEmail);
         erepetirPwd=findViewById(R.id.txtContra2);
         econtra=findViewById(R.id.txtContra);
 
-        /*  nombreAbuelo = findViewById(R.id.txtAbuelo);
-        mailTutor = findViewById(R.id.txtEmail);
-        //equipoFavorito = findViewById(R.id.txtEquipo);
-        contra = findViewById(R.id.txtContra);
-        repetirPwd = findViewById(R.id.txtContra2);
-        medicamentosM = findViewById(R.id.txtmañana);
-        medicamentosT = findViewById(R.id.txttarde);
-        medicamentosN = findViewById(R.id.txtnoche); */
         Button botonRegistro = findViewById(R.id.btnRegister);
         Button botonGuardar = findViewById(R.id.btnGuardar);
         Button botonCancel = findViewById(R.id.btnCancel);
@@ -130,18 +134,49 @@ public class RegistroActivity extends AppCompatActivity {
 
         spinnerEquipo = (Spinner) findViewById(R.id.spinnerEquipo);
 
+        spinnerHoraMedManiana = (Spinner) findViewById(R.id.spinnerHoraMedManiana);
+        spinnerHoraMedTarde = (Spinner) findViewById(R.id.spinnerHoraMedTarde);
+        spinnerHoraMedNoche = (Spinner) findViewById(R.id.spinnerHoraMedNoche);
+        spinnerMinutosMedManiana = (Spinner) findViewById(R.id.spinnerMinutosMedManiana);
+        spinnerMinutosMedTarde = (Spinner) findViewById(R.id.spinnerMinutosMedTarde);
+        spinnerMinutosMedNoche = (Spinner) findViewById(R.id.spinnerMinutosMedNoche);
+
+        spinnerHoraPresionManiana = (Spinner) findViewById(R.id.spinnerHoraPresionManiana);
+        spinnerHoraPresionTarde = (Spinner) findViewById(R.id.spinnerHoraPresionTarde);
+        spinnerHoraPresionNoche = (Spinner) findViewById(R.id.spinnerHoraPresionNoche);
+        spinnerMinutosPresionManiana = (Spinner) findViewById(R.id.spinnerMinutosPresionManiana);
+        spinnerMinutosPresionTarde = (Spinner) findViewById(R.id.spinnerMinutosPresionTarde);
+        spinnerMinutosPresionNoche = (Spinner) findViewById(R.id.spinnerMinutosPresionNoche);
+
+        spinnerHoraGlucosaManiana = (Spinner) findViewById(R.id.spinnerHoraGlucosaManiana);
+        spinnerHoraGlucosaTarde = (Spinner) findViewById(R.id.spinnerHoraGlucosaTarde);
+        spinnerHoraGlucosaNoche = (Spinner) findViewById(R.id.spinnerHoraGlucosaNoche);
+        spinnerMinutosGlucosaManiana = (Spinner) findViewById(R.id.spinnerMinutosGlucosaManiana);
+        spinnerMinutosGlucosaTarde = (Spinner) findViewById(R.id.spinnerMinutosGlucosaTarde);
+        spinnerMinutosGlucosaNoche = (Spinner) findViewById(R.id.spinnerMinutosGlucosaNoche);
+
         cargarEquiposEnSpinner();
 
+        cargarHorasEnSpinners();
+
+        //Es modificación
         if(mAuth.getCurrentUser() != null) {
             botonRegistro.setVisibility(View.GONE);
             botonGuardar.setVisibility(View.VISIBLE);
             a=1;
-
         }
+        //Es alta
         else{
             botonRegistro.setVisibility(View.VISIBLE);
             botonGuardar.setVisibility(View.GONE);
             a=0;
+
+            cargarSpinnersSaludDefault(spinnerHoraMedManiana, spinnerMinutosMedManiana,
+                    spinnerHoraMedTarde, spinnerMinutosMedTarde, spinnerHoraMedNoche, spinnerMinutosMedNoche, "00");
+            cargarSpinnersSaludDefault(spinnerHoraGlucosaManiana, spinnerMinutosGlucosaManiana,
+                    spinnerHoraGlucosaTarde, spinnerMinutosGlucosaTarde, spinnerHoraGlucosaNoche, spinnerMinutosGlucosaNoche, "15");
+            cargarSpinnersSaludDefault(spinnerHoraPresionManiana, spinnerMinutosPresionManiana,
+                    spinnerHoraPresionTarde, spinnerMinutosPresionTarde, spinnerHoraPresionNoche, spinnerMinutosPresionNoche, "30");
         }
 
           //LOGICA PARA QUE AL HACER CLICK EN EL BOTON ENVIE LOS DATOS A LA FUNCION writeNewUser
@@ -163,10 +198,10 @@ public class RegistroActivity extends AppCompatActivity {
         botonGuardar.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 //Aca actualiza al usuario existente
-                ActualizarUsuario();
+                User user = ActualizarUsuario();
                 if(a==1) {
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("equipoAbuelo", equipoFavorito);
+                    resultIntent.putExtra("user", user);
                     setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 }else {
@@ -199,6 +234,70 @@ public class RegistroActivity extends AppCompatActivity {
         };
     }
 
+    private void cargarHorasEnSpinners() {
+        List<String> spinnerArrayHorasManiana = new ArrayList<>();
+        spinnerArrayHorasManiana.add(0,"");
+        spinnerArrayHorasManiana.add(1,"6");
+        spinnerArrayHorasManiana.add(2,"7");
+        spinnerArrayHorasManiana.add(3,"8");
+        spinnerArrayHorasManiana.add(4,"9");
+        spinnerArrayHorasManiana.add(5,"10");
+        spinnerArrayHorasManiana.add(6,"11");
+        spinnerArrayHorasManiana.add(7,"12");
+
+        List<String> spinnerArrayHorasTarde = new ArrayList<>();
+        spinnerArrayHorasTarde.add(0,"");
+        spinnerArrayHorasTarde.add(1,"13");
+        spinnerArrayHorasTarde.add(2,"14");
+        spinnerArrayHorasTarde.add(3,"15");
+        spinnerArrayHorasTarde.add(4,"16");
+        spinnerArrayHorasTarde.add(5,"17");
+        spinnerArrayHorasTarde.add(6,"18");
+
+        List<String> spinnerArrayHorasNoche = new ArrayList<>();
+        spinnerArrayHorasNoche.add(0,"");
+        spinnerArrayHorasNoche.add(1,"19");
+        spinnerArrayHorasNoche.add(2,"20");
+        spinnerArrayHorasNoche.add(3,"21");
+        spinnerArrayHorasNoche.add(4,"22");
+        spinnerArrayHorasNoche.add(5,"23");
+
+        List<String> spinnerArrayMinutos = new ArrayList<>();
+        spinnerArrayMinutos.add(0,"");
+        spinnerArrayMinutos.add(1,"00");
+        spinnerArrayMinutos.add(2,"15");
+        spinnerArrayMinutos.add(3,"30");
+        spinnerArrayMinutos.add(4,"45");
+
+        ArrayAdapter<String> adapterHorasManiana = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayHorasManiana);
+        ArrayAdapter<String> adapterHorasTarde = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayHorasTarde);
+        ArrayAdapter<String> adapterHorasNoche = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayHorasNoche);
+        ArrayAdapter<String> adapterMinutos = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayMinutos);
+        adapterHorasManiana.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterHorasTarde.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterHorasNoche.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterMinutos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        buildSpinnerHoraMinutos(spinnerHoraMedManiana, spinnerMinutosMedManiana, adapterHorasManiana, adapterMinutos);
+        buildSpinnerHoraMinutos(spinnerHoraMedTarde, spinnerMinutosMedTarde, adapterHorasTarde, adapterMinutos);
+        buildSpinnerHoraMinutos(spinnerHoraMedNoche, spinnerMinutosMedNoche, adapterHorasNoche, adapterMinutos);
+
+        buildSpinnerHoraMinutos(spinnerHoraGlucosaManiana, spinnerMinutosGlucosaManiana, adapterHorasManiana, adapterMinutos);
+        buildSpinnerHoraMinutos(spinnerHoraGlucosaTarde, spinnerMinutosGlucosaTarde, adapterHorasTarde, adapterMinutos);
+        buildSpinnerHoraMinutos(spinnerHoraGlucosaNoche, spinnerMinutosGlucosaNoche, adapterHorasNoche, adapterMinutos);
+
+        buildSpinnerHoraMinutos(spinnerHoraPresionManiana, spinnerMinutosPresionManiana, adapterHorasManiana, adapterMinutos);
+        buildSpinnerHoraMinutos(spinnerHoraPresionTarde, spinnerMinutosPresionTarde, adapterHorasTarde, adapterMinutos);
+        buildSpinnerHoraMinutos(spinnerHoraPresionNoche, spinnerMinutosPresionNoche, adapterHorasNoche, adapterMinutos);
+    }
+
+    private void buildSpinnerHoraMinutos(Spinner spinnerHora, Spinner spinnerMinutos, ArrayAdapter<String> adapterHora, ArrayAdapter<String> adapterMinutos) {
+        spinnerHora.setAdapter(adapterHora);
+        spinnerHora.setOnItemSelectedListener(new HorasItemSelectedListener(spinnerMinutos));
+        spinnerMinutos.setAdapter(adapterMinutos);
+        spinnerMinutos.setOnItemSelectedListener(new MinutosOnItemSelectedListener(spinnerMinutos, spinnerHora));
+    }
+
 
     private void cargarEquiposEnSpinner() {
         List<String> equiposPrimera = footballService.getEquiposDePrimera();
@@ -218,12 +317,13 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     //FUNCION PARA CREAR USUARIO EN FIREBASE
-     private String writeNewUser(String username, String email,String equipo,String remediosM,String remediosT,String remediosN) {
+     private String writeNewUser(String username, String email, String equipo, String remediosM, String remediosT, String remediosN) {
         //Obtengo el ID del usuario que se me va a guardar en la BD
         String userID=myUsersFb.push().getKey();
         //Guardo la informacion en el usuario.child(ID) al respectivo usuario.
         if(userID != null && userID != "")
-            myUsersFb.child(userID).setValue(new User(userID,username,email,equipo,remediosM,remediosT,remediosN));
+            myUsersFb.child(userID).setValue(new User(userID, username, email, equipo, remediosM, remediosT, remediosN,
+                getHorariosRemedios(), getHorariosGlucosa(), getHorariosPresion()));
         else {
             Toast.makeText(RegistroActivity.this, "fallo al crear al usuario", Toast.LENGTH_SHORT).show();
         }
@@ -346,7 +446,12 @@ public class RegistroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //Si no se repite o algo, lo guarda en la base
-                            String userID=writeNewUser( nombreAbuelo.getEditText().getText().toString().toLowerCase(),mailTutor.getEditText().getText().toString().toLowerCase(),footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),medicamentosM.getEditText().getText().toString().toLowerCase(), medicamentosT.getEditText().getText().toString().toLowerCase(),medicamentosN.getEditText().getText().toString().toLowerCase());
+                            String userID = writeNewUser(nombreAbuelo.getEditText().getText().toString().toLowerCase(),
+                                mailTutor.getEditText().getText().toString().toLowerCase(),
+                                footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),
+                                medicamentosM.getEditText().getText().toString().toLowerCase(),
+                                medicamentosT.getEditText().getText().toString().toLowerCase(),
+                                medicamentosN.getEditText().getText().toString().toLowerCase());
                             if(userID != "" && userID != null) {
                                 CrearNuevoRecordatoriosGlucosa();
                                 CrearNuevoRecordatoriosPresion();
@@ -359,12 +464,12 @@ public class RegistroActivity extends AppCompatActivity {
                 });
     }
 
-    private void ActualizarUsuario() {
+    private User ActualizarUsuario() {
 
         if(!CamposCompletadosCorrectamente())
-            return;
+            return null;
 
-        UpdateUser();
+        User user = UpdateUser();
         if(ActualizarRecordatorioPresion)
             UpdatePresion();
         else
@@ -375,6 +480,7 @@ public class RegistroActivity extends AppCompatActivity {
         else
             Toast.makeText(RegistroActivity.this, "No se pudo actualizar al al recordatorio de presion", Toast.LENGTH_SHORT).show();
 
+        return user;
     }
 
     private boolean CamposCompletadosCorrectamente() {
@@ -405,7 +511,7 @@ public class RegistroActivity extends AppCompatActivity {
             camposEstanOk = false;
         }
         if (!password.equals(repetirPwd.getEditText().getText().toString())) {
-            Toast.makeText(getApplicationContext(), getString(R.string.contraseñasNoCoinciden), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.contraseniasNoCoinciden), Toast.LENGTH_SHORT).show();
             camposEstanOk = false;
             return camposEstanOk;
         }
@@ -430,7 +536,6 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     public void pedirAlaBaseUsuarioByEmail(final String email){
-        //String mailQueInicioSesion = getIntent().getExtras().getString("1");
         myUsersFb.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot users) {
@@ -443,67 +548,98 @@ public class RegistroActivity extends AppCompatActivity {
                 }
 
                 if (u != null && u.userID != null) {
-
-                    //LLENAR CAMPOS
-                    UserID=u.userID;
-
-                    nombreAbuelo.setHint("Nombre usuario");
-                    mailTutor.setEnabled(false);
-                    mailTutor.setHint("Email tutor");
-                    mailTutor.setFocusable(false);
-                    contra.setHint("Contraseña");
-                    contra.setFocusable(false);
-                    contra.setEnabled(false);
-                    repetirPwd.setHint("Repetir contraseña");
-                    repetirPwd.setFocusable(false);
-                    repetirPwd.setEnabled(false);
-                    //equipoFavorito.setText(u.equipo);
-                    if (a==1){
-                        mM.setText(u.remediosManiana);
-                        mT.setText(u.remediosTarde);
-                        mN.setText(u.remediosNoche);
-                        emailTutor.setText(u.email);
-                        econtra.setText("123456");
-                        erepetirPwd.setText("123456");
-                        n.setText(u.username);
-
-                    }else{
-                        mM.setText(u.remediosManiana);
-                        mT.setText(u.remediosTarde);
-                        mN.setText(u.remediosNoche);}
-                    String nombreEquipo = "";
-                    if (u.equipo.equalsIgnoreCase("ninguno")){
-                        nombreEquipo = "Ninguno";
-                    } else {
-                        nombreEquipo = footballService.obtenerEquipoVisual(u.equipo).getNombre();
-                    }
-                    spinnerEquipo.setSelection(getIndex(spinnerEquipo, nombreEquipo));
-
-
-
-/*                    CrearNuevoRecordatoriosGlucosa();
-                    CrearNuevoRecordatoriosPresion();*/
-
+                    llenarCampos(u);
                 } else {
                     System.out.println("Ocurrio un error al obtener el usuario");
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
 
         });
     }
 
-    private int getIndex(Spinner spinnerEquipo, String equipo){
-        for (int i=0;i<spinnerEquipo.getCount();i++){
-            if (spinnerEquipo.getItemAtPosition(i).toString().equalsIgnoreCase(equipo)){
-                return i;
-            }
-        }
+    private void llenarCampos(User u) {
+        UserID=u.userID;
 
+        nombreAbuelo.setHint("Nombre usuario");
+        mailTutor.setEnabled(false);
+        mailTutor.setHint("Email tutor");
+        mailTutor.setFocusable(false);
+        contra.setHint("Contraseña");
+        contra.setFocusable(false);
+        contra.setEnabled(false);
+        repetirPwd.setHint("Repetir contraseña");
+        repetirPwd.setFocusable(false);
+        repetirPwd.setEnabled(false);
+
+        if (a==1){
+            mM.setText(u.remediosManiana);
+            mT.setText(u.remediosTarde);
+            mN.setText(u.remediosNoche);
+            emailTutor.setText(u.email);
+            econtra.setText("123456");
+            erepetirPwd.setText("123456");
+            n.setText(u.username);
+
+        }else{
+            mM.setText(u.remediosManiana);
+            mT.setText(u.remediosTarde);
+            mN.setText(u.remediosNoche);}
+        String nombreEquipo;
+        if (u.equipo.equalsIgnoreCase("ninguno")){
+            nombreEquipo = "Ninguno";
+        } else {
+            nombreEquipo = footballService.obtenerEquipoVisual(u.equipo).getNombre();
+        }
+        spinnerEquipo.setSelection(getIndex(spinnerEquipo, nombreEquipo));
+
+        seterValoresSpinner(u.horariosRecordatoriosRemedios, "00", spinnerHoraMedManiana, spinnerMinutosMedManiana,
+            spinnerHoraMedTarde, spinnerMinutosMedTarde, spinnerHoraMedNoche, spinnerMinutosMedNoche);
+
+        seterValoresSpinner(u.horariosRecordatoriosGlucosa, "15", spinnerHoraGlucosaManiana, spinnerMinutosGlucosaManiana,
+            spinnerHoraGlucosaTarde, spinnerMinutosGlucosaTarde, spinnerHoraGlucosaNoche, spinnerMinutosGlucosaNoche);
+
+        seterValoresSpinner(u.horariosRecordatoriosPresion, "30", spinnerHoraPresionManiana, spinnerMinutosPresionManiana,
+            spinnerHoraPresionTarde, spinnerMinutosPresionTarde, spinnerHoraPresionNoche, spinnerMinutosPresionNoche);
+    }
+
+    private void seterValoresSpinner(HorariosRecordatorios horariosRecordatorios, String minutosDefault,
+                                     Spinner spinnerHoraManiana, Spinner spinnerMinutosManiana,
+                                     Spinner spinnerHoraTarde, Spinner spinnerMinutosTarde,
+                                     Spinner spinnerHoraNoche, Spinner spinnerMinutosNoche) {
+        if(horariosRecordatorios!=null) {
+            //Si tiene cargados los horarios, se setean en el spinner
+            spinnerHoraManiana.setSelection(getIndex(spinnerHoraManiana, horariosRecordatorios.manianaHora));
+            spinnerMinutosManiana.setSelection(getIndex(spinnerMinutosManiana, horariosRecordatorios.manianaMinutos));
+            spinnerHoraTarde.setSelection(getIndex(spinnerHoraTarde, horariosRecordatorios.tardeHora));
+            spinnerMinutosTarde.setSelection(getIndex(spinnerMinutosTarde, horariosRecordatorios.tardeMinutos));
+            spinnerHoraNoche.setSelection(getIndex(spinnerHoraNoche, horariosRecordatorios.nocheHora));
+            spinnerMinutosNoche.setSelection(getIndex(spinnerMinutosNoche, horariosRecordatorios.nocheMinutos));
+        } else{
+            //Si no tiene horarios cargados se toman los default para setear en los spinner
+            cargarSpinnersSaludDefault(spinnerHoraManiana, spinnerMinutosManiana, spinnerHoraTarde, spinnerMinutosTarde,
+                spinnerHoraNoche, spinnerMinutosNoche, minutosDefault);
+        }
+    }
+
+    private void cargarSpinnersSaludDefault(Spinner spinnerHoraManiana, Spinner spinnerMinutosManiana,
+                                       Spinner spinnerHoraTarde, Spinner spinnerMinutosTarde,
+                                       Spinner spinnerHoraNoche, Spinner spinnerMinutosNoche, String minutosDefault){
+        spinnerHoraManiana.setSelection(getIndex(spinnerHoraManiana, getString(R.string.horarioSaludManiana)));
+        spinnerMinutosManiana.setSelection(getIndex(spinnerMinutosManiana, minutosDefault));
+        spinnerHoraTarde.setSelection(getIndex(spinnerHoraTarde, getString(R.string.horarioSaludTarde)));
+        spinnerMinutosTarde.setSelection(getIndex(spinnerMinutosTarde, minutosDefault));
+        spinnerHoraNoche.setSelection(getIndex(spinnerHoraNoche, getString(R.string.horarioSaludNoche)));
+        spinnerMinutosNoche.setSelection(getIndex(spinnerMinutosNoche, minutosDefault));
+    }
+
+    private int getIndex(Spinner spinner, String value){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value))
+                return i;
+        }
         return 0;
     }
 
@@ -650,49 +786,80 @@ public class RegistroActivity extends AppCompatActivity {
         }
     }
 
+    private HorariosRecordatorios getHorariosGlucosa(){
+        return new HorariosRecordatorios(
+            spinnerHoraGlucosaManiana.getSelectedItem().toString(), spinnerMinutosGlucosaManiana.getSelectedItem().toString(),
+            spinnerHoraGlucosaTarde.getSelectedItem().toString(), spinnerMinutosGlucosaTarde.getSelectedItem().toString(),
+            spinnerHoraGlucosaNoche.getSelectedItem().toString(), spinnerMinutosGlucosaNoche.getSelectedItem().toString());
+    }
 
-    private void UpdateUser() {
+    private HorariosRecordatorios getHorariosRemedios(){
+        return new HorariosRecordatorios(
+            spinnerHoraMedManiana.getSelectedItem().toString(), spinnerMinutosMedManiana.getSelectedItem().toString(),
+            spinnerHoraMedTarde.getSelectedItem().toString(), spinnerMinutosMedTarde.getSelectedItem().toString(),
+            spinnerHoraMedNoche.getSelectedItem().toString(), spinnerMinutosMedNoche.getSelectedItem().toString());
+    }
+
+    private HorariosRecordatorios getHorariosPresion(){
+        return new HorariosRecordatorios(
+            spinnerHoraPresionManiana.getSelectedItem().toString(), spinnerMinutosPresionManiana.getSelectedItem().toString(),
+            spinnerHoraPresionTarde.getSelectedItem().toString(), spinnerMinutosPresionTarde.getSelectedItem().toString(),
+            spinnerHoraPresionNoche.getSelectedItem().toString(), spinnerMinutosPresionNoche.getSelectedItem().toString());
+    }
+
+    private User UpdateUser() {
+        User user = null;
+
         //uso la variable global userID obtenida previamente en funcion "pedirAlaBaseUsuarioByEmail(email)"
         // luego Asigno en la tabla users en el child "userID" (con el valor de ese userID) los nuevos valores del usuario
         String userID=UserID !=null? UserID : "" ;
         if(!userID.equals("")) {
-            equipoFavorito = footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString());
-            myUsersFb.child(userID).setValue(
-                    new User(userID, nombreAbuelo.getEditText().getText().toString().toLowerCase(), mailTutor.getEditText().getText().toString().toLowerCase(),
-                            equipoFavorito, medicamentosM.getEditText().getText().toString().toLowerCase(),
-                            medicamentosT.getEditText().getText().toString().toLowerCase(), medicamentosN.getEditText().getText().toString().toLowerCase()));
+            user = new User(userID, nombreAbuelo.getEditText().getText().toString().toLowerCase(),
+                mailTutor.getEditText().getText().toString().toLowerCase(),
+                footballService.getNombreReferencia(spinnerEquipo.getSelectedItem().toString()),
+                medicamentosM.getEditText().getText().toString().toLowerCase(),
+                medicamentosT.getEditText().getText().toString().toLowerCase(),
+                medicamentosN.getEditText().getText().toString().toLowerCase(), getHorariosRemedios(), getHorariosGlucosa(), getHorariosPresion());
+            myUsersFb.child(userID).setValue(user);
         }
         else{
             Toast.makeText(RegistroActivity.this, "no se pudo actualizar al usuario", Toast.LENGTH_SHORT).show();
         }
+        return user;
     }
 
     private void UpdatePresion() {
         // uso la variable global presionTurnoID obtenida previamente en funcion "pedirAlaBaseSobrePresion(email)"
         // luego Asigno en la tabla recordatoriosPresion en el child "presionTurnoID" (con el valor de ese presionTurnoID) los nuevos valores del recordatoriosPresion
         if(PresionManianaID != "" && PresionManianaID != null){
-            myRecordatoriosPresionFb.child(PresionManianaID).setValue(new Recordatorio(PresionManianaID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionManiana(),"mañana"));
+            myRecordatoriosPresionFb.child(PresionManianaID).setValue(new Recordatorio(
+                PresionManianaID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionManiana(),"mañana"));
         }
         if(PresionTardeID != "" && PresionTardeID != null){
-            myRecordatoriosPresionFb.child(PresionTardeID).setValue(new Recordatorio(PresionTardeID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionTarde(),"tarde"));
+            myRecordatoriosPresionFb.child(PresionTardeID).setValue(
+                new Recordatorio(PresionTardeID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionTarde(),"tarde"));
         }
         if(PresionNocheID != "" && PresionNocheID != null){
-            myRecordatoriosPresionFb.child(PresionNocheID).setValue(new Recordatorio(PresionNocheID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionNoche(),"noche"));
+            myRecordatoriosPresionFb.child(PresionNocheID).setValue(
+                new Recordatorio(PresionNocheID,mailTutor.getEditText().getText().toString(),RecordatoriosPresionNoche(),"noche"));
         }
     }
 
 
     private void UpdateGlucosa() {
-        //// uso la variable global glucosaTurnoID obtenida previamente en funcion "pedirAlaBaseSobreGlucosa(email)"
-        //Asigno en la tabla recordatoriosGlucosa en el child "glucosaTurnoID" (con el valor de ese glucosaTurnoID) los nuevos valores del recordatoriosGlucosa
+        // Uso la variable global glucosaTurnoID obtenida previamente en funcion "pedirAlaBaseSobreGlucosa(email)"
+        // Asigno en la tabla recordatoriosGlucosa en el child "glucosaTurnoID" (con el valor de ese glucosaTurnoID) los nuevos valores del recordatoriosGlucosa
         if(GlucosaManianaID != "" && GlucosaManianaID != null){
-            myRecordatoriosGlucosaFb.child(GlucosaManianaID).setValue(new Recordatorio(GlucosaManianaID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaManiana(),"mañana"));
+            myRecordatoriosGlucosaFb.child(GlucosaManianaID).setValue(
+                new Recordatorio(GlucosaManianaID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaManiana(),"mañana"));
         }
         if(GlucosaTardeID != "" && GlucosaTardeID != null){
-            myRecordatoriosGlucosaFb.child(GlucosaTardeID).setValue(new Recordatorio(GlucosaTardeID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaTarde(),"tarde"));
+            myRecordatoriosGlucosaFb.child(GlucosaTardeID).setValue(
+                new Recordatorio(GlucosaTardeID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaTarde(),"tarde"));
         }
         if(GlucosaNocheID != "" && GlucosaNocheID != null){
-            myRecordatoriosGlucosaFb.child(GlucosaNocheID).setValue(new Recordatorio(GlucosaNocheID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaNoche(),"noche"));
+            myRecordatoriosGlucosaFb.child(GlucosaNocheID).setValue(
+                new Recordatorio(GlucosaNocheID,mailTutor.getEditText().getText().toString(),RecordatoriosGlucosaNoche(),"noche"));
         }
     }
 
@@ -726,4 +893,38 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
 
+    private class HorasItemSelectedListener implements AdapterView.OnItemSelectedListener {
+        Spinner spinnerMinutos;
+        public HorasItemSelectedListener(Spinner spinnerMinutos) {
+            this.spinnerMinutos = spinnerMinutos;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            if(position==0)
+                spinnerMinutos.setSelection(0);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) { }
+    }
+
+    private class MinutosOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+        Spinner spinnerMinutos;
+        Spinner spinnerHora;
+
+        public MinutosOnItemSelectedListener(Spinner spinnerMinutos, Spinner spinnerHora) {
+            this.spinnerMinutos = spinnerMinutos;
+            this.spinnerHora = spinnerHora;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            if(TextUtils.isEmpty(spinnerHora.getSelectedItem().toString()))
+                spinnerMinutos.setSelection(0);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) { }
+    }
 }

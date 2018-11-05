@@ -9,12 +9,11 @@
         android:id="@+id/linearLayaut1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginBottom="15dp"
-        >
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageView5"
@@ -35,8 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/nombre_abuelo"
-                android:singleLine="true"
-                />
+                android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -44,8 +42,7 @@
             android:id="@+id/txtEmail_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            >
+            app:errorEnabled="true">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/txtEmail"
@@ -53,8 +50,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email_del_tutor"
                 android:inputType="textEmailAddress"
-                android:singleLine="true"
-                />
+                android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -62,16 +58,15 @@
             android:id="@+id/txtContra_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            >
+            app:errorEnabled="true">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/txtContra"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contrase_a_tutor"
-                android:singleLine="true"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -79,8 +74,7 @@
             android:id="@+id/txtContra2_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            >
+            app:errorEnabled="true">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/txtContra2"
@@ -88,8 +82,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/repetir_pwd"
                 android:inputType="textPassword"
-                android:singleLine="true"
-                />
+                android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -103,15 +96,16 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Spinner
-            android:padding="20dp"
-            android:layout_marginTop="0dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
-            android:textSize="15sp"
+        <Spinner style="@style/Widget.AppCompat.Spinner.Underlined"
             android:id="@+id/spinnerEquipo"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="15dp"
+            android:padding="20dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -122,25 +116,41 @@
             android:textStyle="bold" />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/txtmañana_id"
+            android:id="@+id/txtmaniana_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/txtmañana"
+                android:id="@+id/txtmaniana"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:hint="@string/medicamentos_turno_ma_ana"/>
+                android:hint="@string/medicamentos_turno_ma_ana"
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_marginBottom="5dp"
             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
             android:textSize="12sp"
-            android:textStyle="italic"
-            android:layout_marginBottom="20dp"/>
+            android:textStyle="italic" />
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraMedManiana"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosMedManiana"
+                android:layout_toRightOf="@+id/spinnerHoraMedManiana"
+                android:layout_alignTop="@+id/spinnerHoraMedManiana" />
+        </RelativeLayout>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txttarde_id"
             android:layout_width="match_parent"
@@ -150,50 +160,79 @@
                 android:id="@+id/txttarde"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
                 android:hint="@string/medicamentos_turno_tarde"
-
-                />
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_marginBottom="5dp"
             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
             android:textSize="12sp"
-            android:textStyle="italic"
-            android:layout_marginBottom="20dp"/>
+            android:textStyle="italic" />
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraMedTarde"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosMedTarde"
+                android:layout_toRightOf="@+id/spinnerHoraMedTarde"
+                android:layout_alignTop="@+id/spinnerHoraMedTarde"/>
+
+        </RelativeLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txtnoche_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/txtnoche"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:hint="@string/medicamentos_turno_noche" />
+                android:hint="@string/medicamentos_turno_noche"
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_marginBottom="5dp"
             android:text="Por ejemplo: 1 ibuprofeno, medio clonazepam"
             android:textSize="12sp"
-            android:textStyle="italic"
-            android:layout_marginBottom="20dp"/>
+            android:textStyle="italic" />
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraMedNoche" />
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosMedNoche"
+                android:layout_toRightOf="@+id/spinnerHoraMedNoche"
+                android:layout_alignTop="@+id/spinnerHoraMedNoche"/>
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/glucosa"
-            android:textStyle="bold"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="15dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/glucosa"
             android:textSize="18sp"
+            android:textStyle="bold"
             />
 
         <!-- MAÑANA -->
@@ -203,14 +242,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="@string/ma_ana"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/checkboxGlucosaDias"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/chBxGlucManianaL"
@@ -255,6 +294,21 @@
                 android:text="@string/domingo_vista" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraGlucosaManiana"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosGlucosaManiana"
+                android:layout_toRightOf="@+id/spinnerHoraGlucosaManiana"
+                android:layout_alignTop="@+id/spinnerHoraGlucosaManiana"/>
+        </RelativeLayout>
+
         <!-- TARDE -->
         <TextView
             android:id="@+id/lblGlucosaTarde"
@@ -262,14 +316,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="@string/tarde"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/checkboxGlucosaTarde"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/chBxGlucTardeLu"
@@ -315,6 +369,20 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraGlucosaTarde"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosGlucosaTarde"
+                android:layout_toRightOf="@+id/spinnerHoraGlucosaTarde"
+                android:layout_alignTop="@+id/spinnerHoraGlucosaTarde"/>
+        </RelativeLayout>
+
         <!-- NOCHE -->
         <TextView
             android:id="@+id/lblGlucosaNoche"
@@ -322,14 +390,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="@string/noche"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/checkboxGlucosaNoche"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/chBxGlucNocheLu"
@@ -374,15 +442,29 @@
                 android:text="@string/domingo_vista" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraGlucosaNoche"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosGlucosaNoche"
+                android:layout_toRightOf="@+id/spinnerHoraGlucosaNoche"
+                android:layout_alignTop="@+id/spinnerHoraGlucosaNoche"/>
+        </RelativeLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/presion_vista"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/presion_vista"
             android:textSize="18sp"
-            />
+            android:textStyle="bold" />
 
         <!-- MAÑANA -->
         <TextView
@@ -391,15 +473,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="@string/ma_ana"
-            android:textSize="15sp"
-            />
+            android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/checkboxPresionMañana"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/chBxPresionManianaL"
@@ -445,20 +526,34 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraPresionManiana"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosPresionManiana"
+                android:layout_toRightOf="@+id/spinnerHoraPresionManiana"
+                android:layout_alignTop="@+id/spinnerHoraPresionManiana"/>
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/lblPresionTarde"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="@string/tarde"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/checkboxPresionTarde"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/chBxPresionTardeLu"
@@ -503,6 +598,21 @@
                 android:text="@string/domingo_vista" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraPresionTarde"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosPresionTarde"
+                android:layout_toRightOf="@+id/spinnerHoraPresionTarde"
+                android:layout_alignTop="@+id/spinnerHoraPresionTarde"/>
+        </RelativeLayout>
+
         <!-- NOCHE -->
         <TextView
             android:id="@+id/lblPresionNoche"
@@ -510,14 +620,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="@string/noche"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/checkboxPresionNoche"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/chBxPresionNocheL"
@@ -563,15 +673,30 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerHoraPresionNoche"/>
+
+            <Spinner style="@style/Spinner"
+                android:id="@+id/spinnerMinutosPresionNoche"
+                android:layout_toRightOf="@+id/spinnerHoraPresionNoche"
+                android:layout_alignTop="@+id/spinnerHoraPresionNoche"/>
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp">
+
             <Button
                 android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="@color/grey"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/cancelar"
