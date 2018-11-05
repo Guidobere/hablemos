@@ -121,7 +121,7 @@
     <string name="interaccionTexto_EnviarNotificacion">Se envió la notificación</string>
     <string name="interaccionTexto_Notificacion">El usuario %1$s la notificación de %2$s</string>
     <string name="interaccionTexto_VencerNotificacion">El usuario no abrió la notificación de %1$s a tiempo</string>
-    <string name="interaccionTexto_SaludRevisionSi">El usuario confirmó que se hizo el chequeo de %1$s</string>
+    <string name="interaccionTexto_SaludRevisionSi">El usuario confirmó que se hizo el chequeo de %1$s. Resultado: %2$s</string>
     <string name="interaccionTexto_SaludRevisionNo">El usuario dijo que no se hizo el chequeo de %1$s. Su motivo fue: %2$s</string>
     <string name="interaccionTexto_SaludRevisionNi">La respuesta del usuario sobre su chequeo de %1$s fue: %2$s</string>
 
@@ -130,7 +130,7 @@
     <string name="notificacionTitulo_Clima">Qué lindo día</string>
     <string name="notificacionTexto_Clima">¿Querés salir a pasear?</string>
     <string name="notificacionTitulo_Chequeo">Revisión de %1$s de la %2$s</string>
-    <string name="notificacionTexto_Chequeo">Tocá una vez acá para avisarme cuando lo hagas!</string>
+    <string name="notificacionTexto_Chequeo">¡Tocá una vez acá para avisarme cuando lo hagas!</string>
 
     <string name="cancelar">Cancelar</string>
     <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>
