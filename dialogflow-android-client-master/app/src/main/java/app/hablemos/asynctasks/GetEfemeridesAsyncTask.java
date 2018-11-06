@@ -31,7 +31,7 @@ public class GetEfemeridesAsyncTask extends AsyncTask<Void, Void, List<String>> 
                     cumples.add(cumple);
                 }
             }
-            String htmlAniversario = document.select("#cajadia div.eldia").get(1).parents().html();//$("#cajadia div.eldia")[3].parentElement.innerText.split("\n\n\n")
+            String htmlAniversario = document.select("#cajadia div.eldia[style='background: #5ac382']").parents().get(0).html();//$("#cajadia div.eldia")[3].parentElement.innerText.split("\n\n\n")
             Document documentAniversarios = Jsoup.parse(htmlAniversario);
             documentAniversarios.outputSettings(new Document.OutputSettings().prettyPrint(false));//makes html() preserve linebreaks and spacing
             documentAniversarios.select("br").append("\\n");

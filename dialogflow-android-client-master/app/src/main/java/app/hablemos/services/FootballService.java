@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.TreeMap;
 
 import app.hablemos.R;
-import app.hablemos.asynctasks.GetComparacionAsyncTask;
-import app.hablemos.asynctasks.GetEquiposAsyncTask;
 import app.hablemos.model.football.Comparators;
 import app.hablemos.model.football.ConversionMaps;
 import app.hablemos.model.football.DatosEquipo;
@@ -26,16 +24,14 @@ public class FootballService {
 
     private List<Equipo> equiposDePrimera;
     private List<EquipoPosicionado> equiposPosicionados;
-    private HashMap<String, String> mapaEquipos;
     private String bullet;
 
     public FootballService(Context context) {
         this.bullet = context.getString(R.string.bullet);
         this.equiposPosicionados = new ArrayList<>();
         this.equiposDePrimera = new ArrayList<>();
-        this.mapaEquipos = ConversionMaps.getMapaEquipos();
         try {
-            this.equiposDePrimera = new GetEquiposAsyncTask().execute().get();
+            this.equiposDePrimera = AsyncUtil.getEquiposDePrimera();
             HashMap<String, String> mapaConversion = ConversionMaps.getMapaConversionVisual();
             for(Equipo equipo : this.equiposDePrimera) {
                 if (mapaConversion.keySet().contains(equipo.getNombre())){
@@ -49,13 +45,13 @@ public class FootballService {
 
     /* SERVICIOS EXPUESTOS */
     public String getTablaPosiciones() {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         List<EquipoPosicionado> topN = equiposPosicionados.subList(0,this.equiposPosicionados.size());
         return FootballUtil.getStringTablaPosiciones(this.equiposDePrimera, topN, "La tabla de posiciones se encuentra de esta manera: ");
     }
 
     public String getTopNEquipos(int n) {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         if (n < 1 || n > this.equiposPosicionados.size()) {
             return "La cantidad deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente.";
         }
@@ -67,7 +63,7 @@ public class FootballService {
     }
 
     public String getBottomNEquipos(int n) {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         if (n < 1 || n > this.equiposPosicionados.size()) {
             return "La cantidad deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente.";
         }
@@ -79,7 +75,7 @@ public class FootballService {
     }
 
     public String getPosicionEquipo(String equipo) {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         Equipo equipoVisual = FootballUtil.obtenerEquipoVisual(this.equiposDePrimera, equipo);
         int posicion = FootballUtil.obtenerEquipoPosicionado(this.equiposPosicionados, equipo).getPosicion();
         if (posicion != 0)
@@ -89,7 +85,7 @@ public class FootballService {
     }
 
     public String getEquipoEnPosicion(int posicion) {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         if (posicion < 1 || posicion > this.equiposPosicionados.size()) {
             return "La posicion deseada no es correcta, hay " + this.equiposPosicionados.size() + " equipos actualmente.";
         }
@@ -100,7 +96,7 @@ public class FootballService {
                 break;
             }
         }
-        return "El equipo que está en la posición " + posicion + " es " + ConversionMaps.modificarNombresEquiposPrimera(equipo) + ".";
+        return "El equipo que está en la posición " + posicion + " es " + FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, equipo, false) + ".";
     }
 
     public String getDatosEquipo(String equipo) {
@@ -113,7 +109,7 @@ public class FootballService {
     }
 
     public String getEstadisticasEquipo(String equipo) {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         String equipoVisual = FootballUtil.obtenerEquipoVisual(this.equiposDePrimera, equipo).getNombre();
         EquipoPosicionado equipoPosicionado = FootballUtil.obtenerEquipoPosicionado(this.equiposPosicionados, equipo);
         if (equipoPosicionado != null) return equipoVisual + equipoPosicionado.toString();
@@ -123,12 +119,7 @@ public class FootballService {
     public String getComparacionEquipos(String equipo1, String equipo2) {
         String equipoVisual1 = FootballUtil.obtenerEquipoVisual(this.equiposDePrimera, equipo1).getNombre();
         String equipoVisual2 = FootballUtil.obtenerEquipoVisual(this.equiposDePrimera, equipo2).getNombre();
-        String comparacion;
-        try {
-            comparacion = new GetComparacionAsyncTask(mapaEquipos.get(equipo1), mapaEquipos.get(equipo2)).execute().get();
-        } catch (Exception e) {
-            return "Al menos uno de los equipos ingresados no es correcto.";
-        }
+        String comparacion = AsyncUtil.getComparacion(equipo1, equipo2);
         if (!comparacion.equals("")) return ConversionMaps.modificarNombresEquiposPrimera(comparacion);
         else return "La comparación entre " + equipoVisual1 + " y " + equipoVisual2 + " no pudo ser realizada.";
     }
@@ -169,8 +160,8 @@ public class FootballService {
                 partidosActuales = AsyncUtil.getPartidosProximaFecha(partidosFiltrados.get(posEnLista).getFecha());
             }
             for(PartidoActual partidoActual : partidosActuales) {
-                if (partidoActual.getEquipoLocal().equalsIgnoreCase(mapaEquipos.get(equipo)) ||
-                        partidoActual.getEquipoVisitante().equalsIgnoreCase(mapaEquipos.get(equipo))) {
+                if (partidoActual.getEquipoLocal().equalsIgnoreCase(ConversionMaps.getMapaEquipos().get(equipo)) ||
+                        partidoActual.getEquipoVisitante().equalsIgnoreCase(ConversionMaps.getMapaEquipos().get(equipo))) {
                     retorno.append(" a las ").append(partidoActual.getHoraJuego());
                 }
             }
@@ -197,7 +188,7 @@ public class FootballService {
             } else {
                 partidosActuales = AsyncUtil.getPartidosPasados(partidosFiltrados.get(partidosFiltrados.size()-1).getFecha());
             }
-            String nombreEquipo = mapaEquipos.get(equipo).replace("(","").replace(")","");
+            String nombreEquipo = ConversionMaps.getMapaEquipos().get(equipo).replace("(","").replace(")","");
             for(PartidoActual partidoActual : partidosActuales) {
                 if (partidoActual.getEquipoLocal().replace("(","").replace(")","").equalsIgnoreCase(nombreEquipo) ||
                         partidoActual.getEquipoVisitante().equalsIgnoreCase(nombreEquipo)) {
@@ -229,7 +220,7 @@ public class FootballService {
     }
 
     public String getLibertadores() {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         List<EquipoPosicionado> libertadores = new ArrayList<>();
         for (EquipoPosicionado ep : this.equiposPosicionados) {
             if (ep.isLibertadores()) {
@@ -240,7 +231,7 @@ public class FootballService {
     }
 
     public String getSudamericana() {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         List<EquipoPosicionado> sudamericana = new ArrayList<>();
         for (EquipoPosicionado ep : this.equiposPosicionados) {
             if (ep.isSudamericana()) {
@@ -251,7 +242,7 @@ public class FootballService {
     }
 
     public String getDescienden() {
-        this.equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        this.equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         List<EquipoPosicionado> descienden = new ArrayList<>();
         for (EquipoPosicionado ep : this.equiposPosicionados) {
             if (ep.isDesciende()) {

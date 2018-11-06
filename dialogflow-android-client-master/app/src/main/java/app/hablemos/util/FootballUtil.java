@@ -58,7 +58,7 @@ public class FootballUtil {
     }
 
     public static List<EquipoPosicionado> getEquiposFiltrados(Comparator<EquipoPosicionado> comparador) {
-        List<EquipoPosicionado> equiposPosicionados = AsyncUtil.llenarEquiposPosicionados();
+        List<EquipoPosicionado> equiposPosicionados = AsyncUtil.obtenerEquiposPosicionados();
         List<EquipoPosicionado> equipos = new ArrayList<>(equiposPosicionados);
         Collections.sort(equipos, comparador);
         Collections.reverse(equipos);
