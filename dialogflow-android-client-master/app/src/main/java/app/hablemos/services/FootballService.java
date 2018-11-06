@@ -97,9 +97,10 @@ public class FootballService {
         for(EquipoPosicionado ep : this.equiposPosicionados) {
             if (ep.getPosicion() == posicion){
                 equipo = ep.getNombre();
+                break;
             }
         }
-        return "El equipo que está en la posición " + posicion + " es " + FootballUtil.obtenerEquipoVisual(this.equiposDePrimera, equipo).getNombre() + ".";
+        return "El equipo que está en la posición " + posicion + " es " + ConversionMaps.modificarNombresEquiposPrimera(equipo) + ".";
     }
 
     public String getDatosEquipo(String equipo) {
