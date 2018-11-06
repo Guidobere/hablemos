@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import app.hablemos.asynctasks.GetComparacionAsyncTask;
 import app.hablemos.asynctasks.GetDatosAsyncTask;
 import app.hablemos.asynctasks.GetEfemeridesAsyncTask;
+import app.hablemos.asynctasks.GetEquiposAsyncTask;
 import app.hablemos.asynctasks.GetGoleadoresAsyncTask;
 import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
 import app.hablemos.asynctasks.GetPartidosAsyncTask;
@@ -16,6 +18,7 @@ import app.hablemos.asynctasks.GetPartidosProximaFechaAsyncTask;
 import app.hablemos.asynctasks.GetPlantelAsyncTask;
 import app.hablemos.asynctasks.GetPosicionesAsyncTask;
 import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
+import app.hablemos.model.football.ConversionMaps;
 import app.hablemos.model.football.DatosEquipo;
 import app.hablemos.model.football.Equipo;
 import app.hablemos.model.football.EquipoPosicionado;
@@ -104,7 +107,7 @@ public class AsyncUtil {
         return goleadores;
     }
 
-    public static List<EquipoPosicionado> llenarEquiposPosicionados() {
+    public static List<EquipoPosicionado> obtenerEquiposPosicionados() {
         List<EquipoPosicionado> equiposPosicionados = new ArrayList<>();
         try {
             equiposPosicionados = new GetPosicionesAsyncTask().execute().get();
@@ -112,5 +115,26 @@ public class AsyncUtil {
             e.printStackTrace();
         }
         return equiposPosicionados;
+    }
+
+    public static String getComparacion(String equipo1, String equipo2) {
+        HashMap<String,String> mapaEquipos = ConversionMaps.getMapaEquipos();
+        String comparacion = "";
+        try {
+            comparacion = new GetComparacionAsyncTask(mapaEquipos.get(equipo1), mapaEquipos.get(equipo2)).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return comparacion;
+    }
+
+    public static List<Equipo> getEquiposDePrimera() {
+        List<Equipo> equiposDePrimera = new ArrayList<>();
+        try {
+            equiposDePrimera = new GetEquiposAsyncTask().execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return equiposDePrimera;
     }
 }
