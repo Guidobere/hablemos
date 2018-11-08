@@ -152,6 +152,8 @@ public class FootballService {
                 retorno.append(partidosFiltrados.get(posEnLista).toString(rival, postergado));
             } else if(dia2.contains("Post")) {
                 retorno.append(partidosFiltrados.get(posEnLista).toStringErrorPostergado(rival));
+            } else {
+                retorno.append(partidosFiltrados.get(posEnLista).toString(rival, false));
             }
             List<PartidoActual> partidosActuales;
             if (partidosFiltrados.get(posEnLista).getDia().equals(DateUtils.getNowString())) {
@@ -191,7 +193,7 @@ public class FootballService {
             String nombreEquipo = ConversionMaps.getMapaEquipos().get(equipo).replace("(","").replace(")","");
             for(PartidoActual partidoActual : partidosActuales) {
                 if (partidoActual.getEquipoLocal().replace("(","").replace(")","").equalsIgnoreCase(nombreEquipo) ||
-                        partidoActual.getEquipoVisitante().equalsIgnoreCase(nombreEquipo)) {
+                        partidoActual.getEquipoVisitante().replace("(","").replace(")","").equalsIgnoreCase(nombreEquipo)) {
                     if(partidoActual.getEstado().equalsIgnoreCase("jugandose")) {
                         retorno.append(partidosFiltrados.get(partidosFiltrados.size() - 1).toStringEnCurso(FootballUtil.getNombreRealFromTabla(this.equiposDePrimera, partidosFiltrados.get(partidosFiltrados.size() - 1).getRival(), false)));
                         if (partidoActual.getTiempoJuego().equalsIgnoreCase("e.t.") || partidoActual.getTiempoJuego().equalsIgnoreCase("e. t.")) {
