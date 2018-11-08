@@ -71,12 +71,12 @@ public class ClimaService {
                     int numeroID = Integer.parseInt(id);
                     Double numero = Double.parseDouble(mensaje);
 
-                    if (numero > 33 && numeroID > 799) { //
+                    if (numero > 32 && numeroID > 799) { //
                         notificationService.enviarNotificacionMuchoCalor(localContext, "mañana");
                         return null;
                     }
 
-                    if (numero > 14 && numeroID > 799) { //
+                    if (numero > 21 && numeroID > 799) { //
                         notificationService.enviarNotificacionClimaLindo(localContext, "mañana");
                         return null;
                     }
