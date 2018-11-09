@@ -91,7 +91,7 @@ public class NotificationService {
 
     public void enviarNotificacionClimaHorrible(Context context, String turno) {
         String notificationTitle = "¡Esta muy feo hoy!";
-        String notificationText = "Quedate en casa mirando la tele";
+        String notificationText = "Quedate en casa que llueve fuerte!";
         enviarNotificacion(context, notificationTitle, notificationText,
                 RingtoneManager.TYPE_ALARM, ID_NOTIFICACION_CLIMA_HORRIBLE, turno, "");
     }
