@@ -172,7 +172,26 @@ public class FootballUtil {
         } else {
             nombreJugador = getNombreRealJugador(equiposDePrimera, equipo, nombre.replace(".", ""));
         }
-        return "\nEl gol " + marcador + " lo marcó " + getNombreRealJugador(equiposDePrimera, equipo, nombreJugador) + " a los " + goles.split("'")[0] + " minutos.";
+        StringBuilder marcadores = new StringBuilder("\nEl gol " + marcador + " lo marcó " + nombreJugador);
+        String tiempo = goles.split("'")[0];
+        if (tiempo.startsWith("45(+")) {
+            String minutosAdicionales = tiempo.split("\\+")[1].replace(")", "").trim();
+            if (minutosAdicionales.equalsIgnoreCase("1")) {
+                marcadores.append(" al minuto de adicional del primer tiempo");
+            } else {
+                marcadores.append(" a los ").append(tiempo.split("\\+")[1].replace(")", "").trim()).append(" minutos de adicional del primer tiempo");
+            }
+        } else if (tiempo.startsWith("90(+")) {
+            String minutosAdicionales = tiempo.split("\\+")[1].replace(")", "").trim();
+            if (minutosAdicionales.equalsIgnoreCase("1")) {
+                marcadores.append(" al minuto de adicional del segundo tiempo");
+            } else {
+                marcadores.append(" a los ").append(minutosAdicionales).append(" minutos de adicional del segundo tiempo");
+            }
+        } else {
+            marcadores.append(" a los ").append(tiempo).append(" minutos.");
+        }
+        return marcadores.toString();
     }
 
     public static String obtenerMarcadores(List<Equipo> equiposDePrimera, String equipo, String goles, String rival) {
