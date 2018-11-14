@@ -30,7 +30,7 @@ public class HealthService {
         if(tipo.equalsIgnoreCase("presion")) {
             DatabaseReference presionFbReference = FirebaseDatabase.getInstance().getReference().child(
                 localContext.getString(R.string.fbRecordatoriosPresion));
-            enviarNotificacionChequeo(nombreAbuelo, mailQueInicioSesion, turno, tipo,
+            enviarNotificacionChequeo(nombreAbuelo, mailQueInicioSesion, turno, "presión",
                 presionFbReference, localContext, notificationService);
         }
 
@@ -93,7 +93,7 @@ public class HealthService {
                             notificationService.enviarNotificacionChequeo(localContext, nombreAbuelo, turno, chequeo);
                         }
                     } else {
-                        Log.e(this.getClass().getName(), "Ocurrio un error al obtener los recordatorios del usuario");
+                        Log.e(this.getClass().getName(), "Ocurrió un error al obtener los recordatorios del usuario");
                     }
                 }
             }

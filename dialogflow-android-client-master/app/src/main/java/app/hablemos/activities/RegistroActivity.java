@@ -473,12 +473,12 @@ public class RegistroActivity extends AppCompatActivity {
         if(ActualizarRecordatorioPresion)
             UpdatePresion();
         else
-            Toast.makeText(RegistroActivity.this, "No se pudo actualizar al al recordatorio de glucosa", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegistroActivity.this, "No se pudo actualizar el recordatorio de glucosa", Toast.LENGTH_SHORT).show();
 
         if(ActualizarRecordatorioGlucosa)
             UpdateGlucosa();
         else
-            Toast.makeText(RegistroActivity.this, "No se pudo actualizar al al recordatorio de presion", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegistroActivity.this, "No se pudo actualizar el recordatorio de presión", Toast.LENGTH_SHORT).show();
 
         return user;
     }

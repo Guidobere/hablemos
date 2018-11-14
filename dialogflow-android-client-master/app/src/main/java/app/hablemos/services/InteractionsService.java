@@ -21,6 +21,7 @@ import java.util.List;
 import app.hablemos.R;
 import app.hablemos.mailsender.GmailSender;
 import app.hablemos.model.Interaccion;
+import app.hablemos.util.StringUtils;
 
 public class InteractionsService {
 
@@ -93,7 +94,7 @@ public class InteractionsService {
         String bodyFinal = body;
 
         //reemplazo nombre abuelo, interacciones, logo y color
-        bodyFinal = bodyFinal.replace("@Abuelo@", nombreAbuelo);
+        bodyFinal = bodyFinal.replace("@Abuelo@", StringUtils.ponerMayusculas(nombreAbuelo));
         bodyFinal = bodyFinal.replace("@ListaInteracciones@", generarListaInteraccionesHTML(interacciones));
         bodyFinal = bodyFinal.replace("@urlImagen@", getContext().getString(R.string.urlImagenReporte));
         @SuppressLint("ResourceType")

@@ -33,8 +33,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -62,6 +60,7 @@ import app.hablemos.services.FootballService;
 import app.hablemos.services.InteractionsService;
 import app.hablemos.services.NotificationService;
 import app.hablemos.util.DateUtils;
+import app.hablemos.util.StringUtils;
 
 public class MainActivity extends AppCompatActivity implements AIListener , View.OnClickListener , AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener {
     private String TAG;
@@ -140,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
         vieneDeNotificacion = getIntent().getExtras().getBoolean("vieneDeNotificacion");
         if(vieneDeNotificacion && TextUtils.isEmpty(nombreAbuelo) && !TextUtils.isEmpty(getIntent().getExtras().getString("nombreAbuelo")))
-            nombreAbuelo = parsearNombre(getIntent().getExtras().getString("nombreAbuelo"));
+            nombreAbuelo = StringUtils.ponerMayusculas(getIntent().getExtras().getString("nombreAbuelo"));
         rtaNotificacionManejada = false;
         contadorClicksEditarRegistro = 0;
 
@@ -231,20 +230,6 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private String parsearNombre(String nombre) {
-        String ret = "";
-        try{
-            String [] nombres = nombre.trim().split(" ");
-            for (int i=0; i<nombres.length; i++) {
-                String s1 = nombres[i].substring(0, 1).toUpperCase();
-                ret += " " + s1 + nombres[i].substring(1).toLowerCase();
-            }
-        } catch (Exception e) {
-            ret = nombre;
-        }
-        return ret.trim();
     }
 
     //Resultado de subintents
@@ -469,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     loQueDiceYescribe(result, action.getAccion(), true);
                 }
             } catch (Exception e) {
-                loQueDiceYescribe("Eso todavía no aprendí a contestarlo, preguntame otra cosa", "errorFutbol", false);
+                loQueDiceYescribe("Eso todavía no aprendí a contestarlo, pregúnteme otra cosa", "errorFutbol", false);
                 irAlMenu("menu_futbol", 6);
             }
         } else if(speech.startsWith("medicamentos _") && speech.split(" _ ").length>1) {
@@ -484,14 +469,14 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             switch (speech) {
                 case "caminarno":
                     interactionsService.guardarInteraccion(mailQueInicioSesion,
-                            "Notificacion clima", "No",
-                            "El usuario no accedio a salir a caminar");
-                    loQueDiceYescribe("Entonces escribí o decí: Pastelería, Fútbol o Salud","default", false);
+                            "Notificación clima", "No",
+                            "El usuario no accedió a salir a caminar");
+                    loQueDiceYescribe("Entonces escriba o diga: Pastelería, Fútbol o Salud","default", false);
                     break;
                 case "caminarsi":
                     interactionsService.guardarInteraccion(mailQueInicioSesion,
-                            "Notificacion clima", "Si",
-                            "El usuario accedio a salir a caminar");
+                            "Notificación clima", "Si",
+                            "El usuario accedió a salir a caminar");
                     loQueDiceYescribe("¡Buena suerte!","default", false);
                     break;
                 case "despedida":
@@ -522,7 +507,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
             observacion = getString(R.string.interaccionTexto_SaludRevisionNi, chequeo, loQueDijo); // No se entendió lo que dijo, se guarda textual
         }
         interactionsService.guardarInteraccion(mailQueInicioSesion,
-            getString(R.string.interaccionTitulo_RevisionSalud, chequeo), parsearNombre(resultado), observacion);
+            getString(R.string.interaccionTitulo_RevisionSalud, chequeo), StringUtils.ponerMayusculas(resultado), observacion);
         loQueDiceYescribe(getString(R.string.graciasAvisoRevision),"default", false);
         irAlMenu("menu_principal", 3);
     }
@@ -539,7 +524,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
     }
 
     private void salir(int segundos, final Activity activity) {
-        loQueDiceYescribe("¡Hasta pronto!", "default",false);
+        loQueDiceYescribe(getString(R.string.saludoFinal), "default",false);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -583,12 +568,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     if(elturno.equalsIgnoreCase(turnoPresion) && losdias.contains(diaSemana)){
                         a=1;
                        // speech="Hoy si";
-                        loQueDiceYescribe("Hoy a la "+ turnoPresion +" debes medirte la presión","default", false);
+                        loQueDiceYescribe("Hoy a la "+ turnoPresion +" debe medirse la presión","default", false);
                     }
                 }
 
                 if(a == 0) {
-                    loQueDiceYescribe("Hoy a la "+ turnoPresion +" no debes medirte la presión","default", false);
+                    loQueDiceYescribe("Hoy a la "+ turnoPresion +" no debe medirse la presión","default", false);
                 }
             }
 
@@ -618,12 +603,12 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
 
                     if(elturno.equalsIgnoreCase(turnoGlucosa) && losdias.contains(diaSemana)){
                         a=1;
-                       loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" debes medirte la glucosa","default", false);
+                       loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" debe medirse la glucosa","default", false);
                     }
                 }
 
                 if(a == 0) {
-                     loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" no debes medirte la glucosa","default", false);
+                     loQueDiceYescribe("Hoy a la "+ turnoGlucosa +" no debe medirse la glucosa","default", false);
                 }
             }
 
@@ -648,7 +633,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                 if (u != null && u.username != null) {
                     switch (pedido) {
                         case "saludo":
-                            nombreAbuelo = parsearNombre(u.username);
+                            nombreAbuelo = StringUtils.ponerMayusculas(u.username);
                             loQueDiceYescribe("¡" + getSaludo() + ", " + nombreAbuelo + "! ","default", false);
                             equipoAbuelo = u.equipo;
                             interactionsService.guardarInteraccion(
@@ -661,27 +646,27 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                                 loQueDiceYescribe("Nada que tomar a la tarde.","default", false);
                             }
                             else{
-                                loQueDiceYescribe("A la tarde tenés que tomar " + u.remediosTarde,"default", false);}
+                                loQueDiceYescribe("A la tarde debe tomar " + u.remediosTarde,"default", false);}
                              break;
                         case "mañana":
                            if(TextUtils.isEmpty(u.remediosManiana)){
                                 loQueDiceYescribe("Nada que tomar a la mañana.","default", false);
                             }
                             else{
-                                loQueDiceYescribe("A la mañana tenés que tomar " + u.remediosManiana,"default", false);}
+                                loQueDiceYescribe("A la mañana debe tomar " + u.remediosManiana,"default", false);}
                           break;
                         case "noche":
                             if(TextUtils.isEmpty(u.remediosNoche)){
                                 loQueDiceYescribe("Nada que tomar a la noche.","default", false);
                             }
                             else{
-                                loQueDiceYescribe("A la noche tenés que tomar " + u.remediosNoche,"default", false);}
+                                loQueDiceYescribe("A la noche debe tomar " + u.remediosNoche,"default", false);}
                             break;
                         default:
                             break;
                     }
                 } else {
-                    System.out.println("Ocurrio un error al obtener el usuario");
+                    System.out.println("Ocurrió un error al obtener el usuario");
                 }
             }
 
