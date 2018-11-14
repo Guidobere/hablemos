@@ -39,7 +39,7 @@
     <string name="saludoTarde">Buenas tardes</string>
     <string name="saludoNoche">Buenas noches</string>
     <string name="errorSpeechRecog">Speech recognition engine error</string>
-    <string name="saludoFinal">¡Hasta la proxima!</string>
+    <string name="saludoFinal">¡Hasta pronto!</string>
 
 
     <string name="errorReconVoz">No se pudo reconocer la entrada de voz</string>
@@ -49,7 +49,7 @@
     <string name="coloca_tu_email">Coloca tu Email</string>
     <string name="coloca_tu_contrasenia">Coloca tu Contraseña</string>
     <string name="ingresar">Ingresar</string>
-    <string name="no_tenes_usuario_registrate_ahora">¿No tenes usuario? Registrate ahora</string>
+    <string name="no_tenes_usuario_registrate_ahora">¿No tenés usuario? Registrate ahora</string>
     <string name="contrasenia_view">Contraseña</string>
     <string name="email_view">Email</string>
     <string name="logo_login">Login</string>
@@ -63,11 +63,11 @@
     <string name="ir_al_login">ir al login</string>
     <string name="tagLogin">Admin_Log</string>
     <string name="fallo_autenticacion">No pudimos autenticarte. ¡Hacelo de nuevo!</string>
-    <string name="minimum_password">Minimo de 6 caracteres</string>
+    <string name="minimum_password">Mínimo de 6 caracteres</string>
     <string name="tagRegistro">RegistroActivity</string>
     <string name="imagen_mensaje">imagenMensaje</string>
     <string name="mensajeicono">mensajeIcono</string>
-    <string name="escribi_algo_aca">Escribi algo aca</string>
+    <string name="escribi_algo_aca">Escriba algo aca</string>
     <string name="mensaje_actual">LOS MENSAJES VAN ACA</string>
     <string name="imagenregistro">imagenRegistro</string>
     <string name="registrar">Registrar</string>
@@ -98,7 +98,7 @@
     <string name="domingo_vista">D</string>
     <string name="tarde">Tarde</string>
     <string name="noche">Noche</string>
-    <string name="presion_vista">Recordatorios Presion (No obligatorio)</string>
+    <string name="presion_vista">Recordatorios Presión (No obligatorio)</string>
     <string name="lblEquipo">Equipo</string>
 
     <!-- Validaciones registro -->
@@ -126,14 +126,14 @@
     <string name="interaccionTexto_SaludRevisionNi">La respuesta del usuario sobre su chequeo de %1$s fue: %2$s</string>
 
     <!-- Notificaciones -->
-    <string name="notificacionTexto_Salud">Tocá una vez acá para saber cuáles.</string>
+    <string name="notificacionTexto_Salud">Toque una vez acá para saber cuáles.</string>
     <string name="notificacionTitulo_Clima">Qué lindo día</string>
-    <string name="notificacionTexto_Clima">¿Querés salir a pasear?</string>
+    <string name="notificacionTexto_Clima">¿Quiere salir a pasear?</string>
     <string name="notificacionTitulo_Chequeo">Revisión de %1$s de la %2$s</string>
-    <string name="notificacionTexto_Chequeo">¡Tocá una vez acá para avisarme cuando lo hagas!</string>
+    <string name="notificacionTexto_Chequeo">¡Toque una vez acá para avisarme cuando lo haga!</string>
 
     <string name="cancelar">Cancelar</string>
-    <string name="notificacionAvisoMail">Ya le mandé el reporte a tu tutor. Saludos!!</string>
+    <string name="notificacionAvisoMail">Ya le mandé el reporte a su tutor. Saludos!!</string>
     <string name="el_mensaje_va_aca">EL MENSAJE VA ACA</string>
 
     <string name="configurar">configurar</string>

@@ -101,7 +101,7 @@ public class NotificationService {
         String notificationTitle = context.getString(R.string.notificacionTitulo_Chequeo, chequeo, turno);
         String notificationText = context.getString(R.string.notificacionTexto_Chequeo);
         int tipoNotificacion = 0;
-        if(chequeo.equals("presion"))
+        if(chequeo.equals("presión"))
             tipoNotificacion = ID_NOTIFICACION_PRESION;
         else if(chequeo.equals("glucosa"))
             tipoNotificacion = ID_NOTIFICACION_GLUCOSA;
