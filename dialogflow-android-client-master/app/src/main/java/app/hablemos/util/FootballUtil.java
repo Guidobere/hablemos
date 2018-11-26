@@ -29,6 +29,9 @@ public class FootballUtil {
     public static String getNombreRealFromTabla(List<Equipo> equiposDePrimera, String nombre, boolean reemplazar) {
         HashMap<String, String> mapaEquipos = ConversionMaps.getMapaEquipos();
         String nombreReal = "";
+        if(reemplazar){
+            nombre = nombre.replace("(", "").replace(")", "");
+        }
         for (String key : mapaEquipos.keySet()) {
             String nombreDeMapa = mapaEquipos.get(key);
             if (reemplazar) {

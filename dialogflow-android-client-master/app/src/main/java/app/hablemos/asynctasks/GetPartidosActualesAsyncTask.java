@@ -38,8 +38,12 @@ public class GetPartidosActualesAsyncTask extends AsyncTask<Void, Void, List<Par
                         partidoActual.setEquipoVisitante(equipoVisitante);
                         if (estadoPartido.equalsIgnoreCase("finaliza") ||
                                 estadoPartido.equalsIgnoreCase("jugandose")) {
-                            int golesEquipoLocal = Integer.parseInt(tableRows.get(j).children().get(2).text().trim());
-                            int golesEquipoVisitante = Integer.parseInt(tableRows.get(j).children().get(3).text().trim());
+                            int golesEquipoLocal=-1;
+                            int golesEquipoVisitante=-1;
+                            try {
+                                golesEquipoLocal = Integer.parseInt(tableRows.get(j).children().get(2).text().trim());
+                                golesEquipoVisitante = Integer.parseInt(tableRows.get(j).children().get(3).text().trim());
+                            } catch (Exception e){}
                             partidoActual.setGolesEquipoLocal(golesEquipoLocal);
                             partidoActual.setGolesEquipoVisitante(golesEquipoVisitante);
                             if (golesEquipoLocal > 0) {
