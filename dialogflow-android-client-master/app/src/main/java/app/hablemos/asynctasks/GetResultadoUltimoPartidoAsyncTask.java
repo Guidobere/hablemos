@@ -49,7 +49,7 @@ public class GetResultadoUltimoPartidoAsyncTask extends AsyncTask<Void, Void, Li
                         try {
                             golesEquipoLocal = Integer.parseInt(tableRows.get(i).children().get(2).text().trim());
                             golesEquipoVisitante = Integer.parseInt(tableRows.get(i).children().get(3).text().trim());
-                        } catch (Exception e){}
+                        } catch (Exception ignored){}
                         partidoActual.setGolesEquipoLocal(golesEquipoLocal);
                         partidoActual.setGolesEquipoVisitante(golesEquipoVisitante);
                         if (golesEquipoLocal > 0) {

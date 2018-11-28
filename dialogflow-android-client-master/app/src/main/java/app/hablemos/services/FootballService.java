@@ -17,7 +17,6 @@ import app.hablemos.model.football.EquipoPosicionado;
 import app.hablemos.model.football.Partido;
 import app.hablemos.model.football.PartidoActual;
 import app.hablemos.util.AsyncUtil;
-import app.hablemos.util.DateUtils;
 import app.hablemos.util.FootballUtil;
 
 public class FootballService {
@@ -155,12 +154,7 @@ public class FootballService {
             } else {
                 retorno.append(partidosFiltrados.get(posEnLista).toString(rival, false));
             }
-            List<PartidoActual> partidosActuales;
-            if (partidosFiltrados.get(posEnLista).getDia().equals(DateUtils.getNowString())) {
-                partidosActuales = AsyncUtil.getPartidosActuales();
-            } else {
-                partidosActuales = AsyncUtil.getPartidosProximaFecha(partidosFiltrados.get(posEnLista).getFecha());
-            }
+            List<PartidoActual> partidosActuales = AsyncUtil.getPartidosProximaFecha(partidosFiltrados.get(posEnLista).getFecha());
             for(PartidoActual partidoActual : partidosActuales) {
                 if (partidoActual.getEquipoLocal().equalsIgnoreCase(ConversionMaps.getMapaEquipos().get(equipo)) ||
                         partidoActual.getEquipoVisitante().equalsIgnoreCase(ConversionMaps.getMapaEquipos().get(equipo))) {
@@ -184,12 +178,7 @@ public class FootballService {
             }
             Collections.sort(partidosFiltrados, Comparators.comparadorDeFecha);
             StringBuilder retorno = new StringBuilder(equipoVisual.getNombre());
-            List<PartidoActual> partidosActuales;
-            if (partidosFiltrados.get(partidosFiltrados.size()-1).getDia().equals(DateUtils.getNowString())) {
-                partidosActuales = AsyncUtil.getPartidosActuales();
-            } else {
-                partidosActuales = AsyncUtil.getPartidosPasados(partidosFiltrados.get(partidosFiltrados.size()-1).getFecha());
-            }
+            List<PartidoActual> partidosActuales = AsyncUtil.getPartidosPasados(partidosFiltrados.get(partidosFiltrados.size()-1).getFecha());
             String nombreEquipo = ConversionMaps.getMapaEquipos().get(equipo).replace("(","").replace(")","");
             for(PartidoActual partidoActual : partidosActuales) {
                 if (partidoActual.getEquipoLocal().replace("(","").replace(")","").equalsIgnoreCase(nombreEquipo) ||
@@ -258,6 +247,9 @@ public class FootballService {
 
     public String getEfemerides() {
         List<String> efemerides = AsyncUtil.getEfemerides();
+        if (efemerides.size() == 0) {
+            return "Hoy no hay cumpleaños de jugadores ni aniversarios de clubes. Vuelva mañana a consultar!";
+        }
         StringBuilder respuesta = new StringBuilder("Estas son las efemérides de hoy: ");
         String separador = "";
         int contador = 1;

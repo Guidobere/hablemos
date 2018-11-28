@@ -1,8 +1,6 @@
 package app.hablemos.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
@@ -12,7 +10,6 @@ import app.hablemos.asynctasks.GetDatosAsyncTask;
 import app.hablemos.asynctasks.GetEfemeridesAsyncTask;
 import app.hablemos.asynctasks.GetEquiposAsyncTask;
 import app.hablemos.asynctasks.GetGoleadoresAsyncTask;
-import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
 import app.hablemos.asynctasks.GetPartidosAsyncTask;
 import app.hablemos.asynctasks.GetPartidosProximaFechaAsyncTask;
 import app.hablemos.asynctasks.GetPlantelAsyncTask;
@@ -45,16 +42,6 @@ public class AsyncUtil {
             e.printStackTrace();
         }
         return partidos;
-    }
-
-    public static List<PartidoActual> getPartidosActuales() {
-        List<PartidoActual> partidosActuales = new ArrayList<>();
-        try {
-            partidosActuales = new GetPartidosActualesAsyncTask().execute().get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return partidosActuales;
     }
 
     public static List<PartidoActual> getPartidosPasados(String fecha) {
