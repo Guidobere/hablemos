@@ -1,23 +1,6 @@
 package app.hablemos.model.football;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.TreeMap;
-
-import app.hablemos.asynctasks.GetDatosAsyncTask;
-import app.hablemos.asynctasks.GetEfemeridesAsyncTask;
-import app.hablemos.asynctasks.GetGoleadoresAsyncTask;
-import app.hablemos.asynctasks.GetPartidosActualesAsyncTask;
-import app.hablemos.asynctasks.GetPartidosAsyncTask;
-import app.hablemos.asynctasks.GetPartidosProximaFechaAsyncTask;
-import app.hablemos.asynctasks.GetPlantelAsyncTask;
-import app.hablemos.asynctasks.GetPosicionesAsyncTask;
-import app.hablemos.asynctasks.GetResultadoUltimoPartidoAsyncTask;
-import app.hablemos.model.football.DatosEquipo;
-import app.hablemos.model.football.EquipoPosicionado;
-import app.hablemos.model.football.Partido;
-import app.hablemos.model.football.PartidoActual;
 
 public class Comparators {
 

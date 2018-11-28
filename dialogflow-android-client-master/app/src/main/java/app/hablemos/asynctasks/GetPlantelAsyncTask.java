@@ -9,8 +9,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.hablemos.model.football.DatosEquipo;
-
 public class GetPlantelAsyncTask extends AsyncTask<Void, Void, List<String>> {
 
     private String pagina;
