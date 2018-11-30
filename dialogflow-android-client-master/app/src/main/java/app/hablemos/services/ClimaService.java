@@ -34,8 +34,6 @@ public class ClimaService {
     private String mensaje;
     private String id;
 
-    double temperatura;
-
     private void sendNotifications(final Context localContext, final NotificationService notificationService, final Double latitud, final Double longitud, final String city) {
 
         AsyncTask<Void, Void, Void> execute = new AsyncTask<Void, Void, Void>() {
@@ -69,25 +67,26 @@ public class ClimaService {
 
                     id = details.getString("id");
                     int numeroID = Integer.parseInt(id);
-                    Double numero = Double.parseDouble(mensaje);
+                    Double grados = Double.parseDouble(mensaje);
+                    Double humedad = Double.parseDouble(main.getString("humidity"));
 
-                    if (numero > 32 && numeroID > 799) { //
-                        notificationService.enviarNotificacionMuchoCalor(localContext, "mañana");
+                    if (grados > 28 && numeroID > 799) { //
+                        notificationService.enviarNotificacionMuchoCalor(localContext, "");
                         return null;
                     }
 
-                    if (numero > 21 && numeroID > 799) { //
-                        notificationService.enviarNotificacionClimaLindo(localContext, "mañana");
+                    if (grados > 21 && numeroID > 799 && humedad<70) {
+                        notificationService.enviarNotificacionClimaLindo(localContext, "");
                         return null;
                     }
 
                     if (numeroID > 299) {
-                        notificationService.enviarNotificacionClimaParaguas(localContext, "mañana");
+                        notificationService.enviarNotificacionClimaParaguas(localContext, "");
                         return null;
                     }
 
                     if (numeroID > 199) {
-                        notificationService.enviarNotificacionClimaHorrible(localContext, "mañana");
+                        notificationService.enviarNotificacionClimaHorrible(localContext, "");
                         return null;
                     }
 
