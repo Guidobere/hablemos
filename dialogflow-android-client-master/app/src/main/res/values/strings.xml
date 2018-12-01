@@ -19,10 +19,10 @@
     <string name="rbInteracciones">interacciones</string>
 
     <!-- Clima -->
-    <string name="horarioClima">13</string>
+    <string name="horarioClima">10</string>
 
     <!-- Salud -->
-    <string name="horarioSaludManiana">10</string>
+    <string name="horarioSaludManiana">9</string>
     <string name="horarioSaludTarde">16</string>
     <string name="horarioSaludNoche">21</string>
 

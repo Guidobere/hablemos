@@ -487,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
                     loQueDiceYescribe(speech,"default", false);
                     break;
                 default: //Aca no lo modifique por que lo que dice es el mismo speech, los otros lo modificaba
-                    loQueDiceYescribe(speech,"default", false);
+                    loQueDiceYescribe(speech,"default", true);
                     break;
             }
         }
@@ -761,7 +761,8 @@ public class MainActivity extends AppCompatActivity implements AIListener , View
         return texto.replace("Racing Club", "Rácing Club")
             .replace("Velez Sarsfield", "Velez Sársfield")
             .replace("Heinze", "Géinze")
-            .replace("River Plate", "Ríver Plate");
+            .replace("River Plate", "Ríver Plate")
+            .replace("Botty", "Bóti");
     }
 
     private void interrumpirBotty(){
